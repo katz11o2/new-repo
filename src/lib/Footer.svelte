@@ -1,6 +1,8 @@
 <script>
-  
+  import IISCLogo from '../lib/logos/IISC.png';
+  import MSMELogo from '../lib/logos/MSME.jpg';
 </script>
+
 
 <style>
   footer {
@@ -194,8 +196,9 @@
         Transforming ideas into breakthrough <br>  innovations since 2010.
       </div>
       <div class="footer-logos">
-        <img src=src/lib/logos/IISC.png  alt="Logo 1" class="footer-logo" />
-        <img src=src/lib/logos/MSME.jpg alt="Logo 2" class="footer-logo" />
+       <img src="{IISCLogo}" alt="Logo 1" class="footer-logo" />
+<img src="{MSMELogo}" alt="Logo 2" class="footer-logo" />
+
       </div>
     </div>
 
