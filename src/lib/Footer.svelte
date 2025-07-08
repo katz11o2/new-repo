@@ -1,6 +1,5 @@
 <script>
-  import Logo1 from '../lib/logos/logo1.png';
-  import Logo2 from '../lib/logos/logo2.png';
+  
 </script>
 
 <style>
@@ -195,8 +194,8 @@
         Transforming ideas into breakthrough <br>  innovations since 2010.
       </div>
       <div class="footer-logos">
-        <img src=src\lib\logos\IISC.png  alt="Logo 1" class="footer-logo" />
-        <img src=src\lib\logos\MSME.jpg alt="Logo 2" class="footer-logo" />
+        <img src=src/lib/logos/IISC.png  alt="Logo 1" class="footer-logo" />
+        <img src=src/lib/logos/MSME.jpg alt="Logo 2" class="footer-logo" />
       </div>
     </div>
 
