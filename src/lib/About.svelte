@@ -2,10 +2,11 @@
   import { onMount } from 'svelte';
 
   let currentImageIndex = 0;
-  const images = [
-    '/src/lib/logos/Artboard 1 copy.jpg',
-    '/src/lib/logos/Artboard 1.jpg'
-  ];
+ const images = [
+  '/images/Artboard 1 copy.jpg',
+  '/images/Artboard 1.jpg'
+];
+
 
   let interval;
 
@@ -94,7 +95,7 @@
     width: 70%;
     position: relative;
     overflow: hidden;
-    height: 24px;
+    height: 16px;
   }
 
   .scroll-content {
