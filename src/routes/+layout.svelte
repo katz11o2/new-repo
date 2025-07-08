@@ -1,6 +1,7 @@
 <script>
   import Header from '../lib/Header.svelte';
   import Footer from '../lib/Footer.svelte';
+  import About from '../lib/About.svelte';
 </script>
 
 <div class="app-wrapper">
@@ -8,8 +9,9 @@
 
   <main class="main-content">
     <slot />
+    <About/>
   </main>
-
+ 
   <Footer />
 </div>
 
