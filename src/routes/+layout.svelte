@@ -2,6 +2,8 @@
   import Header from '../lib/Header.svelte';
   import Footer from '../lib/Footer.svelte';
   import About from '../lib/About.svelte';
+   import Service from '../lib/Service.svelte';
+   import Team from '../lib/Team.svelte';
 </script>
 
 <div class="app-wrapper">
@@ -10,7 +12,10 @@
   <main class="main-content">
     <slot />
     <About/>
+    <Service/>
+    <Team/>
   </main>
+  
  
   <Footer />
 </div>
