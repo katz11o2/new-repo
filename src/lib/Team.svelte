@@ -210,7 +210,7 @@
     text-align: center;
   }
 
-  .initiatives-container h3 {
+  .initiatives-container h2 {
     font-family: 'Poppins', sans-serif;
     font-size: 1.8rem;
     color: #1a1a1a;
@@ -223,7 +223,7 @@
     font-size: 2.4rem;
     font-weight: 800;
     color: #000;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
   }
 
   .initiatives-container h1 span {
@@ -235,6 +235,7 @@
     font-family: 'Poppins', sans-serif;
     font-size: 1.1rem;
     color: #555;
+    
     max-width: 800px;
     margin: 0 auto;
     line-height: 1.6;
@@ -260,6 +261,52 @@
     font-weight: 600;
     color: #1a1a1a;
     margin-bottom: 12px;
+  }
+
+   .initiatives-section {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    padding: 20px 20px 20px;
+    background-color: white;
+    color: #1a1a1a;
+  }
+
+  .initiatives-section h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #0a0a23;
+    margin-bottom: 12px;
+  }
+
+  .initiatives-section h1 {
+    font-size: 2.6rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    line-height: 1.3;
+  }
+
+  .initiatives-section .highlight {
+    background: linear-gradient(to right, #a8dcff, #008cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .initiatives-section p {
+    font-size: 1rem;
+    color: #555;
+    max-width: 850px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  @media (max-width: 768px) {
+    .initiatives-section h1 {
+      font-size: 2rem;
+    }
+
+    .initiatives-section p {
+      font-size: 0.95rem;
+    }
   }
 
   .decoration {
@@ -375,6 +422,8 @@
     .content p {
       font-size: 0.6rem;
     }
+
+    
   }
 </style>
 
@@ -386,6 +435,8 @@
     <span class="line"></span>
   </div>
 </div>
+
+
 
 {#each rows as row}
   <div class="row">
@@ -402,6 +453,21 @@
     {/each}
   </div>
 {/each}
+
+
+
+
+<div class="initiatives-section">
+  
+  <h1>
+    Transform Your Ideas Into 
+    <span class="highlight">Innovation Reality</span>
+  </h1>
+  <p>
+    Partner with us to access world-class resources, expert guidance, and comprehensive support to bring your innovations to life.
+  </p>
+</div>
+
 <section class="glass-section">
   <div class="glass-container">
     <div class="glass-box">
