@@ -11,7 +11,7 @@
     font-family: 'Poppins', sans-serif;
     width: 100%;
     overflow-x: hidden;
-    padding-bottom: 20px;
+    padding-bottom: 5px;
   }
 
   .logo-bar {
@@ -58,7 +58,7 @@
     display: flex;
     justify-content: center;
     gap: 20px;
-    padding: 8px 0;
+    padding: 4px 0;
     flex-wrap: wrap;
   }
 
