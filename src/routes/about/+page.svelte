@@ -1,199 +1,101 @@
 <script>
-  import { onMount } from 'svelte';
-
-  const today = new Date();
-  let currentMonth = today.getMonth();
-  let currentYear = today.getFullYear();
-
-  // Upcoming events (you can replace these dynamically)
-  const upcomingEvents = [
-    { date: '2025-07-12', title: 'Ideathon Launch' },
-    { date: '2025-07-15', title: 'Guest Lecture on AI' },
-    { date: '2025-07-19', title: 'Startup Networking' },
-    { date: '2025-07-22', title: 'Tech Bootcamp' },
-    { date: '2025-07-25', title: 'Pitch Day' },
-  ];
-
-  function getDaysInMonth(month, year) {
-    return new Date(year, month + 1, 0).getDate();
-  }
-
-  function generateCalendar(month, year) {
-    const firstDay = new Date(year, month, 1).getDay();
-    const daysInMonth = getDaysInMonth(month, year);
-    let calendar = [];
-    let week = [];
-
-    for (let i = 0; i < firstDay; i++) week.push(null);
-
-    for (let day = 1; day <= daysInMonth; day++) {
-      week.push(new Date(year, month, day));
-      if (week.length === 7) {
-        calendar.push(week);
-        week = [];
-      }
-    }
-
-    if (week.length) calendar.push(week);
-
-    return calendar;
-  }
-
-  function getMonthName(monthIndex) {
-    return new Date(2000, monthIndex, 1).toLocaleString('default', { month: 'long' });
-  }
-
-  let selectedEvent = '';
-
-  function handleClick(date) {
-    if (!date) return;
-    const day = date.getDay();
-    if (day === 1) selectedEvent = 'Masterclass on Root Cause Analysis';
-    else if (day === 5) selectedEvent = 'Seminar on Startups';
-    else selectedEvent = '';
-  }
+  // No script needed
 </script>
 
 <style>
-  .calendar-container {
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: url('/your-background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    overflow-x: hidden;
+  }
+
+  .container {
+    min-height: 100vh;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
     padding: 40px;
-    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
   }
 
-  .month-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .glass-box {
+    max-width: 800px;
     width: 100%;
-    max-width: 700px;
-    margin-bottom: 10px;
-  }
-
-  .calendars {
-    display: flex;
-    gap: 40px;
-    flex-wrap: wrap;
-  }
-
-  .calendar {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 10px;
-    width: 300px;
-    background: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  }
-
-  .calendar h3 {
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #93c5fd;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    color: #000;
     text-align: center;
+    animation: popUp 1.2s ease-out forwards;
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  @keyframes popUp {
+    0% {
+      opacity: 0;
+      transform: scale(0.95) translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  h1 {
     color: #1e3a8a;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
 
-  .weekdays,
-  .week {
-    display: flex;
-    justify-content: space-between;
+  p {
+    text-align: justify;
+    line-height: 1.6;
+    font-size: 1rem;
+    margin-bottom: 16px;
   }
 
-  .day {
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 2px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: 0.2s ease;
+  a {
+    color: #2563eb;
+    text-decoration: underline;
+    transition: color 0.3s ease;
   }
 
-  .day:hover {
-    background-color: #dbeafe;
+  a:hover {
+    color: #1d4ed8;
   }
 
-  .blue-day {
-    background-color: #2563eb;
-    color: white;
-  }
-
-  .event-box {
-    margin-top: 20px;
-    text-align: center;
-    background: #f9fafb;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 700px;
-    width: 100%;
-  }
-
-  .upcoming {
-    margin-top: 40px;
-    text-align: left;
-    max-width: 700px;
-    width: 100%;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  }
-
-  .arrows {
-    cursor: pointer;
-    font-size: 1.5rem;
-    padding: 0 10px;
+  @media (max-width: 600px) {
+    .glass-box {
+      padding: 20px;
+    }
   }
 </style>
 
-<div class="calendar-container">
-  <div class="month-header">
-    <div class="arrows" on:click={() => currentMonth--}>&larr;</div>
-    <h2>{getMonthName(currentMonth)} & {getMonthName((currentMonth + 1) % 12)} {currentYear}</h2>
-    <div class="arrows" on:click={() => currentMonth++}>&rarr;</div>
-  </div>
-
-  <div class="calendars">
-    {#each [0, 1] as offset}
-      {#key offset}
-        <div class="calendar">
-          {#let monthIndex = (currentMonth + offset) % 12}
-          {#let yearOffset = currentMonth + offset >= 12 ? 1 : 0}
-          <h3>{getMonthName(monthIndex)} {currentYear + yearOffset}</h3>
-          <div class="weekdays">
-            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
-          </div>
-          {#each generateCalendar(monthIndex, currentYear + yearOffset) as week}
-            <div class="week">
-              {#each week as day}
-                <div 
-                  class="day {day && (day.getDay() === 5 ? 'blue-day' : '')}" 
-                  on:click={() => handleClick(day)}>
-                  {day ? day.getDate() : ''}
-                </div>
-              {/each}
-            </div>
-          {/each}
-        </div>
-      {/key}
-    {/each}
-  </div>
-
-  {#if selectedEvent}
-    <div class="event-box">
-      <strong>Event:</strong> {selectedEvent}
-    </div>
-  {/if}
-
-  <div class="upcoming">
-    <h3>Upcoming Events</h3>
-    <ul>
-      {#each upcomingEvents as event}
-        <li><strong>{event.date}:</strong> {event.title}</li>
-      {/each}
-    </ul>
+<div class="container">
+  <div class="glass-box">
+    <h1>Cambrian Incubation Center (CIC)</h1>
+    <p>
+      The Cambrian Incubation Centre (CIC) is a smart initiative, established by 
+      <a href="https://www.cambridge.edu.in/" target="_blank">Cambridge Institute of Technology, Bangalore</a>,
+      to create a vibrant ecosystem that encourages technological innovation leading to entrepreneurship and growth.
+    </p>
+    <p>
+      Its primary objective is to provide a supportive environment to innovation-hungry 
+      <a href="https://msme.gov.in/" target="_blank">MSMEs</a> to the extent possible and permissible. 
+      It fosters creation of a collaborative environment where students (potential entrepreneurs), academic staff (as mentors), and industry experts, especially from MSMEs, can connect, share knowledge, and grow together with eligible scheme support from the 
+      <a href="https://msme.gov.in/" target="_blank">Ministry of MSME</a> (Govt of India).
+    </p>
+    <p>
+      The creation of a dedicated Centre is the outcome of recognition of Cambridge Institute of Technology (Bangalore) as a Host Institution, by the 
+      <a href="https://dcmsme.gov.in/" target="_blank">Office of the Development Commissioner - MSME</a>, Ministry of MSME, Govt of India. 
+      This Centre is also supported by the 
+      <a href="https://coeiisc.in/" target="_blank">MSME (DCMSME) Centre of Excellence at IISc Bangalore</a>.
+    </p>
   </div>
 </div>

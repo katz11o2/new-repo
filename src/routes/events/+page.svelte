@@ -8,7 +8,7 @@
     { date: '2025-07-15', title: 'Guest Lecture on AI' },
     { date: '2025-07-19', title: 'Startup Networking' },
     { date: '2025-07-22', title: 'Tech Bootcamp' },
-    { date: '2025-07-25', title: 'Pitch Day' },
+    { date: '2025-07-25', title: 'Pitch Day' }
   ];
 
   function getDaysInMonth(month, year) {
@@ -24,7 +24,8 @@
     for (let i = 0; i < firstDay; i++) week.push(null);
 
     for (let day = 1; day <= daysInMonth; day++) {
-      week.push(new Date(year, month, day));
+      const date = new Date(year, month, day);
+      week.push(date);
       if (week.length === 7) {
         calendar.push(week);
         week = [];
@@ -52,67 +53,72 @@
   $: calendarPairs = [0, 1].map(offset => {
     const newMonth = currentMonth + offset;
     const monthIndex = newMonth % 12;
-    const year = currentYear + Math.floor(newMonth / 12);
-    return { offset, monthIndex, year };
+    const yearOffset = Math.floor(newMonth / 12);
+    const year = currentYear + yearOffset;
+    const calendar = generateCalendar(monthIndex, year);
+
+    return {
+      monthIndex,
+      year,
+      calendar
+    };
   });
 </script>
 
 <style>
-  body {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    background: #f0f4f8;
-  }
-
   .calendar-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 20px;
+    padding: 3rem 1rem;
+    background: linear-gradient(to right, #e0f2fe, #f8fafc);
+    font-family: 'Poppins', sans-serif;
   }
 
   .month-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 700px;
+    max-width: 720px;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 1.5rem;
   }
 
   .arrows {
-    font-size: 1.5rem;
+    font-size: 2rem;
     cursor: pointer;
+    color: #1d4ed8;
     user-select: none;
-    color: #1e40af;
   }
 
   .calendars {
     display: flex;
     flex-wrap: wrap;
-    gap: 30px;
+    gap: 2rem;
     justify-content: center;
   }
 
   .calendar {
-    background: white;
-    border: 1px solid #e0e7ff;
-    border-radius: 12px;
-    padding: 20px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid #dbeafe;
+    border-radius: 16px;
+    padding: 1.5rem;
     width: 320px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(8px);
     animation: fadeInUp 0.6s ease;
   }
 
   @keyframes fadeInUp {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   .calendar h3 {
     text-align: center;
-    color: #1d4ed8;
-    margin-bottom: 10px;
+    color: #1e3a8a;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
   }
 
   .weekdays, .week {
@@ -121,7 +127,8 @@
   }
 
   .weekdays div {
-    font-weight: bold;
+    font-weight: 600;
+    font-size: 0.85rem;
     color: #475569;
     width: 36px;
     text-align: center;
@@ -131,16 +138,16 @@
     width: 36px;
     height: 36px;
     margin: 2px;
-    border-radius: 6px;
+    border-radius: 8px;
     text-align: center;
     line-height: 36px;
     font-size: 0.9rem;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: all 0.3s ease;
   }
 
   .day:hover {
-    background: #e0f2fe;
+    background: #dbeafe;
   }
 
   .blue-day {
@@ -149,34 +156,44 @@
   }
 
   .event-box {
-    margin-top: 30px;
-    text-align: center;
-    padding: 20px;
-    background: #f8fafc;
-    border-radius: 10px;
-    width: 100%;
-    max-width: 700px;
+    margin-top: 2rem;
+    background: white;
     border: 1px solid #dbeafe;
+    padding: 1.25rem;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 720px;
+    text-align: center;
+    color: #0f172a;
+    font-weight: 500;
+    font-size: 1rem;
   }
 
   .upcoming {
-    margin-top: 40px;
+    margin-top: 3rem;
     text-align: left;
-    max-width: 700px;
+    max-width: 720px;
     width: 100%;
     background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  }
+
+  .upcoming h3 {
+    margin-bottom: 1rem;
+    color: #1d4ed8;
+    font-size: 1.2rem;
   }
 
   ul {
-    padding-left: 20px;
+    padding-left: 1.2rem;
   }
 
   li {
-    margin-bottom: 10px;
+    margin-bottom: 0.75rem;
     font-size: 0.95rem;
+    color: #334155;
   }
 
   @media (max-width: 700px) {
@@ -195,17 +212,17 @@
   </div>
 
   <div class="calendars">
-    {#each calendarPairs as { offset, monthIndex, year } (offset)}
+    {#each calendarPairs as { monthIndex, year, calendar }}
       <div class="calendar">
         <h3>{getMonthName(monthIndex)} {year}</h3>
         <div class="weekdays">
           <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
         </div>
-        {#each generateCalendar(monthIndex, year) as week}
+        {#each calendar as week}
           <div class="week">
             {#each week as day}
               <div
-                class="day {day && (day.getDay() === 5 ? 'blue-day' : '')}"
+                class="day {day && day.getDay() === 5 ? 'blue-day' : ''}"
                 on:click={() => handleClick(day)}
               >
                 {day ? day.getDate() : ''}
