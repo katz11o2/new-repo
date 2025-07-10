@@ -1,9 +1,6 @@
 <script>
-  import Header from '../lib/Header.svelte';
-  import Footer from '../lib/Footer.svelte';
-  import About from '../lib/About.svelte';
-   import Service from '../lib/Service.svelte';
-   import Team from '../lib/Team.svelte';
+  import Header from '$lib/Header.svelte';
+  import Footer from '$lib/Footer.svelte';
 </script>
 
 <div class="app-wrapper">
@@ -11,12 +8,8 @@
 
   <main class="main-content">
     <slot />
-    <About/>
-    <Service/>
-    <Team/>
   </main>
-  
- 
+
   <Footer />
 </div>
 
@@ -25,7 +18,6 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    width: 100%;
   }
 
   .main-content {

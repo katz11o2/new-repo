@@ -97,10 +97,11 @@
   <!-- Menu Bar -->
   <nav class="menu-bar">
     <a href="/" class="menu-link">Home</a>
-    <a href="/about" class="menu-link">About Us</a>
-    <a href="/services" class="menu-link">Facilities</a>
+    <a href="/projects" class="menu-link">Calender of Events</a>
+    
+    <a href="/facilities" class="menu-link">Facilities</a>
     <a href="/projects" class="menu-link">Register/Login</a>
     <a href="/contact" class="menu-link">Benificiaries</a>
-    <a href="/projects" class="menu-link">Calender of Events</a>
-  </nav>
+     <a href="/contact" class="menu-link">Contact Us</a>
+   </nav>
 </header>
