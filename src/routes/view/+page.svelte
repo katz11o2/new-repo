@@ -9,6 +9,10 @@
   let loading = true;
   let error = null;
 
+  // For comment form
+  let commentText = {};
+  let selectedHOD = {};
+
   async function fetchFromBin(key) {
     const binId = localStorage.getItem(key);
     if (!binId) return [];
@@ -17,6 +21,13 @@
     });
     const json = await res.json();
     return json.record || [];
+  }
+
+  function handleSend(entryId) {
+    alert(`Sent to: ${selectedHOD[entryId] || "Not selected"}\nComment: ${commentText[entryId] || "No comment"}`);
+    // You can replace alert() with actual submission logic later
+    selectedHOD[entryId] = '';
+    commentText[entryId] = '';
   }
 
   onMount(async () => {
@@ -78,6 +89,37 @@
     max-width: 100%;
     border-radius: 10px;
   }
+
+  .dropdown-section {
+    margin-top: 20px;
+    background: rgba(255,255,255,0.6);
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  .dropdown-section select,
+  .dropdown-section textarea {
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    margin-top: 8px;
+    border: 1px solid #94a3b8;
+    font-family: inherit;
+  }
+
+  .dropdown-section button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .dropdown-section button:hover {
+    background-color: #1d4ed8;
+  }
 </style>
 
 <div class="container">
@@ -90,7 +132,7 @@
   {:else if entries.length === 0}
     <p>No submissions found.</p>
   {:else}
-    {#each entries as entry}
+    {#each entries as entry, i}
       <div class="card">
         <h2>{entry.title}</h2>
         <p class="meta"><strong>Submitted By:</strong> {entry.submittedBy || "Unknown"}</p>
@@ -112,6 +154,25 @@
           <img class="img-preview" src={entry.visualizedProduct} alt="Visual Preview" />
         {/if}
         <p class="meta">📅 {new Date(entry.submittedAt).toLocaleString()}</p>
+
+        <!-- ✅ New Dropdown and Comment Section -->
+        <div class="dropdown-section">
+          <label><strong>Send to HOD:</strong></label>
+          <select bind:value={selectedHOD[i]}>
+            <option disabled selected value="">Select HOD</option>
+            <option>EEE HOD</option>
+            <option>ECE HOD</option>
+            <option>CSE HOD</option>
+            <option>AIML HOD</option>
+            <option>CIVIL HOD</option>
+            <option>MECH HOD</option>
+          </select>
+
+          <label><strong>Add Comment:</strong></label>
+          <textarea rows="3" bind:value={commentText[i]} placeholder="Write your comment..."></textarea>
+
+          <button on:click={() => handleSend(i)}>Send</button>
+        </div>
       </div>
     {/each}
   {/if}
