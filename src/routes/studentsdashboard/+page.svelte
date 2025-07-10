@@ -1,6 +1,4 @@
 <script>
-  import { onMount } from "svelte";
-
   const MASTER_KEY = "$2a$10$7s2J1bfLkUw4k5xI41hADupk/1x12kJIIECHjYqWCruKDUnE0/wKu";
   const BIN_KEY_STORAGE = "jsonbin_industry_ideas";
   const IMGBB_API_KEY = "6b78d56b527f6dba58807d358ac35142";
@@ -129,7 +127,7 @@
 
 <style>
   .form-section {
-    background: linear-gradient(to bottom right, #f1f5f9, #ffffff);
+    background: linear-gradient(to bottom right, #e0f2fe, #f8fafc);
     padding: 60px 20px;
     display: flex;
     justify-content: center;
@@ -138,28 +136,28 @@
 
   .form-card {
     width: 100%;
-    max-width: 760px;
-    background: white;
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.7);
     padding: 40px;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(16px);
     border: 1px solid #e2e8f0;
   }
 
   .form-card h2 {
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 700;
     margin-bottom: 30px;
     text-align: center;
-    color: #1e3a8a;
+    color: #1e40af;
   }
 
   label {
     font-weight: 600;
     margin-bottom: 6px;
     display: block;
-    color: #334155;
+    color: #1e293b;
   }
 
   input,
@@ -168,17 +166,17 @@
     width: 100%;
     padding: 12px 14px;
     font-size: 1rem;
-    margin-bottom: 18px;
-    border: 1.8px solid #cbd5e1;
-    border-radius: 10px;
-    background-color: #f8fafc;
+    margin-bottom: 20px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    background-color: #f9fafb;
     transition: border 0.2s ease;
   }
 
   input:focus,
   select:focus,
   textarea:focus {
-    border-color: #1e3a8a;
+    border-color: #3b82f6;
     outline: none;
     background-color: white;
   }
@@ -190,20 +188,20 @@
 
   button {
     width: 100%;
-    background-color: #1e3a8a;
+    background-color: #1d4ed8;
     color: white;
     padding: 14px;
     font-size: 1rem;
-    border-radius: 10px;
+    border-radius: 12px;
     font-weight: 600;
     border: none;
     cursor: pointer;
-    margin-top: 10px;
+    margin-top: 12px;
     transition: background-color 0.3s ease;
   }
 
   button:hover {
-    background-color: #294faa;
+    background-color: #2563eb;
   }
 
   @media (max-width: 600px) {
@@ -215,9 +213,9 @@
 
 <div class="form-section">
   <div class="form-card">
-    <h2>Submit a Challenge</h2>
+    <h2>📌 Submit Your Industry Challenge</h2>
 
-    <label>Category</label>
+    <label>Category *</label>
     <select bind:value={newStatement.category}>
       <option value="" disabled>Select a category</option>
       {#each categories as category}
@@ -225,7 +223,7 @@
       {/each}
     </select>
 
-    <label>Title</label>
+    <label>Title *</label>
     <input bind:value={newStatement.title} placeholder="Enter a descriptive title" />
 
     <label>Description</label>
@@ -235,22 +233,22 @@
     <input bind:value={newStatement.uniqueness} placeholder="What makes it unique?" />
 
     <label>Existing Technologies</label>
-    <input bind:value={newStatement.existingTech} placeholder="What exists already?" />
+    <input bind:value={newStatement.existingTech} placeholder="What already exists?" />
 
     <label>Gap Analysis</label>
-    <input bind:value={newStatement.gapAnalysis} placeholder="What is missing in the current scenario?" />
+    <input bind:value={newStatement.gapAnalysis} placeholder="What is the gap you identified?" />
 
     <label>Patentability</label>
     <input bind:value={newStatement.patentability} placeholder="Can this be patented?" />
 
     <label>Market Data</label>
-    <input bind:value={newStatement.marketData} placeholder="Any data or stats related to market" />
+    <input bind:value={newStatement.marketData} placeholder="Any related market statistics?" />
 
     <label>Financials</label>
-    <input bind:value={newStatement.financials} placeholder="Any cost estimates or analysis" />
+    <input bind:value={newStatement.financials} placeholder="Any cost estimates or returns?" />
 
     <label>Attachments</label>
-    <input type="file" on:change={(e) => file = e.target.files[0]} />
+    <input type="file" on:change={(e) => file = e.target.files[0]} accept="image/*,.pdf,.docx" />
 
     <button on:click={addStatement} disabled={loading}>
       {loading ? "Submitting..." : "Submit Challenge"}

@@ -1,201 +1,189 @@
 <script>
-    import { goto } from "$app/navigation";
-  
-    let msmename = "";
-    let msmemember = "";
-    let phone = "";
-    let email = "";
-    let password = "";
-    let captchaInput = "";
-    let captcha = Math.floor(1000 + Math.random() * 9000).toString();
-    let isChecked = false;
-    let companyType = "";
-  
-    function handleSignup() {
-        if (msmename && msmemember && phone && email && password && captchaInput === captcha && companyType) {
-            alert("Signup Successful");
-            // Proceed to next step or page
-            goto("/industrysdashboard");
-        } else {
-            alert("Please fill all fields correctly and choose a company type.");
-        }
-    }
+  import { goto } from "$app/navigation";
 
-    function agreeAndProceed() {
-        if (!isChecked) {
-            alert("Please agree to the terms before proceeding.");
-            return;
-        }
-        goto("/industrysdashboard");
+  let msmename = "";
+  let msmemember = "";
+  let phone = "";
+  let email = "";
+  let password = "";
+  let captchaInput = "";
+  let captcha = Math.floor(1000 + Math.random() * 9000).toString();
+  let isChecked = false;
+  let companyType = "";
+
+  function handleSignup() {
+    if (
+      msmename &&
+      msmemember &&
+      phone &&
+      email &&
+      password &&
+      captchaInput === captcha &&
+      companyType
+    ) {
+      alert("Signup Successful");
+      goto("/industrysdashboard");
+    } else {
+      alert("Please fill all fields correctly and choose a company type.");
     }
-  
-    function redirectToLogin() {
-        goto("/loginindustry");
-    }
+  }
+
+  function redirectToLogin() {
+    goto("/loginindustry");
+  }
 </script>
 
 <svelte:head>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
 </svelte:head>
 
 <style>
-    * {
-        font-family: 'Poppins', sans-serif;
-    }
+  * {
+    font-family: "Poppins", sans-serif;
+  }
 
-    .wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 110vh;
-        gap: 40px;
-        background: linear-gradient(135deg, #ffffff, #ffffff);
-    }
+  .wrapper {
+    min-height: 100vh;
+    background: linear-gradient(to right, #f4f7fa, #ffffff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+  }
 
-    .image-container img {
-        height: 500px;
-        width: 370px;
-        border-radius: 20px;
-    }
+  .form-container {
+    width: 100%;
+    max-width: 420px;
+    padding: 30px 25px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    color: #003366;
+    animation: fadePop 0.4s ease-in-out;
+  }
 
-    .form-container {
-        width: 360px;
-        padding: 20px;
-        margin-bottom: 8px;
-        position: relative;
-        top:20px;
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.15);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: #003366;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
+  h2 {
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    color: #003366;
+  }
 
-    .form-container h2 {
-        font-size: 1.5rem;
-        text-align: center;
-        margin-bottom: 10px;
-        font-weight: 600;
-    }
+  input,
+  button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+  }
 
-    .form-container input,
-    .form-container button {
-        width: 100%;
-        padding: 8px;
-        margin-top: 6px;
-        border-radius: 8px;
-        border: 1px solid #003366;
-        font-size: 0.9rem;
-        transition: all 0.3s ease;
-    }
+  input {
+    border: 1px solid #ccc;
+    background: #fff;
+  }
 
-    .form-container input:focus {
-        outline: none;
-        border-color: #005fa3;
-        box-shadow: 0 0 5px rgba(0, 95, 163, 0.3);
-    }
+  input:focus {
+    outline: none;
+    border-color: #003366;
+    box-shadow: 0 0 5px rgba(0, 51, 102, 0.2);
+  }
 
-    .form-container button {
-        background-color: #003366;
-        color: white;
-        font-weight: 500;
-        cursor: pointer;
-        margin-top: 10px;
-    }
+  .captcha {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 12px;
+    border-radius: 10px;
+    margin: 12px 0 5px;
+    color: #003366;
+    letter-spacing: 2px;
+  }
 
-    .form-container button:hover {
-        background-color: #005fa3;
-    }
+  .checkbox-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
 
-    .captcha {
-        font-size: 1.2rem;
-        font-weight: bold;
-        background: rgba(255, 255, 255, 0.3);
-        padding: 10px;
-        border-radius: 8px;
-        margin: 10px 0 5px;
-        text-align: center;
-        color: #003366;
-    }
+  .checkbox-group label {
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
 
-    label {
-        font-size: 0.9rem;
-        margin-top: 10px;
-    }
+  button {
+    background: #003366;
+    color: white;
+    border: none;
+    font-weight: 600;
+    margin-top: 18px;
+    cursor: pointer;
+  }
 
-    .checkbox-group {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 10px;
-    }
+  button:hover {
+    background: #005fa3;
+  }
 
-    .checkbox-group label {
-        font-size: 0.85rem;
-        margin-top: 8px;
-    }
+  .login-link {
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: 18px;
+    color: #003366;
+    text-decoration: underline;
+    cursor: pointer;
+  }
 
-    p {
-        font-size: 0.85rem;
-        margin: 10px 0;
-        line-height: 1.4;
-        color: #1b1b1b;
-    }
+  .login-link:hover {
+    color: #005fa3;
+  }
 
-    .login-link {
-        font-size: 1rem;
-        text-align: center;
-        color: #003366;
-        text-decoration: underline;
-        cursor: pointer;
-        margin-top: 15px;
+  @keyframes fadePop {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
     }
-
-    .login-link:hover {
-        color: #005fa3;
+    to {
+      opacity: 1;
+      transform: scale(1);
     }
+  }
 </style>
 
 <div class="wrapper">
-    <!-- Image Section -->
-    <div class="image-container">
-        <img src="/logos/Frame 1 (1).png" alt="Header Image" />
+  <div class="form-container">
+    <h2>Sign Up as MSME</h2>
+
+    <input type="text" bind:value={msmename} placeholder="Name of MSME" />
+    <input type="text" bind:value={msmemember} placeholder="MSME Number" />
+    <input type="text" bind:value={phone} placeholder="Phone Number" />
+    <input type="email" bind:value={email} placeholder="Email Address" />
+    <input type="password" bind:value={password} placeholder="Password" />
+
+    <div class="captcha">{captcha}</div>
+    <input type="text" bind:value={captchaInput} placeholder="Enter Captcha" />
+
+    <div class="checkbox-group">
+      <label><input type="radio" bind:group={companyType} value="Micro" /> Micro</label>
+      <label><input type="radio" bind:group={companyType} value="Small" /> Small</label>
+      <label><input type="radio" bind:group={companyType} value="Medium" /> Medium</label>
     </div>
 
-    <!-- Form Section -->
-    <div class="form-container">
-        <h2>Sign Up</h2>
-        
-        <input type="text" bind:value={msmename} placeholder="Name of MSME" />
-        <input type="text" bind:value={msmemember} placeholder="MSME Number" />
-        <input type="text" bind:value={phone} placeholder="Phone Number" />
-        <input type="email" bind:value={email} placeholder="Enter your email ID" />
-        <input type="password" bind:value={password} placeholder="Password" />
-        
-        <div class="captcha">{captcha}</div>
-        <input type="text" bind:value={captchaInput} placeholder="Enter Captcha" />
+    <button on:click={handleSignup}>Sign Up</button>
 
-        <div class="checkbox-group">
-            <label>
-                <input type="radio" bind:group={companyType} value="Micro" /> Micro
-            </label>
-            <label>
-                <input type="radio" bind:group={companyType} value="Small" /> Small
-            </label>
-            <label>
-                <input type="radio" bind:group={companyType} value="Medium" /> Medium
-            </label>
-        </div>
-
-        <button on:click={handleSignup}>Sign Up</button>
-
-        <!-- Login Link -->
-        <div class="login-link" on:click={redirectToLogin}>
-            Already have an account? Login here
-        </div>
+    <div class="login-link" on:click={redirectToLogin}>
+      Already have an account? Login here
     </div>
+  </div>
 </div>

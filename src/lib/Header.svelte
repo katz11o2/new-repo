@@ -97,7 +97,7 @@
   <!-- Menu Bar -->
   <nav class="menu-bar">
     <a href="/" class="menu-link">Home</a>
-    <a href="/projects" class="menu-link">Calender of Events</a>
+
     
     <a href="/facilities" class="menu-link">Facilities</a>
     <a href="/login" class="menu-link">Register/Login</a>

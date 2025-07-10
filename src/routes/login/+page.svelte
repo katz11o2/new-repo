@@ -81,7 +81,7 @@
   <h1>Post Your Problem Statement</h1>
 
   <div class="card-grid">
-    <div class="card" on:click={() => goto('/loginforboth')}>
+    <div class="card" on:click={() => goto('/loginforstudents')}>
       <h2>Student</h2>
       <p>
         Post a problem statement or take up an industry challenge and showcase your skills.
@@ -97,7 +97,7 @@
       <span class="arrow">→</span>
     </div>
 
-    <div class="card" on:click={() => goto('/industry')}>
+    <div class="card" on:click={() => goto('/loginindustry')}>
       <h2>MSME / Non-MSME</h2>
       <p>
         Collaborate with our institution to innovate, co-create, and solve real-world problems.
