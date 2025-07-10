@@ -314,19 +314,20 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+    margin-bottom: 50px;
   }
 
   .dot {
     width: 10px;
     height: 10px;
-    background-color: #007BFF;
+    background-color: blue;
     border-radius: 50%;
   }
 
   .line {
     width: 350px;
     height: 2px;
-    background-color: #007BFF;
+    background-color:#17194a;
   }
 
   .row {
@@ -399,6 +400,96 @@
     color: inherit;
   }
 
+  .podium-showcase {
+  background: #fff;
+  padding: 30px 30px 80px;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.podium-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 50px;
+}
+
+.podium-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.podium-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.podium-box:hover {
+  transform: scale(1.05);
+}
+
+.person {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+
+.startup-box {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(6px);
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #222;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.base {
+  width: 80px;
+  height: 60px;
+  background: #ddd;
+  border-radius: 10px 10px 0 0;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.first .base {
+  background: gold;
+  height: 100px;
+  z-index: 2;
+}
+.second .base {
+  background: silver;
+  height: 80px;
+}
+.third .base {
+  background: #cd7f32; /* bronze */
+  height: 60px;
+}
+
+@media (max-width: 768px) {
+  .podium-container {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+
+  .podium-box {
+    margin-bottom: 30px;
+  }
+}
+
+
   @media (min-width: 600px) {
     .row {
       flex-wrap: nowrap;
@@ -454,6 +545,42 @@
   </div>
 {/each}
 
+<div class="podium-showcase">
+
+ <div class="section-heading">
+  <h2>Our top Student Startups</h2>
+  <div class="decoration">
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="line"></span>
+  </div>
+</div>
+
+  <div class="podium-container">
+    
+    <!-- 2nd Place -->
+    <div class="podium-box second">
+      <div class="person">🥈</div>
+      <div class="startup-box">EcoForge</div>
+      <div class="base">2nd</div>
+    </div>
+
+    <!-- 1st Place -->
+    <div class="podium-box first">
+      <div class="person">🥇</div>
+      <div class="startup-box">NeuraTech</div>
+      <div class="base">1st</div>
+    </div>
+
+    <!-- 3rd Place -->
+    <div class="podium-box third">
+      <div class="person">🥉</div>
+      <div class="startup-box">EduPulse</div>
+      <div class="base">3rd</div>
+    </div>
+
+  </div>
+</div>
 
 
 

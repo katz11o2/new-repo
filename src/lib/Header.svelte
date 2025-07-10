@@ -98,10 +98,12 @@
   <nav class="menu-bar">
     <a href="/" class="menu-link">Home</a>
 
-    
+     <a href="/about" class="menu-link">About us</a>
+     <a href="/events" class="menu-link">Calender of Events</a>
     <a href="/facilities" class="menu-link">Facilities</a>
     <a href="/login" class="menu-link">Register/Login</a>
     <a href="/beneficiaries" class="menu-link">Benificiaries</a>
+     <a href="/Gallery" class="menu-link">Gallery</a>
      <a href="/contact" class="menu-link">Contact Us</a>
    </nav>
 </header>
