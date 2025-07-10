@@ -1,11 +1,8 @@
 <script>
-  import { onMount } from 'svelte';
-
   const today = new Date();
   let currentMonth = today.getMonth();
   let currentYear = today.getFullYear();
 
-  // Upcoming events (you can replace these dynamically)
   const upcomingEvents = [
     { date: '2025-07-12', title: 'Ideathon Launch' },
     { date: '2025-07-15', title: 'Guest Lecture on AI' },
@@ -35,7 +32,6 @@
     }
 
     if (week.length) calendar.push(week);
-
     return calendar;
   }
 
@@ -52,68 +48,99 @@
     else if (day === 5) selectedEvent = 'Seminar on Startups';
     else selectedEvent = '';
   }
+
+  $: calendarPairs = [0, 1].map(offset => {
+    const newMonth = currentMonth + offset;
+    const monthIndex = newMonth % 12;
+    const year = currentYear + Math.floor(newMonth / 12);
+    return { offset, monthIndex, year };
+  });
 </script>
 
 <style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #f0f4f8;
+  }
+
   .calendar-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px;
-    font-family: 'Poppins', sans-serif;
+    padding: 40px 20px;
   }
 
   .month-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
     max-width: 700px;
-    margin-bottom: 10px;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .arrows {
+    font-size: 1.5rem;
+    cursor: pointer;
+    user-select: none;
+    color: #1e40af;
   }
 
   .calendars {
     display: flex;
-    gap: 40px;
     flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
   }
 
   .calendar {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 10px;
-    width: 300px;
     background: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e0e7ff;
+    border-radius: 12px;
+    padding: 20px;
+    width: 320px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    animation: fadeInUp 0.6s ease;
+  }
+
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
   }
 
   .calendar h3 {
     text-align: center;
-    color: #1e3a8a;
+    color: #1d4ed8;
     margin-bottom: 10px;
   }
 
-  .weekdays,
-  .week {
+  .weekdays, .week {
     display: flex;
     justify-content: space-between;
+  }
+
+  .weekdays div {
+    font-weight: bold;
+    color: #475569;
+    width: 36px;
+    text-align: center;
   }
 
   .day {
     width: 36px;
     height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     margin: 2px;
-    border-radius: 5px;
-    cursor: pointer;
+    border-radius: 6px;
+    text-align: center;
+    line-height: 36px;
     font-size: 0.9rem;
-    transition: 0.2s ease;
+    cursor: pointer;
+    transition: background 0.3s ease;
   }
 
   .day:hover {
-    background-color: #dbeafe;
+    background: #e0f2fe;
   }
 
   .blue-day {
@@ -122,13 +149,14 @@
   }
 
   .event-box {
-    margin-top: 20px;
+    margin-top: 30px;
     text-align: center;
-    background: #f9fafb;
     padding: 20px;
+    background: #f8fafc;
     border-radius: 10px;
-    max-width: 700px;
     width: 100%;
+    max-width: 700px;
+    border: 1px solid #dbeafe;
   }
 
   .upcoming {
@@ -142,10 +170,20 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   }
 
-  .arrows {
-    cursor: pointer;
-    font-size: 1.5rem;
-    padding: 0 10px;
+  ul {
+    padding-left: 20px;
+  }
+
+  li {
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 700px) {
+    .calendars {
+      flex-direction: column;
+      align-items: center;
+    }
   }
 </style>
 
@@ -157,28 +195,25 @@
   </div>
 
   <div class="calendars">
-    {#each [0, 1] as offset}
-      {#key offset}
-        <div class="calendar">
-          {#let monthIndex = (currentMonth + offset) % 12}
-          {#let yearOffset = currentMonth + offset >= 12 ? 1 : 0}
-          <h3>{getMonthName(monthIndex)} {currentYear + yearOffset}</h3>
-          <div class="weekdays">
-            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
-          </div>
-          {#each generateCalendar(monthIndex, currentYear + yearOffset) as week}
-            <div class="week">
-              {#each week as day}
-                <div 
-                  class="day {day && (day.getDay() === 5 ? 'blue-day' : '')}" 
-                  on:click={() => handleClick(day)}>
-                  {day ? day.getDate() : ''}
-                </div>
-              {/each}
-            </div>
-          {/each}
+    {#each calendarPairs as { offset, monthIndex, year } (offset)}
+      <div class="calendar">
+        <h3>{getMonthName(monthIndex)} {year}</h3>
+        <div class="weekdays">
+          <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
         </div>
-      {/key}
+        {#each generateCalendar(monthIndex, year) as week}
+          <div class="week">
+            {#each week as day}
+              <div
+                class="day {day && (day.getDay() === 5 ? 'blue-day' : '')}"
+                on:click={() => handleClick(day)}
+              >
+                {day ? day.getDate() : ''}
+              </div>
+            {/each}
+          </div>
+        {/each}
+      </div>
     {/each}
   </div>
 
