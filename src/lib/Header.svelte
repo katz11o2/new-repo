@@ -100,8 +100,8 @@
     <a href="/projects" class="menu-link">Calender of Events</a>
     
     <a href="/facilities" class="menu-link">Facilities</a>
-    <a href="/projects" class="menu-link">Register/Login</a>
-    <a href="/contact" class="menu-link">Benificiaries</a>
+    <a href="/login" class="menu-link">Register/Login</a>
+    <a href="/beneficiaries" class="menu-link">Benificiaries</a>
      <a href="/contact" class="menu-link">Contact Us</a>
    </nav>
 </header>

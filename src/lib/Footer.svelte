@@ -10,7 +10,7 @@
     color: white;
     font-family: 'Poppins', sans-serif;
     width: 100%;
-    padding: 30px 0px 0 20px;
+    padding: 40px  20px;
   }
 
   .footer-wrapper {
@@ -115,7 +115,7 @@
 
    @media (max-width: 768px) {
     footer {
-      padding: 15px 5px 0 5px;
+      padding: 30px 8px;
     }
 
     .footer-wrapper {
