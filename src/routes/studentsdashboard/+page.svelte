@@ -1,4 +1,7 @@
 <script>
+
+  import { goto } from "$app/navigation";
+
   let form = {
     title: "",
     category: "",
@@ -64,7 +67,13 @@
         existing = json.record || [];
       }
 
-      existing.push({ ...form, submittedAt: new Date().toISOString() });
+     existing.push({
+  ...form,
+  submittedAt: new Date().toISOString(),
+  submittedBy: "Student"
+});
+
+
 
       const url = binId ? `https://api.jsonbin.io/v3/b/${binId}` : "https://api.jsonbin.io/v3/b";
       const method = binId ? "PUT" : "POST";
@@ -85,6 +94,7 @@
       }
 
       alert("✅ Submission successful!");
+      goto("/");
       form = {
         title: "",
         category: "",

@@ -15,7 +15,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 40px 20px;
+    padding: 10px 20px;
   }
 
   h1 {

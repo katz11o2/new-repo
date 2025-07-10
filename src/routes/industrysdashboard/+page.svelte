@@ -1,11 +1,11 @@
 <script>
-  import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
 
   const MASTER_KEY = "$2a$10$7s2J1bfLkUw4k5xI41hADupk/1x12kJIIECHjYqWCruKDUnE0/wKu";
   const BIN_KEY_STORAGE = "jsonbin_industry_ideas";
   const IMGBB_API_KEY = "6b78d56b527f6dba58807d358ac35142";
 
-  let newStatement = {
+  let statement = {
     category: "",
     title: "",
     description: "",
@@ -14,11 +14,10 @@
     gapAnalysis: "",
     patentability: "",
     marketData: "",
-    financials: "",
-    attachments: ""
+    financials: ""
   };
 
-  let file;
+  let file = null;
   let loading = false;
 
   const categories = [
@@ -38,9 +37,9 @@
     });
   }
 
-  async function addStatement() {
-    if (!newStatement.title || !newStatement.category) {
-      alert("Please fill all required fields.");
+  async function handleSubmit() {
+    if (!statement.title || !statement.category) {
+      alert("Please fill in Title and Category.");
       return;
     }
 
@@ -69,24 +68,18 @@
         existing = json.record || [];
       }
 
-      existing.push({
-        title: newStatement.title,
-        category: newStatement.category,
-        description: newStatement.description,
-        uniqueness: newStatement.uniqueness,
-        existingTechnologies: newStatement.existingTech,
-        gapAnalysis: newStatement.gapAnalysis,
-        patentability: newStatement.patentability,
-        Marketingdata: newStatement.marketData,
-        researchData: newStatement.financials,
-        experimentalData: "",
-        visualizedProduct: imageUrl,
-        submittedAt: new Date().toISOString()
-      });
+     existing.push({
+  ...statement,
+  visualizedProduct: imageUrl,
+  submittedAt: new Date().toISOString(),
+  submittedBy: "Industry"
+});
+
 
       const url = binId
         ? `https://api.jsonbin.io/v3/b/${binId}`
         : "https://api.jsonbin.io/v3/b";
+
       const method = binId ? "PUT" : "POST";
 
       const saveRes = await fetch(url, {
@@ -104,8 +97,11 @@
         localStorage.setItem(BIN_KEY_STORAGE, result.metadata.id);
       }
 
-      alert("✅ Challenge submitted!");
-      newStatement = {
+      alert("✅ Challenge submitted successfully!");
+      goto("/");
+
+      // Reset form
+      statement = {
         category: "",
         title: "",
         description: "",
@@ -114,13 +110,13 @@
         gapAnalysis: "",
         patentability: "",
         marketData: "",
-        financials: "",
-        attachments: ""
+        financials: ""
       };
       file = null;
+
     } catch (err) {
       console.error(err);
-      alert("❌ Failed to submit.");
+      alert("❌ Submission failed.");
     } finally {
       loading = false;
     }
@@ -205,12 +201,6 @@
   button:hover {
     background-color: #294faa;
   }
-
-  @media (max-width: 600px) {
-    .form-card {
-      padding: 24px;
-    }
-  }
 </style>
 
 <div class="form-section">
@@ -218,7 +208,7 @@
     <h2>Submit a Challenge</h2>
 
     <label>Category</label>
-    <select bind:value={newStatement.category}>
+    <select bind:value={statement.category}>
       <option value="" disabled>Select a category</option>
       {#each categories as category}
         <option value={category}>{category}</option>
@@ -226,33 +216,33 @@
     </select>
 
     <label>Title</label>
-    <input bind:value={newStatement.title} placeholder="Enter a descriptive title" />
+    <input bind:value={statement.title} placeholder="Enter a descriptive title" />
 
     <label>Description</label>
-    <textarea bind:value={newStatement.description} placeholder="Explain the problem in detail"></textarea>
+    <textarea bind:value={statement.description} placeholder="Explain the problem in detail"></textarea>
 
     <label>Uniqueness</label>
-    <input bind:value={newStatement.uniqueness} placeholder="What makes it unique?" />
+    <input bind:value={statement.uniqueness} placeholder="What makes it unique?" />
 
     <label>Existing Technologies</label>
-    <input bind:value={newStatement.existingTech} placeholder="What exists already?" />
+    <input bind:value={statement.existingTech} placeholder="What exists already?" />
 
     <label>Gap Analysis</label>
-    <input bind:value={newStatement.gapAnalysis} placeholder="What is missing in the current scenario?" />
+    <input bind:value={statement.gapAnalysis} placeholder="What's missing in current process?" />
 
     <label>Patentability</label>
-    <input bind:value={newStatement.patentability} placeholder="Can this be patented?" />
+    <input bind:value={statement.patentability} placeholder="Is it patentable?" />
 
     <label>Market Data</label>
-    <input bind:value={newStatement.marketData} placeholder="Any data or stats related to market" />
+    <input bind:value={statement.marketData} placeholder="Any marketing data?" />
 
     <label>Financials</label>
-    <input bind:value={newStatement.financials} placeholder="Any cost estimates or analysis" />
+    <input bind:value={statement.financials} placeholder="Any cost estimates or funding info" />
 
-    <label>Attachments</label>
-    <input type="file" on:change={(e) => file = e.target.files[0]} />
+    <label>Upload Attachment (Optional)</label>
+    <input type="file" accept="image/*,.pdf,.docx" on:change={(e) => file = e.target.files[0]} />
 
-    <button on:click={addStatement} disabled={loading}>
+    <button on:click={handleSubmit} disabled={loading}>
       {loading ? "Submitting..." : "Submit Challenge"}
     </button>
   </div>
