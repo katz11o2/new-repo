@@ -4,15 +4,35 @@
 
 <style>
   .section {
-  padding: 60px 20px 180px 20px; /* bottom padding set to 0 */
-  background: linear-gradient(to bottom right, #f1f5ff, #ffffff);
-  font-family: 'Poppins', sans-serif;
-  min-height: auto; /* was 100vh, which caused space if content is short */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+    padding: 60px 20px 180px 20px;
+    background: linear-gradient(to bottom right, #f1f5ff, #ffffff);
+    font-family: 'Poppins', sans-serif;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative; /* To allow absolute positioning inside */
+  }
 
+  .admin-box {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #1e3a8a;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: background-color 0.3s;
+  }
+
+  .admin-box:hover {
+    background-color: #334bb8;
+  }
 
   .section h1 {
     font-size: 2.6rem;
@@ -22,8 +42,6 @@
     text-align: center;
     letter-spacing: -0.5px;
   }
-
- 
 
   .card-grid {
     display: grid;
@@ -37,7 +55,7 @@
     background: rgba(255, 255, 255, 0.6);
     border: 1.5px solid rgba(30, 58, 138, 0.2);
     border-radius: 20px;
-    padding: 24px 24px 14px 24px; /* reduced bottom padding */
+    padding: 24px 24px 14px 24px;
     box-shadow: 0 12px 32px rgba(30, 58, 138, 0.08);
     backdrop-filter: blur(12px);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -81,6 +99,11 @@
 </style>
 
 <main class="section">
+  <!-- ✅ Admin Button -->
+  <div class="admin-box" on:click={() => goto('/adminpage')}>
+    Admin
+  </div>
+
   <h1>Post Your Problem Statement</h1>
 
   <div class="card-grid">
