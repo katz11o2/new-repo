@@ -82,15 +82,10 @@
 
 <div class="wrapper">
   <div class="container {fadeIn ? 'fade-in' : ''}">
-    <h1 class="text">Industry Problem Solving</h1>
+    <h1 class="text">Research and Development</h1>
    <p>
-   A partnership between learned academia and industry is designed to establish a professional platform to enable impactful
-    collaboration to take on real-world challenges and build innovative solutions through intense research by participating research faculty.
-    Such a professional relationship will involve expertise, resources, and technological capabilities of industry, especially MSMEs, with
-    the intellectual and research-oriented knowledge from the academic world. The primary objective is to intensely drive innovation in
-    product/process development. Expected outcomes from such partnerships shall include accelerated yet relevant Innovation, access to
-    resources, practical application including experimentation and related data acquisition and analysis, knowledge transfer, etc.
-  </p>
+  Research and Development (R&D) serves as the backbone of technological advancement and societal progress. It fosters a culture of inquiry, experimentation, and continuous improvement, empowering institutions and industries to stay ahead in a rapidly evolving global landscape. By integrating theoretical frameworks with practical applications, R&D initiatives drive the creation of cutting-edge products, improved processes, and transformative solutions. Whether through academic research labs, corporate innovation centers, or public-private partnerships, the focus remains on generating knowledge, solving real-world problems, and enhancing economic and social outcomes. Sustained investment in R&D not only leads to technological breakthroughs but also cultivates a skilled workforce and a robust innovation ecosystem.
+</p>
+
   </div>
 </div>
-

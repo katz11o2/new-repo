@@ -4,19 +4,19 @@
       {
         name: "Shri D.K Mohan",
         role: "Chairman, CGI",
-        link: "/profile/1",
+        link: "/chairman",
         image: "https://engg.cambridge.edu.in/wp-content/uploads/2020/12/Chairman-600x410-1.jpg.webp"
       },
       {
         name: "Shri Nithin Mohan",
         role: "CEO, CITech ",
-        link: "/profile/2",
+        link: "/ceo",
         image: "https://i.ibb.co/B1Mz9nV/IMG-7217.jpg"
       },
       {
         name: "Dr. G Indumathi",
         role: "Prinicpal, CITech",
-        link: "/profile/3",
+        link: "/princi",
         image: "https://engg.cambridge.edu.in/wp-content/uploads/2021/09/Principal1.png.webp"
       }
     ],
@@ -24,13 +24,13 @@
       {
         name: "Shri Srinivas M. Jamkhandi ",
         role: "Advisior-Innovation, CITech",
-        link: "/profile/5",
+        link: "/srini",
         image: "https://i.ibb.co/4wvg2LQs/11111111.jpg"
       },
       {
         name: "Dr. M Varalatchoutmy",
         role: "Head - CIC, CITech",
-        link: "/profile/4",
+        link: "cichead",
         image: "https://engg.cambridge.edu.in/wp-content/uploads/2023/06/536e21ff-2f83-4f7f-8cfb-f3707a562081.jpg"
       }
     ],
@@ -38,25 +38,25 @@
       {
         name: "Dr. S R Shanthi",
         role: "Professor & Dean, BS, CITech",
-        link: "/profile/6",
+       
         image: "https://engg.cambridge.edu.in/wp-content/uploads/2023/06/Dean.png"
       },
       {
         name: "Dr. Shreekanth M Prabhu",
         role: "Professor & Head, CSE, CITech",
-        link: "/profile/7",
+        
         image: "https://media.licdn.com/dms/image/v2/C4D03AQHXSzSF4MXFKA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1516239447507?e=1757548800&v=beta&t=udRYiCjrzJVKWwhEIu72kT2ifi3FVBAfN-LMXHlyXdw"
       },
       {
         name: "Dr. Preethi S",
         role: "Professor & Head, ISE, CITech",
-        link: "/profile/8",
+       
         image: "https://faculty.cambridge.edu.in/wp-content/uploads/2021/08/Ms.-Preethi-S-associate-professor.jpg"
       },
       {
         name: "Dr. Sandeep Kumar",
         role: "Professor & Head, CS-IOT, CITech",
-        link: "/profile/9",
+       
         image: "https://sp.yimg.com/ib/th/id/OIP.DuXdFeIsvVSNLQaN4HDO6QHaHa?pid=Api&w=148&h=148&c=7&dpr=2&rs=1"
       }
     ],
@@ -64,25 +64,25 @@
       {
         name: "Dr. Varalatchoumy M",
         role: "Professor & Head, AIML, CITech",
-        link: "/profile/10",
+       
         image: "https://engg.cambridge.edu.in/wp-content/uploads/2023/06/536e21ff-2f83-4f7f-8cfb-f3707a562081.jpg"
       },
       {
         name: "Dr. Shiva Panchakshari T G",
         role: "Professor & Head, ECE, CITech",
-        link: "/profile/11",
+       
         image: "https://engg.cambridge.edu.in/wp-content/uploads/2022/03/DSC_1035-2048x1362.jpg"
       },
       {
         name: "Prof. Hema A",
         role: "Associate Professor & Head, EEE, CITech",
-        link: "/profile/12",
+       
         image: "https://engg.cambridge.edu.in/wp-content/uploads/2021/11/hema.jpg"
       },
       {
         name: "Dr. Shankar B S",
         role: "Professor & Head, Civil, CITech",
-        link: "/profile/13",
+      
         image: "https://engg.cambridge.edu.in/wp-content/uploads/2021/11/Dr.-SHANKAR-B.S-Professor-and-HOD-CIVIL.jpg"
       }
     ],
@@ -90,19 +90,19 @@
       {
         name: "Dr. Suneelkumar N Kulkarni",
         role: "Professor & Head, Mechanical, CITech",
-        link: "/profile/14",
+      
         image: "https://engg.cambridge.edu.in/wp-content/uploads/2021/03/mech-hod-Dr-Suneelkumar-N-Kulkarni.jpg"
       },
       {
         name: "Dr. Ravi",
         role: "Professor & Head, MBA, CITech",
-        link: "/profile/15",
+       
         image: "https://media.licdn.com/dms/image/v2/C5103AQGpD02sI7GKMQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1549959731357?e=1757548800&v=beta&t=up4DeO6eHi-hL1SsrhyMdrt3tvujCOcjDdb2zwmTlRQ"
       },
       {
         name: "Prof. Diwakar Karadi",
         role: "Assistant Professor & Head, MCA, CITech",
-        link: "/profile/16",
+     
         image: "https://faculty.cambridge.edu.in/wp-content/uploads/2021/11/Diwakar-Karadi-assistant-professor-mca.jpg"
       }
     ],
@@ -110,13 +110,13 @@
       {
         name: "Mr. Syed Hayath",
         role: "Web Administrator, Cambrian Incubation Centre, CITech",
-        link: "/profile/17",
+       
         image: "https://i.postimg.cc/g2L1bDMC/DSC-092898.jpg"
       },
       {
         name: "Mr. Arun Singh",
         role: "Operations Manager, Cambrian Incubation Centre, CITech",
-        link: "/profile/18",
+      
         image: "https://i.ibb.co/B2xmBwjy/arun.png"
       }
     ]
@@ -560,22 +560,22 @@
     
     <!-- 2nd Place -->
     <div class="podium-box second">
-      <div class="person">🥈</div>
-      <div class="startup-box">EcoForge</div>
+      <div class="person"></div>
+      <div class="startup-box">Gestify</div>
       <div class="base">2nd</div>
     </div>
 
     <!-- 1st Place -->
     <div class="podium-box first">
-      <div class="person">🥇</div>
-      <div class="startup-box">NeuraTech</div>
+      <div class="person"></div>
+      <div class="startup-box">Projectoo</div>
       <div class="base">1st</div>
     </div>
 
     <!-- 3rd Place -->
     <div class="podium-box third">
-      <div class="person">🥉</div>
-      <div class="startup-box">EduPulse</div>
+      <div class="person"></div>
+      <div class="startup-box">Koko Shell</div>
       <div class="base">3rd</div>
     </div>
 
@@ -601,22 +601,23 @@
       <img src="/images/solve.gif" alt="Industry Problem Solving" />
       <h3>Industry Problem Solving</h3>
       <p>Transform complex challenges into opportunities with expert solutions.</p>
-      <button>Learn More</button>
+      <a href="/research"><button>Learn More</button></a>
     </div>
 
     <div class="glass-box">
       <img src="/images/rd.gif" alt="R&D Partnership" />
       <h3>R&D Partnership</h3>
       <p>Access research labs and collaborate with experts to boost your innovations.</p>
-      <button>Learn More</button>
+      <a href="/rd"><button>Learn More</button></a>
     </div>
 
     <div class="glass-box">
       <img src="/images/support.gif" alt="Innovation Support" />
       <h3>Innovation Support</h3>
       <p>Get end-to-end support from idea to market with mentorship and funding.</p>
-      <button>Learn More</button>
+      <a href="/is"><button>Learn More</button></a>
     </div>
   </div>
 </section>
+
 

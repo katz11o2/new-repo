@@ -212,22 +212,22 @@
   </div>
 
   <div class="right">
-    <div class="circle-wrapper" on:click={() => scrollByAmount(100)}>
+    <div class="circle-wrapper" on:click={() => scrollByAmount(500)}>
       <div class="circle"></div>
       <span class="circle-label desktop">Brief</span>
       <span class="circle-label mobile">A</span>
     </div>
-    <div class="circle-wrapper" on:click={() => scrollByAmount(200)}>
+    <div class="circle-wrapper" on:click={() => scrollByAmount(1500)}>
       <div class="circle"></div>
       <span class="circle-label desktop">Team</span>
       <span class="circle-label mobile">B</span>
     </div>
-    <div class="circle-wrapper" on:click={() => scrollByAmount(300)}>
+    <div class="circle-wrapper" on:click={() => scrollByAmount(2800)}>
       <div class="circle"></div>
       <span class="circle-label desktop">Startups</span>
       <span class="circle-label mobile">C</span>
     </div>
-    <div class="circle-wrapper" on:click={() => scrollByAmount(400)}>
+    <div class="circle-wrapper" on:click={() => scrollByAmount(3200)}>
       <div class="circle"></div>
       <span class="circle-label desktop">Initiatives</span>
       <span class="circle-label mobile">D</span>

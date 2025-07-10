@@ -82,15 +82,9 @@
 
 <div class="wrapper">
   <div class="container {fadeIn ? 'fade-in' : ''}">
-    <h1 class="text">Industry Problem Solving</h1>
-   <p>
-   A partnership between learned academia and industry is designed to establish a professional platform to enable impactful
-    collaboration to take on real-world challenges and build innovative solutions through intense research by participating research faculty.
-    Such a professional relationship will involve expertise, resources, and technological capabilities of industry, especially MSMEs, with
-    the intellectual and research-oriented knowledge from the academic world. The primary objective is to intensely drive innovation in
-    product/process development. Expected outcomes from such partnerships shall include accelerated yet relevant Innovation, access to
-    resources, practical application including experimentation and related data acquisition and analysis, knowledge transfer, etc.
-  </p>
+    <h1 class="text">Innovation Support</h1>
+    <p>
+      Innovation Support aims to create an enabling ecosystem that nurtures creativity, experimentation, and the transformation of ideas into viable solutions. By providing mentorship, access to prototyping facilities, funding opportunities, and industry linkages, innovation support systems empower students, researchers, and startups to pursue breakthrough innovations. These structured initiatives foster a collaborative environment where challenges are addressed through design thinking, iterative development, and real-world validation. The ultimate goal is to accelerate the journey from concept to market, thereby strengthening the innovation pipeline and promoting sustainable, scalable impact across sectors.
+    </p>
   </div>
 </div>
-
