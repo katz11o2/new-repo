@@ -4,14 +4,15 @@
 
 <style>
   .section {
-    padding: 60px 20px;
-    background: linear-gradient(to bottom right, #f1f5ff, #ffffff);
-    font-family: 'Poppins', sans-serif;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+  padding: 60px 20px 180px 20px; /* bottom padding set to 0 */
+  background: linear-gradient(to bottom right, #f1f5ff, #ffffff);
+  font-family: 'Poppins', sans-serif;
+  min-height: auto; /* was 100vh, which caused space if content is short */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 
   .section h1 {
     font-size: 2.6rem;
@@ -21,6 +22,8 @@
     text-align: center;
     letter-spacing: -0.5px;
   }
+
+ 
 
   .card-grid {
     display: grid;
@@ -81,7 +84,7 @@
   <h1>Post Your Problem Statement</h1>
 
   <div class="card-grid">
-    <div class="card" on:click={() => goto('/loginforstudents')}>
+    <div class="card" on:click={() => goto('/loginforbothstudent')}>
       <h2>Student</h2>
       <p>
         Post a problem statement or take up an industry challenge and showcase your skills.
@@ -97,7 +100,7 @@
       <span class="arrow">→</span>
     </div>
 
-    <div class="card" on:click={() => goto('/loginindustry')}>
+    <div class="card" on:click={() => goto('/loginforboth')}>
       <h2>MSME / Non-MSME</h2>
       <p>
         Collaborate with our institution to innovate, co-create, and solve real-world problems.

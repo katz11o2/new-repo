@@ -1,60 +1,57 @@
 <script>
-  const MASTER_KEY = "$2a$10$7s2J1bfLkUw4k5xI41hADupk/1x12kJIIECHjYqWCruKDUnE0/wKu";
-  const BIN_KEY_STORAGE = "jsonbin_industry_ideas";
-  const IMGBB_API_KEY = "6b78d56b527f6dba58807d358ac35142";
-
-  let newStatement = {
-    category: "",
+  let form = {
     title: "",
+    category: "",
     description: "",
     uniqueness: "",
-    existingTech: "",
+    existingTechnologies: "",
     gapAnalysis: "",
     patentability: "",
-    marketData: "",
-    financials: "",
-    attachments: ""
+    Marketingdata: "",
+    visualizedProduct: "",
+    researchData: "",
+    experimentalData: "",
+    otherCategory: "",
+    confirmSubmission: false
   };
 
   let file;
   let loading = false;
 
-  const categories = [
-    "New Product Development",
-    "New Process Development",
-    "New Features in Existing Product",
-    "Problems in Existing Product",
-    "Problems in Existing Processes"
-  ];
+  const MASTER_KEY = "$2a$10$7s2J1bfLkUw4k5xI41hADupk/1x12kJIIECHjYqWCruKDUnE0/wKu";
+  const BIN_KEY_STORAGE = "jsonbin_design_ideas";
+  const IMGBB_API_KEY = "6b78d56b527f6dba58807d358ac35142";
+
+  let showOtherCategory = false;
+  $: showOtherCategory = form.category === "OTHERS";
+
+  let showPatentField = false;
+  $: showPatentField = form.uniqueness === "Yes";
 
   async function toBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => resolve(reader.result.split(",")[1]);
-      reader.onerror = (err) => reject(err);
+      reader.onerror = error => reject(error);
     });
   }
 
-  async function addStatement() {
-    if (!newStatement.title || !newStatement.category) {
-      alert("Please fill all required fields.");
+  async function submitForm() {
+    if (!form.confirmSubmission || !file) {
+      alert("Please confirm the submission and upload a visual file.");
       return;
     }
 
     loading = true;
-
     try {
-      let imageUrl = "";
-      if (file) {
-        const base64 = await toBase64(file);
-        const imgRes = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
-          method: "POST",
-          body: new URLSearchParams({ image: base64 })
-        });
-        const imgJson = await imgRes.json();
-        imageUrl = imgJson?.data?.url || "";
-      }
+      const imageBase64 = await toBase64(file);
+      const imgRes = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+        method: "POST",
+        body: new URLSearchParams({ image: imageBase64 })
+      });
+      const imgData = await imgRes.json();
+      form.visualizedProduct = imgData.data.url;
 
       let binId = localStorage.getItem(BIN_KEY_STORAGE);
       let existing = [];
@@ -67,27 +64,12 @@
         existing = json.record || [];
       }
 
-      existing.push({
-        title: newStatement.title,
-        category: newStatement.category,
-        description: newStatement.description,
-        uniqueness: newStatement.uniqueness,
-        existingTechnologies: newStatement.existingTech,
-        gapAnalysis: newStatement.gapAnalysis,
-        patentability: newStatement.patentability,
-        Marketingdata: newStatement.marketData,
-        researchData: newStatement.financials,
-        experimentalData: "",
-        visualizedProduct: imageUrl,
-        submittedAt: new Date().toISOString()
-      });
+      existing.push({ ...form, submittedAt: new Date().toISOString() });
 
-      const url = binId
-        ? `https://api.jsonbin.io/v3/b/${binId}`
-        : "https://api.jsonbin.io/v3/b";
+      const url = binId ? `https://api.jsonbin.io/v3/b/${binId}` : "https://api.jsonbin.io/v3/b";
       const method = binId ? "PUT" : "POST";
 
-      const saveRes = await fetch(url, {
+      const response = await fetch(url, {
         method,
         headers: {
           "Content-Type": "application/json",
@@ -97,28 +79,31 @@
         body: JSON.stringify(existing)
       });
 
-      const result = await saveRes.json();
+      const result = await response.json();
       if (!binId) {
         localStorage.setItem(BIN_KEY_STORAGE, result.metadata.id);
       }
 
-      alert("✅ Challenge submitted!");
-      newStatement = {
-        category: "",
+      alert("✅ Submission successful!");
+      form = {
         title: "",
+        category: "",
         description: "",
         uniqueness: "",
-        existingTech: "",
+        existingTechnologies: "",
         gapAnalysis: "",
         patentability: "",
-        marketData: "",
-        financials: "",
-        attachments: ""
+        Marketingdata: "",
+        visualizedProduct: "",
+        researchData: "",
+        experimentalData: "",
+        otherCategory: "",
+        confirmSubmission: false
       };
       file = null;
-    } catch (err) {
-      console.error(err);
-      alert("❌ Failed to submit.");
+    } catch (e) {
+      console.error(e);
+      alert("❌ Submission failed.");
     } finally {
       loading = false;
     }
@@ -126,132 +111,143 @@
 </script>
 
 <style>
-  .form-section {
-    background: linear-gradient(to bottom right, #e0f2fe, #f8fafc);
-    padding: 60px 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: url('https://www.transparenttextures.com/patterns/cubes.png'), linear-gradient(to top right, #dbeafe, #f0f9ff);
+    background-size: cover;
+    margin: 0;
+    padding: 0;
   }
 
-  .form-card {
-    width: 100%;
-    max-width: 800px;
-    background: rgba(255, 255, 255, 0.7);
-    padding: 40px;
+  .glass-box {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(14px);
     border-radius: 20px;
-    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
-    backdrop-filter: blur(16px);
-    border: 1px solid #e2e8f0;
-  }
-
-  .form-card h2 {
-    font-size: 2.2rem;
-    font-weight: 700;
-    margin-bottom: 30px;
-    text-align: center;
-    color: #1e40af;
-  }
-
-  label {
-    font-weight: 600;
-    margin-bottom: 6px;
-    display: block;
-    color: #1e293b;
-  }
-
-  input,
-  select,
-  textarea {
+    padding: 2rem;
+    max-width: 900px;
     width: 100%;
-    padding: 12px 14px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(147, 197, 253, 0.4);
+    margin: 60px auto;
+    animation: fadeIn 0.6s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  form input, form textarea, form select {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid #dbeafe;
+    border-radius: 10px;
+    padding: 12px;
+    width: 100%;
+    margin-bottom: 1rem;
     font-size: 1rem;
-    margin-bottom: 20px;
-    border: 1.5px solid #cbd5e1;
-    border-radius: 12px;
-    background-color: #f9fafb;
-    transition: border 0.2s ease;
+    transition: all 0.3s ease;
   }
 
-  input:focus,
-  select:focus,
-  textarea:focus {
-    border-color: #3b82f6;
+  form input:focus, form textarea:focus, form select:focus {
     outline: none;
-    background-color: white;
-  }
-
-  textarea {
-    resize: vertical;
-    min-height: 100px;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
   }
 
   button {
-    width: 100%;
-    background-color: #1d4ed8;
+    background: #3b82f6;
     color: white;
-    padding: 14px;
-    font-size: 1rem;
-    border-radius: 12px;
-    font-weight: 600;
+    font-size: 1.1rem;
     border: none;
+    border-radius: 10px;
+    padding: 12px;
+    width: 100%;
     cursor: pointer;
-    margin-top: 12px;
-    transition: background-color 0.3s ease;
+    transition: background 0.3s ease;
   }
 
   button:hover {
-    background-color: #2563eb;
+    background: #2563eb;
   }
 
-  @media (max-width: 600px) {
-    .form-card {
-      padding: 24px;
-    }
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    color: #1e3a8a;
+    margin-bottom: 1.5rem;
+  }
+
+  .checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .checkbox input {
+    width: auto;
+  }
+
+  .upload-label {
+    font-weight: 600;
+    color: #2563eb;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .note {
+    font-size: 0.9rem;
+    color: #1e40af;
+    font-style: italic;
+    text-align: center;
+    margin-bottom: 1rem;
   }
 </style>
 
-<div class="form-section">
-  <div class="form-card">
-    <h2>📌 Submit Your Industry Challenge</h2>
+<div class="glass-box">
+  <h1>🚀 Submit Your Design Idea</h1>
+  <form on:submit|preventDefault={submitForm}>
+    <input maxlength="100" bind:value={form.title} placeholder="Title" />
 
-    <label>Category *</label>
-    <select bind:value={newStatement.category}>
-      <option value="" disabled>Select a category</option>
-      {#each categories as category}
-        <option value={category}>{category}</option>
-      {/each}
+    <select bind:value={form.category}>
+      <option value="">Select Category</option>
+      <option value="CSE">Computer Science and Engineering</option>
+      <option value="AIML">Mechanical Engineering</option>
+      <option value="EEE">Electrical Engineering</option>
+      <option value="MECH">Chemical Engineering</option>
+      <option value="OTHERS">Others</option>
     </select>
 
-    <label>Title *</label>
-    <input bind:value={newStatement.title} placeholder="Enter a descriptive title" />
+    {#if showOtherCategory}
+      <input maxlength="100" bind:value={form.otherCategory} placeholder="Specify other category" />
+    {/if}
 
-    <label>Description</label>
-    <textarea bind:value={newStatement.description} placeholder="Explain the problem in detail"></textarea>
+    <textarea maxlength="100" bind:value={form.description} placeholder="Description"></textarea>
 
-    <label>Uniqueness</label>
-    <input bind:value={newStatement.uniqueness} placeholder="What makes it unique?" />
+    <select bind:value={form.uniqueness}>
+      <option value="">Is there any uniqueness?</option>
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
 
-    <label>Existing Technologies</label>
-    <input bind:value={newStatement.existingTech} placeholder="What already exists?" />
+    {#if showPatentField}
+      <input maxlength="100" bind:value={form.patentability} placeholder="Patentability Info" />
+    {/if}
 
-    <label>Gap Analysis</label>
-    <input bind:value={newStatement.gapAnalysis} placeholder="What is the gap you identified?" />
+    <input maxlength="100" bind:value={form.existingTechnologies} placeholder="Existing Technologies" />
+    <input maxlength="100" bind:value={form.gapAnalysis} placeholder="Gap-Analysis / Problem Elimination" />
+    <input maxlength="100" bind:value={form.Marketingdata} placeholder="Market / Marketing Data" />
 
-    <label>Patentability</label>
-    <input bind:value={newStatement.patentability} placeholder="Can this be patented?" />
-
-    <label>Market Data</label>
-    <input bind:value={newStatement.marketData} placeholder="Any related market statistics?" />
-
-    <label>Financials</label>
-    <input bind:value={newStatement.financials} placeholder="Any cost estimates or returns?" />
-
-    <label>Attachments</label>
+    <label class="upload-label">Upload Visualized Product</label>
     <input type="file" on:change={(e) => file = e.target.files[0]} accept="image/*,.pdf,.docx" />
 
-    <button on:click={addStatement} disabled={loading}>
-      {loading ? "Submitting..." : "Submit Challenge"}
-    </button>
-  </div>
+    <div class="note">Only visual files are accepted (PDF, DOCX, images).</div>
+
+    <div class="checkbox">
+      <input type="checkbox" bind:checked={form.confirmSubmission} />
+      <span>I confirm the submission and understand the terms.</span>
+    </div>
+
+    <button type="submit" disabled={loading}>{loading ? 'Submitting...' : 'Submit'}</button>
+  </form>
 </div>
