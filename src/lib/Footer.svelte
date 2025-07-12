@@ -1,6 +1,6 @@
 <script>
   import IISCLogo from '../lib/logos/IISC.png';
-  import MSMELogo from '../lib/logos/MSME.jpg';
+  import MSMELogo from '../lib/logos/MSME.png';
 </script>
 
 
@@ -209,10 +209,10 @@
         Follow us on social media<br />and stay updated with our events!
       </div>
       <div class="social-icons">
-        <a href="#"><i class="fab fa-youtube"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-facebook"></i></a>
-        <a href="#"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.youtube.com/@CITBengaluru"><i class="fab fa-youtube"></i></a>
+        <a href="https://www.instagram.com/cit.bengaluru/"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.facebook.com/citech.official"><i class="fab fa-facebook"></i></a>
+        <a href="https://www.linkedin.com/school/cambridge-institute-of-technology1/posts/?feedView=all"><i class="fab fa-linkedin"></i></a>
       </div>
     </div>
 
