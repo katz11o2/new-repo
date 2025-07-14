@@ -181,7 +181,7 @@ Description: ${description}
 
 <div class="page">
   <div class="heading">
-    <h1>Let's Build The Future Together</h1>
+    <h1>We can Build The Future Together</h1>
     <p>Whether you're looking to collaborate or have an innovative idea, we're here to help.</p>
   </div>
 
