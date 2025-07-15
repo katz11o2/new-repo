@@ -29,7 +29,7 @@
   }
 
   function redirectToLogin() {
-    goto("/loginindustry");
+    goto("/register");
   }
 </script>
 

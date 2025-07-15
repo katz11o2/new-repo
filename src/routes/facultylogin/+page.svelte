@@ -44,7 +44,7 @@
   }
 
   function redirectToRegister() {
-    goto("/registerfaculty");
+    goto("/register");
   }
 </script>
 
