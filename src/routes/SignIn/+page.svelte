@@ -12,7 +12,7 @@
     const data = parseJwt(response.credential);
     user = { name: data.name, email: data.email };
     localStorage.setItem('user', JSON.stringify(user));
-    goto('/studentsdashboard'); // ✅ corrected target route
+    goto('/studentsdashboard'); // ✅ changed route to studentsdashboard
   }
 
   onMount(() => {

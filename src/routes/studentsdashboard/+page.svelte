@@ -91,7 +91,7 @@
       }
 
       alert("✅ Submission successful!");
-      goto("/");
+      goto("/"); // ✅ go to homepage after submit
       form = {
         title: "",
         category: "",
