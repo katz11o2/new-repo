@@ -10,15 +10,19 @@
   let isSubmitting = false;
   let statusMessage = '';
 
+  // Decode Google JWT token
   function parseJwt(token) {
     return JSON.parse(atob(token.split('.')[1]));
   }
 
+  // Called by Google Sign-In on success
   function handleCredentialResponse(response) {
     const data = parseJwt(response.credential);
     user = data;
+    console.log("✅ Logged in:", user);
   }
 
+  // Load Google Sign-In library and assign callback
   onMount(() => {
     if (typeof window !== 'undefined') {
       window.handleCredentialResponse = handleCredentialResponse;
@@ -33,14 +37,19 @@
 
   async function submitForm() {
     if (!user) {
-      alert("Please sign in first.");
+      statusMessage = "❌ Please sign in first.";
+      return;
+    }
+
+    if (!question1 || !question2 || !imageFile) {
+      statusMessage = "❌ Please fill in both questions and upload an image.";
       return;
     }
 
     if (isSubmitting) return;
 
     isSubmitting = true;
-    statusMessage = "Submitting...";
+    statusMessage = "⏳ Submitting...";
 
     const formData = new FormData();
     formData.append("name", user.name);
@@ -50,19 +59,19 @@
     formData.append("image", imageFile);
 
     try {
-      const res = await fetch("http://cambrian-sparkzone.com/api/upload.php", {
+      const res = await fetch("https://cambrian-sparkzone.com/api/upload.php", {
         method: "POST",
         body: formData
       });
 
       const result = await res.text();
+      console.log(result);
+
       if (result.includes("✅")) {
         statusMessage = "✅ Submitted successfully! Redirecting to dashboard...";
-        setTimeout(() => {
-          goto('/Dashboard'); // redirect after 2 seconds
-        }, 2000);
+        setTimeout(() => goto('/Dashboard'), 2000);
       } else {
-        statusMessage = "❌ Submission failed. Try again.";
+        statusMessage = "❌ Submission failed. Server said: " + result;
       }
     } catch (err) {
       console.error(err);
@@ -73,7 +82,7 @@
   }
 </script>
 
-<!-- Google Sign-In -->
+<!-- ✅ Google Sign-In -->
 <div id="g_id_onload"
      data-client_id="594127000452-k46vshbq0dtd07ak28rj0fg9s03srca7.apps.googleusercontent.com"
      data-context="signin"
@@ -89,6 +98,7 @@
      data-text="sign_in_with">
 </div>
 
+<!-- ✅ Form UI (Only shows after login) -->
 {#if user}
   <h3>Hello, {user.name}</h3>
 
@@ -104,3 +114,17 @@
     <p>{statusMessage}</p>
   {/if}
 {/if}
+
+<style>
+  input, button {
+    display: block;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+
+  p {
+    margin-top: 0.5rem;
+    color: #333;
+  }
+</style>
