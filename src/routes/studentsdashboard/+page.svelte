@@ -1,4 +1,4 @@
-<!-- ✅ Updated studentsdashboard.svelte -->
+<!-- ✅ Combined studentsdashboard.svelte -->
 <script>
   import { goto } from "$app/navigation";
 
@@ -67,7 +67,6 @@
         existing = json.record || [];
       }
 
-      // ✅ Pull user email from global token
       const token = window.googleToken;
       const payload = JSON.parse(atob(token.split('.')[1]));
 
@@ -75,7 +74,7 @@
         ...form,
         submittedAt: new Date().toISOString(),
         submittedBy: "Student",
-        submittedByEmail: payload.email // ✅ added email tag
+        submittedByEmail: payload.email
       });
 
       const url = binId ? `https://api.jsonbin.io/v3/b/${binId}` : "https://api.jsonbin.io/v3/b";
@@ -97,7 +96,7 @@
       }
 
       alert("✅ Submission successful!");
-      goto("/");
+      goto("/studentsdashboard2");
       form = {
         title: "",
         category: "",
@@ -122,7 +121,6 @@
     }
   }
 </script>
-
 
 <style>
   body {
