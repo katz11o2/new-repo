@@ -1,92 +1,112 @@
 <script>
   import { onMount } from 'svelte';
-  import { goto } from '$app/navigation';
 
-  const MASTER_KEY = '$2a$10$7s2J1bfLkUw4k5xI41hADupk/1x12kJIIECHjYqWCruKDUnE0/wKu';
-  const BIN_ID = '655f0c7d12a5d3765993b4ae'; // Replace with your JSONBin bin ID
+  let email = '';
+  let password = '';
+  let captchaInput = '';
+  let generatedCaptcha = '';
 
-  function parseJwt(token) {
-    return JSON.parse(atob(token.split('.')[1]));
+  // Generate a random 4-digit captcha
+  function generateCaptcha() {
+    generatedCaptcha = Math.floor(1000 + Math.random() * 9000).toString();
   }
 
-  async function handleCredentialResponse(response) {
-    const data = parseJwt(response.credential);
-
-    const newEntry = {
-      email: data.email,
-      name: data.name,
-      picture: data.picture,
-      timestamp: new Date().toISOString()
-    };
-
-    try {
-      // Fetch existing records
-      const getRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-        headers: {
-          'X-Master-Key': MASTER_KEY
-        }
-      });
-
-      const existingData = await getRes.json();
-      const updatedData = existingData.record || [];
-
-      // Add new user
-      updatedData.push(newEntry);
-
-      // Save to JSONBin
-      await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Master-Key': MASTER_KEY,
-          'X-Bin-Private': 'true'
-        },
-        body: JSON.stringify(updatedData)
-      });
-
-      goto('/studentsdashbaord2');
-    } catch (err) {
-      console.error('❌ Login Failed:', err);
-      alert('❌ Login failed. Try again.');
+  function handleFormLogin() {
+    if (!email || !password || captchaInput !== generatedCaptcha) {
+      alert('Invalid login or captcha!');
+      generateCaptcha();
+      return;
     }
+    alert(`Logged in manually as ${email}`);
+  }
+
+  function handleGoogleLogin(response) {
+    const data = JSON.parse(atob(response.credential.split('.')[1]));
+    alert(`Logged in with Google as ${data.name} (${data.email})`);
   }
 
   onMount(() => {
-    if (typeof window !== 'undefined') {
-      window.handleCredentialResponse = handleCredentialResponse;
+    generateCaptcha();
 
-      const script = document.createElement('script');
-      script.src = 'https://accounts.google.com/gsi/client';
-      script.async = true;
-      script.defer = true;
-      document.head.appendChild(script);
-    }
+    // Google Sign-In
+    window.handleGoogleLogin = handleGoogleLogin;
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
   });
 </script>
 
-<h2>🔐 Login with Google</h2>
-<div id="g_id_onload"
-     data-client_id="594127000452-k46vshbq0dtd07ak28rj0fg9s03srca7.apps.googleusercontent.com"
-     data-callback="handleCredentialResponse"
-     data-auto_prompt="false">
-</div>
-<div class="g_id_signin"
-     data-type="standard"
-     data-size="large"
-     data-theme="outline"
-     data-text="sign_in_with">
-</div>
-
 <style>
-  h2 {
+  .login-box {
+    max-width: 400px;
+    margin: 5rem auto;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    background: white;
     font-family: 'Poppins', sans-serif;
+  }
+  h2 {
     text-align: center;
     color: #1e3a8a;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
   }
-  .g_id_signin {
-    display: flex;
-    justify-content: center;
-    margin-top: 1rem;
+  input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+  .captcha {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    background: #f1f5f9;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    color: #1e3a8a;
+  }
+  button {
+    width: 100%;
+    background: #1e3a8a;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #2c4c9a;
   }
 </style>
+
+<div class="login-box">
+  <h2>Login</h2>
+
+  <input type="email" bind:value={email} placeholder="Email" />
+  <input type="password" bind:value={password} placeholder="Password" />
+
+  <div class="captcha">{generatedCaptcha}</div>
+  <input type="text" bind:value={captchaInput} placeholder="Enter Captcha" />
+
+  <button on:click={handleFormLogin}>Login</button>
+
+  <div id="g_id_onload"
+       data-client_id="594127000452-k46vshbq0dtd07ak28rj0fg9s03srca7.apps.googleusercontent.com"
+       data-callback="handleGoogleLogin"
+       data-auto_prompt="false">
+  </div>
+
+  <div class="g_id_signin"
+       data-type="standard"
+       data-size="large"
+       data-theme="outline"
+       data-text="sign_in_with">
+  </div>
+</div>
