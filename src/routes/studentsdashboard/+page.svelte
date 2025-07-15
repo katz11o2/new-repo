@@ -54,7 +54,12 @@
       });
       const imgData = await imgRes.json();
       if (!imgData.success) throw new Error("Image upload failed");
+
       form.visualizedProduct = imgData.data.url;
+
+      const token = window.googleToken;
+      if (!token) throw new Error("Google token missing");
+      const payload = JSON.parse(atob(token.split('.')[1]));
 
       let binId = localStorage.getItem(BIN_KEY_STORAGE);
       let existing = [];
@@ -66,11 +71,6 @@
         const json = await res.json();
         existing = json.record || [];
       }
-
-      // ✅ Get token from global googleToken variable
-      const token = window.googleToken;
-      if (!token) throw new Error("Google token missing");
-      const payload = JSON.parse(atob(token.split('.')[1]));
 
       existing.push({
         ...form,
