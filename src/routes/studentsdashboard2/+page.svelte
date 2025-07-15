@@ -86,7 +86,7 @@
 </style>
 
 <div class="dashboard">
-  <h1> Your Submitted Design Ideas</h1>
+  <h1> Our Submitted Design Ideas</h1>
 
   {#if loading}
     <p>🔄 Loading your submissions...</p>
