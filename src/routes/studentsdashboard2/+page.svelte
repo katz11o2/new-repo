@@ -26,6 +26,7 @@
       const json = await res.json();
       const allRecords = json.record || [];
 
+      // ✅ Get token from window.googleToken set at login
       const token = window.googleToken;
       if (!token) {
         error = "Google token not found.";
@@ -53,7 +54,6 @@
     padding: 2rem;
     max-width: 1000px;
     margin: 0 auto;
-    font-family: 'Poppins', sans-serif;
   }
   h1 {
     font-size: 2rem;
@@ -105,6 +105,7 @@
         <p><strong>Existing Technologies:</strong> {idea.existingTechnologies}</p>
         <p><strong>Research Data:</strong> {idea.researchData}</p>
         <p><strong>Experimental Data:</strong> {idea.experimentalData}</p>
+        <p><strong>Patentability:</strong> {idea.patentability}</p>
         {#if idea.visualizedProduct}
           <img class="image-preview" src={idea.visualizedProduct} alt="Visual" />
         {/if}

@@ -1,4 +1,3 @@
-<!-- ✅ Combined studentsdashboard.svelte -->
 <script>
   import { goto } from "$app/navigation";
 
@@ -54,6 +53,7 @@
         body: new URLSearchParams({ image: imageBase64 })
       });
       const imgData = await imgRes.json();
+      if (!imgData.success) throw new Error("Image upload failed");
       form.visualizedProduct = imgData.data.url;
 
       let binId = localStorage.getItem(BIN_KEY_STORAGE);
@@ -67,7 +67,9 @@
         existing = json.record || [];
       }
 
+      // ✅ Get token from global googleToken variable
       const token = window.googleToken;
+      if (!token) throw new Error("Google token missing");
       const payload = JSON.parse(atob(token.split('.')[1]));
 
       existing.push({
@@ -96,7 +98,7 @@
       }
 
       alert("✅ Submission successful!");
-      goto("/studentsdashboard2");
+      goto("/");
       form = {
         title: "",
         category: "",
@@ -115,7 +117,7 @@
       file = null;
     } catch (e) {
       console.error(e);
-      alert("❌ Submission failed.");
+      alert("❌ Submission failed: " + e.message);
     } finally {
       loading = false;
     }
