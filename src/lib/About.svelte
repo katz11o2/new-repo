@@ -19,9 +19,9 @@
   });
 
   const items = [
-    "Welcome to Cambrian Incubation Center, We invite you to post your design challenges and we can build a solution for it!",
-    "15+ MSME has colloborated and posted their problem statments with CIC"
-  ];
+  `Welcome to Cambrian Incubation Center, We invite you to post your design challenges and we can build a solution for it! <a href="/login" class="link">Click Here</a>`
+];
+
 
   function scrollByAmount(amount) {
     window.scrollBy({ top: amount, behavior: 'smooth' });
@@ -108,6 +108,8 @@
     transform: translateX(0%);
   }
 
+  
+
   @keyframes scroll {
     0% {
       transform: translateX(0%);
@@ -162,6 +164,20 @@
     white-space: nowrap;
   }
 
+.link {
+  color: white !important;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.link:hover {
+  color: #00ffff !important;
+}
+
+
+
+
   @media (max-width: 600px) {
     .circle-wrapper {
       flex-direction: column;
@@ -205,7 +221,8 @@
     <div class="scroll-content">
       {#each Array(10) as _, i}
         {#each items as item}
-          <span>{item}</span>
+        <span>{@html item}</span>
+
         {/each}
       {/each}
     </div>

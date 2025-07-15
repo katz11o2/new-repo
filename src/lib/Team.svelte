@@ -57,7 +57,7 @@
         name: "Dr. Sandeep Kumar",
         role: "Professor & Head, CS-IOT, CITech",
        
-        image: "https://tse2.mm.bing.net/th/id/OIP.lZBF3rEGqcKSnYekVrMYXQHaHa?pid=Api&P=0&h=180"
+        image: "https://faculty.cambridge.edu.in/wp-content/uploads/2021/11/Sandeep-Kumar-associate-professor.webp"
       }
     ],
     [
@@ -77,7 +77,7 @@
         name: "Dr.Sujatha",
         role: "Professor & Head, EEE, CITech",
        
-        image: "https://tse2.mm.bing.net/th/id/OIP.lZBF3rEGqcKSnYekVrMYXQHaHa?pid=Api&P=0&h=180"
+        image: "https://faculty.cambridge.edu.in/wp-content/uploads/2021/08/B-G-Sujatha-associate-professor.jpg"
       },
       {
         name: "Dr. Shankar B S",

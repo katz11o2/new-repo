@@ -2,17 +2,17 @@
   const servicesTop = [
     {
       gif: 'images/ai.gif',
-      title: '20+',
+      title: '16+',
       description: 'Industry partners have collaborated with us'
     },
     {
       gif: 'images/iot.gif',
-      title: '1500+',
+      title: '500+',
       description: 'Unique patents have been granted to our institution'
     },
     {
       gif: 'images/devops.gif',
-      title: '98%',
+      title: '99%',
       description: "Success rate to all our projects posted by industry partners"
     }
   ];

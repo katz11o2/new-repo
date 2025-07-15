@@ -1,14 +1,15 @@
+
 <script>
   const today = new Date();
   let currentMonth = today.getMonth();
   let currentYear = today.getFullYear();
 
-  const upcomingEvents = [
-    { date: '2025-07-12', title: 'Ideathon Launch' },
-    { date: '2025-07-15', title: 'Guest Lecture on AI' },
-    { date: '2025-07-19', title: 'Startup Networking' },
-    { date: '2025-07-22', title: 'Tech Bootcamp' },
-    { date: '2025-07-25', title: 'Pitch Day' }
+  const pastEvents = [
+    { date: '2025-01-28', title: 'Inauguration of Cambrian Incubation Center' },
+    { date: '2025-01-10', title: 'One Day Design Awareness Program' },
+    { date: '2025-02-14', title: 'Problem Statement & RCA Review' },
+    { date: '2025-03-12', title: 'Mentoring on Data collection & Analysis' },
+    { date: '2025-04-08', title: 'Data process & review and Drone Tech Mentoring' }
   ];
 
   function getDaysInMonth(month, year) {
@@ -44,10 +45,11 @@
 
   function handleClick(date) {
     if (!date) return;
-    const day = date.getDay();
-    if (day === 1) selectedEvent = 'Masterclass on Root Cause Analysis';
-    else if (day === 5) selectedEvent = 'Seminar on Startups';
-    else selectedEvent = '';
+    if (date.getDay() === 5) {
+      selectedEvent = 'Root Cause Analysis';
+    } else {
+      selectedEvent = '';
+    }
   }
 
   $: calendarPairs = [0, 1].map(offset => {
@@ -82,6 +84,25 @@
     max-width: 720px;
     width: 100%;
     margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .rca-label {
+    position: absolute;
+    top: -10px;
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    color: #1d4ed8;
+  }
+
+  .rca-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #2563eb;
   }
 
   .arrows {
@@ -209,6 +230,7 @@
     <div class="arrows" on:click={() => currentMonth--}>&larr;</div>
     <h2>{getMonthName(currentMonth)} & {getMonthName((currentMonth + 1) % 12)} {currentYear}</h2>
     <div class="arrows" on:click={() => currentMonth++}>&rarr;</div>
+    <div class="rca-label"><div class="rca-dot"></div> Root Cause Analysis</div>
   </div>
 
   <div class="calendars">
@@ -223,8 +245,7 @@
             {#each week as day}
               <div
                 class="day {day && day.getDay() === 5 ? 'blue-day' : ''}"
-                on:click={() => handleClick(day)}
-              >
+                on:click={() => handleClick(day)}>
                 {day ? day.getDate() : ''}
               </div>
             {/each}
@@ -241,9 +262,9 @@
   {/if}
 
   <div class="upcoming">
-    <h3>Upcoming Events</h3>
+    <h3>Past Events</h3>
     <ul>
-      {#each upcomingEvents as event}
+      {#each pastEvents as event}
         <li><strong>{event.date}:</strong> {event.title}</li>
       {/each}
     </ul>

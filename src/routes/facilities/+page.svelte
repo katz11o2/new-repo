@@ -14,7 +14,7 @@
     },
     {
       title: "Seminar Halls",
-      image: "https://i.postimg.cc/Yq4GMgvj/Whats-App-Image-2025-04-24-at-13-14-28-f5789805.jpg",
+      image: "https://i.ibb.co/PZ9gVQV1/20241017-150016-1.jpg",
       description: "We have 2 Seminar halls with Modern space for hosting seminars.",
       link: "/seminar1"
     },

@@ -186,21 +186,25 @@
 </style>
 
 <footer>
-  <div class="footer-wrapper">
-    <!-- Left Section -->
-    <div class="footer-left">
-      <div class="footer-heading">
-        In Association With MSME - COE  <br> (IISc) &  Ministry of MSME (GoI)
-      </div>
-      <div class="footer-text">
-        Transforming ideas into breakthrough <br>  innovations since 2010.
-      </div>
-      <div class="footer-logos">
-       <img src="{IISCLogo}" alt="Logo 1" class="footer-logo" />
-<img src="{MSMELogo}" alt="Logo 2" class="footer-logo" />
-
-      </div>
+<div class="footer-wrapper">
+  <!-- Left Section -->
+  <div class="footer-left">
+    <div class="footer-heading">
+      With Support From MSME - COE  <br> (IISc) &  Ministry of MSME (GoI)
     </div>
+    <div class="footer-text">
+      Transforming ideas into breakthrough <br> innovations since 2010.
+    </div>
+    <div class="footer-logos">
+      <a href="https://iisc.ac.in/" target="_blank" rel="noopener noreferrer">
+        <img src="{IISCLogo}" alt="IISc Logo" class="footer-logo" />
+      </a>
+      <a href="https://msme.gov.in/" target="_blank" rel="noopener noreferrer">
+        <img src="{MSMELogo}" alt="MSME Logo" class="footer-logo" />
+      </a>
+    </div>
+  </div>
+
 
     <!-- Center Section -->
     <div class="footer-center">

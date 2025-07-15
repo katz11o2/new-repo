@@ -106,8 +106,8 @@
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
-    gap: 10px;
-    margin-top: 30px;
+    gap: 16px;
+    margin-top: 20px;
     position: relative;
   }
 
@@ -117,7 +117,7 @@
     height: 0;
     border-left: 12px solid transparent;
     border-right: 12px solid transparent;
-    margin: 4px 0;
+    margin: 2px 0;
     transition: transform 0.3s ease;
   }
 
@@ -154,32 +154,47 @@
   }
 
   .box-hod {
-    padding: 18px 36px;
+    padding: 14px 28px;
     border-radius: 4px;
     background-color: #dbeafe;
     border: 2px solid #2563eb;
     font-weight: bold;
     transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-    cursor: pointer;
-    display: inline-block;
     color: black;
     text-align: center;
-    animation: popUp 1.2s ease-out forwards;
-    opacity: 0;
-    transform: scale(0.95);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    animation: fadeIn 0.6s ease-out;
+    display: inline-block;
   }
 
   .box-hod:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
     background-color: #bfdbfe;
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+  }
+
+  .box-hod a {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .side-boxes,
   .right-boxes,
   .flow-diagram {
-    pointer-events: none;
+    pointer-events: auto;
   }
 
   .side-boxes {
@@ -189,7 +204,7 @@
     transform: translateY(-50%);
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
     align-items: flex-end;
   }
 
@@ -231,16 +246,16 @@
 
     h1,
     .team-title {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
     }
 
     p {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     .box-hod {
-      font-size: 0.85rem;
-      padding: 14px 20px;
+      font-size: 0.8rem;
+      padding: 10px 20px;
     }
 
     .side-boxes,
@@ -248,6 +263,10 @@
     .side-arrow,
     .right-arrow {
       display: none;
+    }
+
+    .flow-diagram {
+      gap: 12px;
     }
   }
 
@@ -262,19 +281,24 @@
 
     h1,
     .team-title {
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
 
     p {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
 
     .box-hod {
-      font-size: 0.8rem;
-      padding: 12px 16px;
+      font-size: 0.75rem;
+      padding: 8px 16px;
+    }
+
+    .flow-diagram {
+      gap: 10px;
     }
   }
 </style>
+
 <div class="container">
   <div class="glass-wrapper">
     <h1>Cambrian Incubation Center (CIC)</h1>
@@ -311,34 +335,30 @@
 
       <!-- Left side team -->
       <div class="side-boxes">
-        <div class="box-hod">Web Administrator</div>
-        <div class="box-hod">Operations Manager</div>
+        <div class="box-hod"><a href="/web-admin">Web Administrator</a></div>
+        <div class="box-hod"><a href="/ops-manager">Operations Manager</a></div>
       </div>
       <div class="side-arrow"><div class="arrow-right"></div></div>
 
       <!-- Right side team -->
       <div class="right-boxes">
-        <div class="box-hod">Advisior-Innovation</div>
+        <div class="box-hod"><a href="/advisor">Advisior-Innovation</a></div>
         <div class="arrow-up"></div>
         <div class="arrow-down"></div>
-        <div class="box-hod">MSME/Industry Associates</div>
+        <div class="box-hod"><a href="/msme-associates">MSME/Industry Associates</a></div>
       </div>
       <div class="right-arrow"><div class="arrow-left"></div></div>
 
       <div class="flow-diagram">
-        <div class="box-hod">All Hods</div>
+        <div class="box-hod"><a href="/hods">All Hods</a></div>
         <div class="arrow-up"></div>
-
-        <div class="box-hod">Head - CIC</div>
+        <div class="box-hod"><a href="/head-cic">Head - CIC</a></div>
         <div class="arrow-up"></div>
-
-        <div class="box-hod">Principal</div>
+        <div class="box-hod"><a href="/principal">Principal</a></div>
         <div class="arrow-up"></div>
-
-        <div class="box-hod">CEO</div>
+        <div class="box-hod"><a href="/ceo">CEO</a></div>
         <div class="arrow-up"></div>
-
-        <div class="box-hod">Chairman</div>
+        <div class="box-hod"><a href="/chairman">Chairman</a></div>
       </div>
     </div>
   </div>
