@@ -1,26 +1,36 @@
 <script>
   import { onMount } from 'svelte';
-  import { goto } from '$app/navigation';
 
   let user = null;
   let question1 = '';
   let question2 = '';
   let imageFile = null;
-  let statusMessage = '';
+  let status = '';
   let isSubmitting = false;
 
+  const imgbbApiKey = "6b78d56b527f6dba58807d358ac35142";
+  const formspreeEndpoint = "https://formspree.io/f/mvgqoaby";
+
+  // Google JWT decode
   function parseJwt(token) {
     return JSON.parse(atob(token.split('.')[1]));
   }
 
+  // Google Sign-In Callback
   function handleCredentialResponse(response) {
     const data = parseJwt(response.credential);
-    user = data;
+    user = {
+      name: data.name,
+      email: data.email,
+    };
+    console.log('✅ Logged in:', user);
   }
 
+  // Load Google OAuth Script
   onMount(() => {
     if (typeof window !== 'undefined') {
       window.handleCredentialResponse = handleCredentialResponse;
+
       const script = document.createElement('script');
       script.src = 'https://accounts.google.com/gsi/client';
       script.async = true;
@@ -29,104 +39,109 @@
     }
   });
 
-  async function submitForm() {
-    if (!user || !question1 || !question2 || !imageFile) {
-      statusMessage = "❌ Please fill all fields and sign in.";
+  async function handleSubmit() {
+    if (!user) {
+      status = '❌ Please sign in first.';
+      return;
+    }
+
+    if (!question1 || !question2 || !imageFile) {
+      status = '❌ Fill all fields and upload an image.';
       return;
     }
 
     isSubmitting = true;
-    statusMessage = "⏳ Uploading image...";
+    status = '⏳ Uploading image...';
 
+    // Upload to ImgBB
     const formData = new FormData();
-    formData.append("file", imageFile);
-    formData.append("upload_preset", "svelte_upload"); // 🔁 Replace with your preset name
+    formData.append('image', imageFile);
 
     try {
-      const uploadRes = await fetch("https://api.cloudinary.com/v1_1/dcnzrofcw/image/upload", {
-        method: "POST",
+      const resImg = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbApiKey}`, {
+        method: 'POST',
         body: formData
       });
 
-      const uploadData = await uploadRes.json();
+      const imgResult = await resImg.json();
+      if (!imgResult.success) throw new Error('Image upload failed');
 
-      if (!uploadData.secure_url) {
-        statusMessage = "❌ Upload failed. Try another image.";
-        return;
-      }
+      const imageUrl = imgResult.data.url;
 
-      // Send form data + uploaded image URL to your backend
-      const response = await fetch("https://cambrian-sparkzone.com/api/upload.php", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
+      // Send to Formspree
+      const resForm = await fetch(formspreeEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: user.name,
           email: user.email,
           question1,
           question2,
-          imageUrl: uploadData.secure_url
+          image: imageUrl
         })
       });
 
-      const result = await response.text();
-      console.log(result);
-
-      if (result.includes("✅")) {
-        statusMessage = "✅ Submitted successfully! Redirecting...";
-        setTimeout(() => goto('/Dashboard'), 2000);
+      if (resForm.ok) {
+        status = '✅ Submitted successfully!';
+        question1 = '';
+        question2 = '';
+        imageFile = null;
       } else {
-        statusMessage = "❌ Server failed: " + result;
+        status = '❌ Form submission failed.';
       }
-
     } catch (err) {
       console.error(err);
-      statusMessage = "❌ Connection failed.";
-    } finally {
-      isSubmitting = false;
+      status = '❌ Error during submission.';
     }
+
+    isSubmitting = false;
   }
 </script>
 
-<!-- Google Login -->
-<div id="g_id_onload"
-     data-client_id="594127000452-k46vshbq0dtd07ak28rj0fg9s03srca7.apps.googleusercontent.com"
-     data-context="signin"
-     data-ux_mode="popup"
-     data-callback="handleCredentialResponse"
-     data-auto_prompt="false">
-</div>
+<!-- ✅ Google Sign-In -->
+{#if !user}
+  <div id="g_id_onload"
+       data-client_id="594127000452-k46vshbq0dtd07ak28rj0fg9s03srca7.apps.googleusercontent.com"
+       data-callback="handleCredentialResponse"
+       data-auto_prompt="false">
+  </div>
+  <div class="g_id_signin"
+       data-type="standard"
+       data-size="large"
+       data-theme="outline"
+       data-text="sign_in_with">
+  </div>
+{/if}
 
-<div class="g_id_signin" data-type="standard" data-size="large"></div>
-
-<!-- Show Form After Login -->
+<!-- ✅ Show form after login -->
 {#if user}
-  <h3>Hello, {user.name}</h3>
+  <h3>Welcome, {user.name}</h3>
 
   <input bind:value={question1} placeholder="Answer Question 1" />
   <input bind:value={question2} placeholder="Answer Question 2" />
   <input type="file" accept="image/*" on:change={(e) => imageFile = e.target.files[0]} />
 
-  <button on:click={submitForm} disabled={isSubmitting}>
+  <button on:click={handleSubmit} disabled={isSubmitting}>
     {isSubmitting ? 'Submitting...' : 'Submit'}
   </button>
+{/if}
 
-  {#if statusMessage}
-    <p>{statusMessage}</p>
-  {/if}
+{#if status}
+  <p>{status}</p>
 {/if}
 
 <style>
   input, button {
     display: block;
+    width: 100%;
+    max-width: 400px;
     margin: 0.5rem 0;
-    padding: 0.5rem;
+    padding: 0.6rem;
     font-size: 1rem;
   }
-
   p {
-    margin-top: 0.5rem;
-    color: #333;
+    margin-top: 1rem;
+    color: #444;
+    font-weight: 500;
   }
 </style>
