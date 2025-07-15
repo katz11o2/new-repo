@@ -1,7 +1,8 @@
 <script>
   import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
+
   let user = null;
-  let loading = true;
   let question1 = '';
   let question2 = '';
   let imageFile = null;
@@ -9,21 +10,20 @@
   let isSubmitting = false;
 
   const imgbbApiKey = '6b78d56b527f6dba58807d358ac35142';
-  const scriptEndpoint = 'https://script.google.com/macros/s/AKfycbxK_PEHvy8cXW2JhMVJhC1p_am2NWKiEMKlyJtn18Fxe_EmS_FtkU3oU5a5_98qnX06/exec';
+  const scriptEndpoint = 'https://script.google.com/macros/s/AKfycbyxQi0QCVOfJ92zVYjjnzeXW-VGhRFmKWsn8Vo98OMDnmx7b9uFbIff9WjXdAZsom_l/exec';
 
   onMount(() => {
-    const saved = localStorage.getItem('user');
-    if (saved) {
-      user = JSON.parse(saved);
+    const localUser = localStorage.getItem('user');
+    if (!localUser) {
+      goto('/SignIn');
     } else {
-      window.location.href = '/SignIn';
+      user = JSON.parse(localUser);
     }
-    loading = false;
   });
 
   async function handleSubmit() {
-    if (!question1 || !question2 || !imageFile) {
-      status = '❌ Fill all fields.';
+    if (!user || !question1 || !question2 || !imageFile) {
+      status = '❌ Please fill all fields.';
       return;
     }
 
@@ -31,6 +31,7 @@
     status = '⏳ Uploading image...';
 
     try {
+      // Upload image to ImgBB
       const formData = new FormData();
       formData.append('image', imageFile);
 
@@ -40,12 +41,14 @@
       });
 
       const imgResult = await resImg.json();
-      if (!imgResult.success) throw new Error('❌ Image upload failed.');
-      const imageURL = imgResult.data.url;
+      if (!imgResult.success) throw new Error('Image upload failed');
 
+      const imageUrl = imgResult.data.url;
+
+      // Send form data to Google Apps Script
       status = '📤 Submitting to Google Sheet...';
 
-      const resForm = await fetch(scriptEndpoint, {
+      const response = await fetch(scriptEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -53,36 +56,32 @@
           email: user.email,
           question1,
           question2,
-          imageURL
+          imageURL: imageUrl
         })
       });
 
-      const responseText = await resForm.text();
-      console.log('📄 Response:', responseText);
-
-      if (resForm.ok) {
+      const result = await response.json();
+      if (result.success) {
         status = '✅ Submitted successfully!';
         question1 = '';
         question2 = '';
         imageFile = null;
       } else {
-        throw new Error('❌ Submission failed.');
+        throw new Error('Failed to submit data.');
       }
-
-    } catch (err) {
-      console.error(err);
-      status = '❌ ' + err.message;
+    } catch (error) {
+      console.error(error);
+      status = `❌ ${error.message}`;
     } finally {
       isSubmitting = false;
     }
   }
 </script>
 
-{#if loading}
-  <p>⏳ Loading...</p>
-{:else}
-  <h2>Welcome, {user.name}</h2>
-  <p>Email: {user.email}</p>
+<h2>Dashboard</h2>
+
+{#if user}
+  <p>Logged in as <strong>{user.name}</strong> ({user.email})</p>
 
   <input bind:value={question1} placeholder="Answer Question 1" />
   <input bind:value={question2} placeholder="Answer Question 2" />
@@ -91,14 +90,18 @@
   <button on:click={handleSubmit} disabled={isSubmitting}>
     {isSubmitting ? 'Submitting...' : 'Submit'}
   </button>
+{/if}
 
-  {#if status}
-    <p>{status}</p>
-  {/if}
+{#if status}
+  <p>{status}</p>
 {/if}
 
 <style>
-  h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
   input, button {
     display: block;
     width: 100%;
@@ -107,5 +110,9 @@
     padding: 0.6rem;
     font-size: 1rem;
   }
-  p { font-weight: 500; margin-top: 1rem; }
+
+  p {
+    margin-top: 1rem;
+    color: #333;
+  }
 </style>
