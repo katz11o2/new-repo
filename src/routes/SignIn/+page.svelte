@@ -12,7 +12,7 @@
     const data = parseJwt(response.credential);
     user = { name: data.name, email: data.email };
     localStorage.setItem('user', JSON.stringify(user));
-    goto('/dashboard1');
+    goto('/Dashboard1');
   }
 
   onMount(() => {
