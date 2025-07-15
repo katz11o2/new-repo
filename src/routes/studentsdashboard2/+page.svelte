@@ -53,6 +53,7 @@
     padding: 2rem;
     max-width: 1000px;
     margin: 0 auto;
+    font-family: 'Poppins', sans-serif;
   }
   h1 {
     font-size: 2rem;
@@ -102,6 +103,8 @@
         <p><strong>Gap Analysis:</strong> {idea.gapAnalysis}</p>
         <p><strong>Marketing Data:</strong> {idea.Marketingdata}</p>
         <p><strong>Existing Technologies:</strong> {idea.existingTechnologies}</p>
+        <p><strong>Research Data:</strong> {idea.researchData}</p>
+        <p><strong>Experimental Data:</strong> {idea.experimentalData}</p>
         {#if idea.visualizedProduct}
           <img class="image-preview" src={idea.visualizedProduct} alt="Visual" />
         {/if}
