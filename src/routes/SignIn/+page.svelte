@@ -6,27 +6,21 @@
   let question1 = '';
   let question2 = '';
   let imageFile = null;
-
-  let isSubmitting = false;
   let statusMessage = '';
+  let isSubmitting = false;
 
-  // Decode Google JWT token
   function parseJwt(token) {
     return JSON.parse(atob(token.split('.')[1]));
   }
 
-  // Google Sign-In success callback
   function handleCredentialResponse(response) {
     const data = parseJwt(response.credential);
     user = data;
-    console.log("✅ Logged in:", user);
   }
 
-  // Load Google Sign-In library
   onMount(() => {
     if (typeof window !== 'undefined') {
       window.handleCredentialResponse = handleCredentialResponse;
-
       const script = document.createElement('script');
       script.src = 'https://accounts.google.com/gsi/client';
       script.async = true;
@@ -35,55 +29,67 @@
     }
   });
 
-  // Form submit function
   async function submitForm() {
-    if (!user) {
-      statusMessage = "❌ Please sign in first.";
+    if (!user || !question1 || !question2 || !imageFile) {
+      statusMessage = "❌ Please fill all fields and sign in.";
       return;
     }
-
-    if (!question1 || !question2 || !imageFile) {
-      statusMessage = "❌ Please fill in both questions and upload an image.";
-      return;
-    }
-
-    if (isSubmitting) return;
 
     isSubmitting = true;
-    statusMessage = "⏳ Submitting...";
+    statusMessage = "⏳ Uploading image...";
 
     const formData = new FormData();
-    formData.append("name", user.name);
-    formData.append("email", user.email);
-    formData.append("question1", question1);
-    formData.append("question2", question2);
-    formData.append("image", imageFile);
+    formData.append("file", imageFile);
+    formData.append("upload_preset", "svelte_upload"); // 🔁 Replace with your preset name
 
     try {
-      const res = await fetch("https://u663725096.hostingerapp.com/api/upload.php", {
+      const uploadRes = await fetch("https://api.cloudinary.com/v1_1/dcnzrofcw/image/upload", {
         method: "POST",
         body: formData
       });
 
-      const result = await res.text();
+      const uploadData = await uploadRes.json();
+
+      if (!uploadData.secure_url) {
+        statusMessage = "❌ Upload failed. Try another image.";
+        return;
+      }
+
+      // Send form data + uploaded image URL to your backend
+      const response = await fetch("https://cambrian-sparkzone.com/api/upload.php", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: user.name,
+          email: user.email,
+          question1,
+          question2,
+          imageUrl: uploadData.secure_url
+        })
+      });
+
+      const result = await response.text();
       console.log(result);
 
       if (result.includes("✅")) {
-        statusMessage = "✅ Submitted successfully! Redirecting to dashboard...";
+        statusMessage = "✅ Submitted successfully! Redirecting...";
         setTimeout(() => goto('/Dashboard'), 2000);
       } else {
-        statusMessage = "❌ Submission failed. Server said: " + result;
+        statusMessage = "❌ Server failed: " + result;
       }
+
     } catch (err) {
       console.error(err);
-      statusMessage = "❌ Submission failed. Check your connection.";
+      statusMessage = "❌ Connection failed.";
     } finally {
       isSubmitting = false;
     }
   }
 </script>
 
-<!-- ✅ Google Sign-In -->
+<!-- Google Login -->
 <div id="g_id_onload"
      data-client_id="594127000452-k46vshbq0dtd07ak28rj0fg9s03srca7.apps.googleusercontent.com"
      data-context="signin"
@@ -92,20 +98,15 @@
      data-auto_prompt="false">
 </div>
 
-<div class="g_id_signin"
-     data-type="standard"
-     data-size="large"
-     data-theme="outline"
-     data-text="sign_in_with">
-</div>
+<div class="g_id_signin" data-type="standard" data-size="large"></div>
 
-<!-- ✅ Form UI (Only shows after login) -->
+<!-- Show Form After Login -->
 {#if user}
   <h3>Hello, {user.name}</h3>
 
   <input bind:value={question1} placeholder="Answer Question 1" />
   <input bind:value={question2} placeholder="Answer Question 2" />
-  <input type="file" on:change={(e) => imageFile = e.target.files[0]} />
+  <input type="file" accept="image/*" on:change={(e) => imageFile = e.target.files[0]} />
 
   <button on:click={submitForm} disabled={isSubmitting}>
     {isSubmitting ? 'Submitting...' : 'Submit'}
