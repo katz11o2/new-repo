@@ -3,10 +3,26 @@
 
   const MASTER_KEY = "$2a$10$7s2J1bfLkUw4k5xI41hADupk/1x12kJIIECHjYqWCruKDUnE0/wKu";
   const BIN_KEY_STORAGE = "jsonbin_design_ideas";
+
   let userEmail = "";
   let userSubmissions = [];
   let error = "";
   let loading = true;
+
+  // Helper to get Google JWT from the Google One Tap login session
+  function getGoogleEmailFromCredential() {
+    return new Promise((resolve, reject) => {
+      const token = window.googleToken; // set this in your Google login handler
+      if (!token) return reject("No Google token found");
+
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        resolve(payload.email);
+      } catch (err) {
+        reject("Failed to decode Google token");
+      }
+    });
+  }
 
   async function fetchUserData() {
     try {
@@ -19,12 +35,9 @@
       const json = await res.json();
       const allRecords = json.record || [];
 
-      // Get email from Google auth token (assume available via global session)
-      const token = await googleAuthToken(); // Implement based on your Google auth logic
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      userEmail = payload.email;
-
-      userSubmissions = allRecords.filter(entry => entry.submittedByEmail === userEmail);
+      const email = await getGoogleEmailFromCredential();
+      userEmail = email;
+      userSubmissions = allRecords.filter(entry => entry.submittedByEmail === email);
     } catch (err) {
       console.error(err);
       error = "❌ Failed to load data.";
@@ -87,9 +100,21 @@
         <h2>{idea.title}</h2>
         <p><strong>Category:</strong> {idea.category}</p>
         <p><strong>Description:</strong> {idea.description}</p>
-        <p><strong>Submitted on:</strong> {new Date(idea.submittedAt).toLocaleString()}</p>
+        <p><strong>Uniqueness:</strong> {idea.uniqueness}</p>
+        {#if idea.uniqueness === "Yes"}
+          <p><strong>Patentability:</strong> {idea.patentability}</p>
+        {/if}
+        <p><strong>Existing Technologies:</strong> {idea.existingTechnologies}</p>
+        <p><strong>Gap Analysis:</strong> {idea.gapAnalysis}</p>
+        <p><strong>Marketing Data:</strong> {idea.Marketingdata}</p>
+        <p><strong>Research Data:</strong> {idea.researchData}</p>
+        <p><strong>Experimental Data:</strong> {idea.experimentalData}</p>
+        {#if idea.category === "OTHERS"}
+          <p><strong>Other Category:</strong> {idea.otherCategory}</p>
+        {/if}
+        <p><strong>Submitted On:</strong> {new Date(idea.submittedAt).toLocaleString()}</p>
         {#if idea.visualizedProduct}
-          <img class="image-preview" src={idea.visualizedProduct} alt="Preview" />
+          <img class="image-preview" src={idea.visualizedProduct} alt="Visualized Product" />
         {/if}
       </div>
     {/each}
