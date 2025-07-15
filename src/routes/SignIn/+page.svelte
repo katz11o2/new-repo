@@ -1,4 +1,4 @@
-<script>
+<script> 
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
 
@@ -12,7 +12,7 @@
     const data = parseJwt(response.credential);
     user = { name: data.name, email: data.email };
     localStorage.setItem('user', JSON.stringify(user));
-    goto('/Dashboard1');
+    goto('/studentsdashboard'); // ✅ corrected target route
   }
 
   onMount(() => {
