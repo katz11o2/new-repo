@@ -1,3 +1,4 @@
+<!-- ✅ Updated studentsdashboard.svelte -->
 <script>
   import { goto } from "$app/navigation";
 
@@ -66,10 +67,15 @@
         existing = json.record || [];
       }
 
+      // ✅ Pull user email from global token
+      const token = window.googleToken;
+      const payload = JSON.parse(atob(token.split('.')[1]));
+
       existing.push({
         ...form,
         submittedAt: new Date().toISOString(),
-        submittedBy: "Student"
+        submittedBy: "Student",
+        submittedByEmail: payload.email // ✅ added email tag
       });
 
       const url = binId ? `https://api.jsonbin.io/v3/b/${binId}` : "https://api.jsonbin.io/v3/b";
@@ -116,6 +122,7 @@
     }
   }
 </script>
+
 
 <style>
   body {
