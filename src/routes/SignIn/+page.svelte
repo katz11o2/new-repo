@@ -15,14 +15,14 @@
     return JSON.parse(atob(token.split('.')[1]));
   }
 
-  // Called by Google Sign-In on success
+  // Google Sign-In success callback
   function handleCredentialResponse(response) {
     const data = parseJwt(response.credential);
     user = data;
     console.log("✅ Logged in:", user);
   }
 
-  // Load Google Sign-In library and assign callback
+  // Load Google Sign-In library
   onMount(() => {
     if (typeof window !== 'undefined') {
       window.handleCredentialResponse = handleCredentialResponse;
@@ -35,6 +35,7 @@
     }
   });
 
+  // Form submit function
   async function submitForm() {
     if (!user) {
       statusMessage = "❌ Please sign in first.";
@@ -59,7 +60,7 @@
     formData.append("image", imageFile);
 
     try {
-      const res = await fetch("https://cambrian-sparkzone.com/api/upload.php", {
+      const res = await fetch("https://u663725096.hostingerapp.com/api/upload.php", {
         method: "POST",
         body: formData
       });
