@@ -57,9 +57,9 @@
 
       form.visualizedProduct = imgData.data.url;
 
-      // ✅ Add Google token handling
       const token = window.googleToken;
-      if (!token) throw new Error("Google token missing");
+      if (!token) throw new Error("Google token missing or not set. Please sign in first.");
+
       const payload = JSON.parse(atob(token.split('.')[1]));
 
       let binId = localStorage.getItem(BIN_KEY_STORAGE);
@@ -98,8 +98,9 @@
         localStorage.setItem(BIN_KEY_STORAGE, result.metadata.id);
       }
 
-      alert("\u2705 Submission successful!");
+      alert("✅ Submission successful!");
       goto("/");
+
       form = {
         title: "",
         category: "",
@@ -118,11 +119,34 @@
       file = null;
     } catch (e) {
       console.error(e);
-      alert("\u274C Submission failed: " + e.message);
+      alert("❌ Submission failed: " + e.message);
     } finally {
       loading = false;
     }
   }
+
+  // Google Sign-In setup
+  function handleCredentialResponse(response) {
+    window.googleToken = response.credential;
+    console.log("Signed in with Google");
+  }
+
+  // Load Google Sign-In on component mount
+  onMount(() => {
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.onload = () => {
+      google.accounts.id.initialize({
+        client_id: "594127000452-k46vshbq0dtd07ak28rj0fg9s03srca7.apps.googleusercontent.com", // 🔁 Replace this
+        callback: handleCredentialResponse
+      });
+      google.accounts.id.renderButton(document.getElementById("gSignInDiv"), {
+        theme: "outline",
+        size: "large"
+      });
+    };
+    document.head.appendChild(script);
+  });
 </script>
 
 <style>
@@ -210,6 +234,9 @@
 
 <div class="glass-box">
   <h1>🚀 Submit Your Design Idea</h1>
+
+  <div id="gSignInDiv" style="margin-bottom: 1rem; display: flex; justify-content: center;"></div>
+
   <form on:submit|preventDefault={submitForm}>
     <input maxlength="100" bind:value={form.title} placeholder="Title" />
     <select bind:value={form.category}>
