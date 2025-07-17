@@ -1,6 +1,6 @@
 <script>
-  import { supabase } from '$lib/supabase'; // assumes you’ve set this up
-  import { onMount } from "svelte";
+  import { supabase } from '$lib/supabase';
+  import { onMount } from 'svelte';
 
   let form = {
     title: "",
@@ -18,46 +18,56 @@
     confirmSubmission: false
   };
 
+  let file = null;
+  let loading = false;
+  let success = false;
+
   $: showOtherCategory = form.category === "OTHERS";
   $: showPatentField = form.uniqueness === "Yes";
 
-  let success = false;
-  let loading = false;
-
   async function submitForm() {
-    if (!form.confirmSubmission) {
-      alert("❗Please confirm the submission.");
+    if (!form.confirmSubmission || !file) {
+      alert("Please upload a visual file and confirm submission.");
       return;
     }
-
     loading = true;
 
     try {
-      const { error } = await supabase.from('submissions').insert([form]);
+      const path = `uploads/${Date.now()}_${file.name}`;
+      const { data: uploadData, error: uploadError } =
+        await supabase.storage.from('submissions-images').upload(path, file);
+      if (uploadError) throw uploadError;
 
-      if (error) {
-        console.error("Insert error:", error);
-        alert("❌ Error while submitting form.");
-      } else {
-        success = true;
-        form = {
-          title: "",
-          category: "",
-          description: "",
-          uniqueness: "",
-          existingTechnologies: "",
-          gapAnalysis: "",
-          patentability: "",
-          Marketingdata: "",
-          visualizedProduct: "",
-          researchData: "",
-          experimentalData: "",
-          otherCategory: "",
-          confirmSubmission: false
-        };
-      }
+      const { publicUrl } = supabase.storage
+        .from('submissions-images')
+        .getPublicUrl(uploadData.path);
+      form.visualizedProduct = publicUrl;
+
+      const { error: dbError } = await supabase
+        .from('submissions')
+        .insert([{ ...form, submitted_at: new Date().toISOString() }]);
+      if (dbError) throw dbError;
+
+      success = true;
+      form = {
+        title: "",
+        category: "",
+        description: "",
+        uniqueness: "",
+        existingTechnologies: "",
+        gapAnalysis: "",
+        patentability: "",
+        Marketingdata: "",
+        visualizedProduct: "",
+        researchData: "",
+        experimentalData: "",
+        otherCategory: "",
+        confirmSubmission: false
+      };
+      file = null;
     } catch (err) {
-      console.error("Submission error:", err);
+      console.error(err);
+      alert("❌ Submission failed: " + err.message);
     } finally {
       loading = false;
     }
@@ -65,66 +75,88 @@
 </script>
 
 <style>
+  body {
+    background: linear-gradient(to bottom right, #dfe9f3, #ffffff);
+    font-family: 'Segoe UI', sans-serif;
+    padding: 2rem;
+    margin: 0;
+  }
+
   .glass-form {
     max-width: 800px;
     margin: auto;
     padding: 2rem;
     border-radius: 16px;
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.3);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    color: #fff;
-    font-family: sans-serif;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    color: #000;
+  }
+
+  .glass-form h2 {
+    margin-bottom: 1rem;
+    font-weight: bold;
+    text-align: center;
   }
 
   label {
-    margin-top: 1rem;
+    font-weight: 600;
     display: block;
-    font-weight: bold;
+    margin: 0.7rem 0 0.2rem;
   }
 
-  input, select, textarea {
+  input,
+  select,
+  textarea {
     width: 100%;
-    padding: 0.6rem;
-    margin-top: 0.3rem;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
     border-radius: 8px;
-    border: none;
     margin-bottom: 1rem;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.95);
+    color: #000;
+    outline: none;
+  }
+
+  input[type="checkbox"] {
+    width: auto;
+    margin-right: 0.5rem;
   }
 
   button {
-    padding: 0.8rem 1.5rem;
+    padding: 0.9rem 1.5rem;
     border: none;
-    border-radius: 12px;
-    background: #ffffff30;
+    border-radius: 10px;
+    background: #4a90e2;
     color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    width: 100%;
     cursor: pointer;
-    font-weight: bold;
-    transition: background 0.2s ease;
+    transition: background 0.3s;
   }
 
   button:hover {
-    background: #ffffff50;
+    background: #357abd;
   }
 
-  .success-msg {
+  .success {
     text-align: center;
-    color: #00ffae;
+    color: green;
+    margin-bottom: 1rem;
     font-weight: bold;
-    margin-top: 1rem;
-  }
-
-  body {
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    min-height: 100vh;
-    padding: 2rem;
   }
 </style>
 
-<div class="glass-form">
-  <h2>📤 Submit Project</h2>
+{#if success}
+  <div class="success">🎉 Submitted successfully!</div>
+{/if}
 
+<div class="glass-form">
+  <h2>Submit Project</h2>
   <form on:submit|preventDefault={submitForm}>
     <label>Title</label>
     <input bind:value={form.title} required />
@@ -155,7 +187,7 @@
     </select>
 
     {#if showPatentField}
-      <label>Patentability</label>
+      <label>Patentability Details</label>
       <textarea bind:value={form.patentability}></textarea>
     {/if}
 
@@ -174,20 +206,16 @@
     <label>Experimental Data</label>
     <textarea bind:value={form.experimentalData}></textarea>
 
-    <label>Visualized Product (URL or notes)</label>
-    <input bind:value={form.visualizedProduct} />
+    <label>Upload Visual/Doc</label>
+    <input type="file" accept="image/*,.pdf,.doc,.docx" on:change={(e) => file = e.target.files[0]} required />
 
-    <label>
+    <div>
       <input type="checkbox" bind:checked={form.confirmSubmission} />
-      I confirm that the above information is correct.
-    </label>
+      <label style="display: inline;">I confirm submission</label>
+    </div>
 
     <button type="submit" disabled={loading}>
       {loading ? "Submitting..." : "Submit"}
     </button>
   </form>
-
-  {#if success}
-    <p class="success-msg">✅ Submitted successfully!</p>
-  {/if}
 </div>
