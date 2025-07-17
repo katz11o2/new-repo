@@ -23,6 +23,7 @@
   let file = null;
   let loading = false;
   let showSuccess = false;
+  let showTerms = false;
 
   $: showOtherCategory = form.category === "OTHERS";
   $: showPatentField = form.uniqueness === "Yes";
@@ -112,48 +113,51 @@
 
 <style>
   body {
-    margin: 0;
-    padding: 0;
     background: #ffffff;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
   }
 
   .glass-box {
-    max-width: 700px;
-    margin: 50px auto;
+    max-width: 750px;
+    margin: 60px auto;
     padding: 2rem;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(20px);
     border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
   }
 
   h2 {
     text-align: center;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
   }
 
   label {
-    font-weight: bold;
+    font-weight: 600;
     display: block;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
   }
 
   input, select, textarea {
     width: 100%;
     margin-top: 0.5rem;
-    padding: 0.6rem;
-    border-radius: 8px;
-    border: none;
-    outline: none;
-    background: rgba(255, 255, 255, 0.8);
+    padding: 0.75rem;
+    border-radius: 10px;
+    border: 1.5px solid rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.9);
     font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: #4caf50;
+    outline: none;
   }
 
   button {
-    margin-top: 1.5rem;
-    padding: 0.8rem 1.5rem;
+    margin-top: 2rem;
+    padding: 0.9rem 1.5rem;
     font-size: 1rem;
     border: none;
     border-radius: 10px;
@@ -161,33 +165,71 @@
     color: white;
     cursor: pointer;
     width: 100%;
+    transition: background 0.3s;
+  }
+
+  button:hover {
+    background-color: #43a047;
   }
 
   button[disabled] {
-    background-color: #9e9e9e;
+    background-color: #aaa;
     cursor: not-allowed;
   }
 
-  .success-popup {
+  .success-popup, .terms-popup {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(255,255,255,0.25);
+    top: 0; left: 0;
+    right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .popup-content {
+    background: rgba(255,255,255,0.3);
     backdrop-filter: blur(20px);
     padding: 2rem;
     border-radius: 20px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border: 1px solid rgba(255,255,255,0.3);
-    z-index: 100;
+    max-width: 500px;
     text-align: center;
+    border: 1px solid rgba(255,255,255,0.3);
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
   }
+
+  .checkbox-row {
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .terms-link {
+    color: #1976d2;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
 </style>
 
 {#if showSuccess}
   <div class="success-popup">
-    <h3>✅ Submitted Successfully!</h3>
-    <button on:click={() => { showSuccess = false; goto('/') }}>Close</button>
+    <div class="popup-content">
+      <h3>✅ Submitted Successfully!</h3>
+      <button on:click={() => { showSuccess = false; goto("/") }}>Close</button>
+    </div>
+  </div>
+{/if}
+
+{#if showTerms}
+  <div class="terms-popup">
+    <div class="popup-content">
+      <h3>Terms and Conditions</h3>
+      <p>This submission is final and stored securely. Ensure you have reviewed all fields before submitting.</p>
+      <button on:click={() => showTerms = false}>Close</button>
+    </div>
   </div>
 {/if}
 
@@ -246,10 +288,10 @@
     <label>Upload Visual/Doc (optional)</label>
     <input type="file" accept=".png,.jpg,.pdf,.doc,.docx" on:change={(e) => file = e.target.files[0]} />
 
-    <label>
+    <div class="checkbox-row">
       <input type="checkbox" bind:checked={form.confirmSubmission} />
-      I confirm that the above information is correct.
-    </label>
+      <span>I agree to all <span class="terms-link" on:click={() => showTerms = true}>terms and conditions</span></span>
+    </div>
 
     <button type="submit" disabled={loading}>
       {loading ? "Uploading..." : "Submit"}
