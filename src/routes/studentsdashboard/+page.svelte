@@ -9,9 +9,9 @@
   let submissions = [];
 
   let form = {
-    title: '',
+    idea_title: '',
     category: '',
-    description: '',
+    idea_description: '',
     uniqueness: '',
     existingTechnologies: '',
     gapAnalysis: '',
@@ -24,7 +24,6 @@
     confirmSubmission: false
   };
 
-  let file = null;
   let showOtherCategory = false;
   $: showOtherCategory = form.category === 'OTHERS';
 
@@ -58,13 +57,22 @@
     error = '';
 
     const payload = {
-      ...form,
-      name: user.user_metadata.full_name || '',
-      email: user.email,
-      user_id: user.id,
+      idea_title: form.idea_title,
+      idea_desciption: form.idea_description,
+      category: form.category,
+      uniqueness: form.uniqueness,
       existing_technologies: form.existingTechnologies,
       gap_analysis: form.gapAnalysis,
+      patentability: form.patentability,
       marketing_data: form.Marketingdata,
+      visualized_product: form.visualizedProduct,
+      research_data: form.researchData,
+      experimental_data: form.experimentalData,
+      other_category: form.otherCategory,
+      confirm_submission: form.confirmSubmission,
+      name: user.user_metadata.full_name || '',
+      email: user.email,
+      user_id: user.id
     };
 
     const { error: insertError } = await supabase
@@ -85,9 +93,9 @@
 
   function resetForm() {
     form = {
-      title: '',
+      idea_title: '',
       category: '',
-      description: '',
+      idea_description: '',
       uniqueness: '',
       existingTechnologies: '',
       gapAnalysis: '',
@@ -99,7 +107,6 @@
       otherCategory: '',
       confirmSubmission: false
     };
-    file = null;
   }
 
   async function logout() {
@@ -115,7 +122,7 @@
   </div>
 
   <form on:submit|preventDefault={submitForm} class="space-y-4">
-    <input bind:value={form.title} placeholder="Title" class="w-full p-3 border rounded" maxlength="100" />
+    <input bind:value={form.idea_title} placeholder="Idea Title" class="w-full p-3 border rounded" maxlength="100" />
 
     <select bind:value={form.category} class="w-full p-3 border rounded">
       <option value="">Select Category</option>
@@ -130,7 +137,7 @@
       <input bind:value={form.otherCategory} placeholder="Other Category" class="w-full p-3 border rounded" />
     {/if}
 
-    <textarea bind:value={form.description} placeholder="Description" class="w-full p-3 border rounded" maxlength="500" />
+    <textarea bind:value={form.idea_description} placeholder="Idea Description" class="w-full p-3 border rounded" maxlength="500" />
 
     <select bind:value={form.uniqueness} class="w-full p-3 border rounded">
       <option value="">Is there any uniqueness?</option>
@@ -172,8 +179,8 @@
     <ul class="space-y-4">
       {#each submissions as s}
         <li class="bg-white shadow p-4 rounded">
-          <h3 class="font-semibold text-blue-700">{s.title}</h3>
-          <p>{s.description}</p>
+          <h3 class="font-semibold text-blue-700">{s.idea_title}</h3>
+          <p>{s.idea_desciption}</p>
           <p class="text-sm text-gray-500 mt-1">Submitted: {new Date(s.created_at).toLocaleString()}</p>
         </li>
       {/each}
