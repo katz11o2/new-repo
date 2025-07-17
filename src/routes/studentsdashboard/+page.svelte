@@ -1,4 +1,4 @@
-<script>
+
 <script>
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
@@ -144,6 +144,7 @@
     };
     document.head.appendChild(script);
   });
+
 </script>
 
 
