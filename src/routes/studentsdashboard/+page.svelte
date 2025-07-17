@@ -2,7 +2,6 @@
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
 
-  // ✅ Use your Cloudinary config
   const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dcnzrofcw/auto/upload";
   const UPLOAD_PRESET = "svelte_upload";
 
@@ -25,10 +24,7 @@
   let file = null;
   let loading = false;
 
-  let showOtherCategory = false;
   $: showOtherCategory = form.category === "OTHERS";
-
-  let showPatentField = false;
   $: showPatentField = form.uniqueness === "Yes";
 
   function generateTextFileFromForm(formObj) {
@@ -58,7 +54,6 @@
         submittedByEmail: payload.email
       });
 
-      // 🔼 Upload .txt file (form data) to Cloudinary
       const textFormData = new FormData();
       textFormData.append("file", textFile);
       textFormData.append("upload_preset", UPLOAD_PRESET);
@@ -70,11 +65,8 @@
 
       const textUpload = await textRes.json();
       if (!textUpload.secure_url) throw new Error("Failed to upload form text file.");
-
-      // ✅ Store text file URL (if needed)
       const formFileURL = textUpload.secure_url;
 
-      // 🔼 Upload visual file (optional)
       if (file) {
         const visualFormData = new FormData();
         visualFormData.append("file", file);
@@ -87,7 +79,6 @@
 
         const visualUpload = await visualRes.json();
         if (!visualUpload.secure_url) throw new Error("Failed to upload visual file.");
-
         form.visualizedProduct = visualUpload.secure_url;
       }
 
@@ -97,7 +88,6 @@
 
       goto("/");
 
-      // Reset form
       form = {
         title: "",
         category: "",
@@ -122,7 +112,6 @@
     }
   }
 
-  // ✅ Google Sign-in
   function handleCredentialResponse(response) {
     window.googleToken = response.credential;
     console.log("✅ Google Signed In");
@@ -144,3 +133,69 @@
     document.head.appendChild(script);
   });
 </script>
+
+<form on:submit|preventDefault={submitForm}>
+  <h2>Submit Project</h2>
+
+  <label>Title</label>
+  <input bind:value={form.title} required />
+
+  <label>Category</label>
+  <select bind:value={form.category} required>
+    <option value="">--Select--</option>
+    <option value="SCIENCE">Science</option>
+    <option value="TECHNOLOGY">Technology</option>
+    <option value="ENGINEERING">Engineering</option>
+    <option value="MATH">Math</option>
+    <option value="OTHERS">Others</option>
+  </select>
+
+  {#if showOtherCategory}
+    <label>Other Category</label>
+    <input bind:value={form.otherCategory} />
+  {/if}
+
+  <label>Description</label>
+  <textarea bind:value={form.description} required></textarea>
+
+  <label>Is it unique?</label>
+  <select bind:value={form.uniqueness} required>
+    <option value="">--Select--</option>
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+  </select>
+
+  {#if showPatentField}
+    <label>Patentability</label>
+    <textarea bind:value={form.patentability}></textarea>
+  {/if}
+
+  <label>Existing Technologies</label>
+  <textarea bind:value={form.existingTechnologies}></textarea>
+
+  <label>Gap Analysis</label>
+  <textarea bind:value={form.gapAnalysis}></textarea>
+
+  <label>Marketing Data</label>
+  <textarea bind:value={form.Marketingdata}></textarea>
+
+  <label>Research Data</label>
+  <textarea bind:value={form.researchData}></textarea>
+
+  <label>Experimental Data</label>
+  <textarea bind:value={form.experimentalData}></textarea>
+
+  <label>Upload Visual/Doc (optional)</label>
+  <input type="file" accept=".png,.jpg,.pdf,.doc,.docx" on:change={(e) => file = e.target.files[0]} />
+
+  <label>
+    <input type="checkbox" bind:checked={form.confirmSubmission} />
+    I confirm that the above information is correct.
+  </label>
+
+  <div id="gSignInDiv"></div>
+
+  <button type="submit" disabled={loading}>
+    {loading ? "Uploading..." : "Submit"}
+  </button>
+</form>
