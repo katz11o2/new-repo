@@ -4,93 +4,69 @@
 
   let submissions = [];
   let userEmail = '';
+  let loading = true;
 
   onMount(async () => {
-    const {
-      data: { user },
-      error: userError
-    } = await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser();
+    userEmail = user?.email;
 
-    if (userError || !user) {
-      alert('You must be logged in to view your dashboard.');
-      window.location.href = '/';
+    if (!userEmail) {
+      alert('Not signed in');
+      loading = false;
       return;
     }
 
-    userEmail = user.email;
-
     const { data, error } = await supabase
-      .from('submissions')
+      .from('designsubmissions')
       .select('*')
-      .eq('email', userEmail);
+      .eq('user_email', userEmail)
+      .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('Failed to fetch submissions:', error);
+      alert('Error fetching submissions');
     } else {
       submissions = data;
     }
+    loading = false;
   });
 </script>
 
 <style>
-  .dashboard {
-    max-width: 900px;
-    margin: 3rem auto;
-    font-family: 'Poppins', sans-serif;
-  }
-
-  h2 {
-    text-align: center;
-    color: #1e3a8a;
-    margin-bottom: 2rem;
-  }
-
   .card {
-    background: #f9fafb;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    margin-bottom: 1.5rem;
-    transition: 0.3s;
+    @apply bg-white p-4 shadow-md rounded-xl mb-4 border border-gray-200;
   }
-
-  .card:hover {
-    transform: scale(1.01);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  .title {
+    @apply text-lg font-semibold mb-2;
   }
-
-  .heading {
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #1e40af;
-  }
-
   .field {
-    margin: 0.3rem 0;
-    font-size: 0.95rem;
-  }
-
-  .field strong {
-    color: #475569;
+    @apply text-sm text-gray-700 mb-1;
   }
 </style>
 
-<div class="dashboard">
-  <h2>Welcome, {userEmail}</h2>
-
-  {#if submissions.length === 0}
-    <p>No submissions found for your account.</p>
-  {:else}
-    {#each submissions as item}
+{#if loading}
+  <div class="text-center p-6">Loading your submissions...</div>
+{:else if submissions.length === 0}
+  <div class="text-center p-6 text-gray-600">No submissions found.</div>
+{:else}
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
+    {#each submissions as sub}
       <div class="card">
-        <div class="heading">{item.title}</div>
-        <div class="field"><strong>Category:</strong> {item.category}</div>
-        <div class="field"><strong>Description:</strong> {item.description}</div>
-        <div class="field"><strong>Uniqueness:</strong> {item.uniqueness}</div>
-        <div class="field"><strong>Research:</strong> {item.researchData}</div>
-        <div class="field"><strong>Marketing:</strong> {item.Marketingdata}</div>
+        <div class="title">{sub.title}</div>
+        <div class="field"><strong>Category:</strong> {sub.category}</div>
+        <div class="field"><strong>Description:</strong> {sub.description}</div>
+        <div class="field"><strong>Uniqueness:</strong> {sub.uniqueness}</div>
+        <div class="field"><strong>Technologies:</strong> {sub.existingTechnologies}</div>
+        <div class="field"><strong>Gap Analysis:</strong> {sub.gapAnalysis}</div>
+        <div class="field"><strong>Patentability:</strong> {sub.patentability}</div>
+        <div class="field"><strong>Marketing Data:</strong> {sub.Marketingdata}</div>
+        <div class="field"><strong>Visualized Product:</strong> {sub.visualizedProduct}</div>
+        <div class="field"><strong>Research Data:</strong> {sub.researchData}</div>
+        <div class="field"><strong>Experimental Data:</strong> {sub.experimentalData}</div>
+        <div class="field"><strong>Submitted:</strong> {new Date(sub.created_at).toLocaleString()}</div>
+        {#if sub.imageUrl}
+          <img src={sub.imageUrl} alt="Design" class="mt-2 rounded-md max-h-48 object-cover border border-gray-300" />
+        {/if}
       </div>
     {/each}
-  {/if}
-</div>
+  </div>
+{/if}
