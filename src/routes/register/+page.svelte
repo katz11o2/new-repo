@@ -19,13 +19,13 @@
       return;
     }
     alert(`Logged in manually as ${email}`);
-    goto('/studentsdashboard2'); // ✅ Redirect after manual login
+    goto('/studentsdashboard'); // ✅ Redirect after manual login
   }
 
   function handleGoogleLogin(response) {
     const data = JSON.parse(atob(response.credential.split('.')[1]));
     alert(`Logged in with Google as ${data.name} (${data.email})`);
-    goto('/studentsdashboard2'); // ✅ Redirect after Google login
+    goto('/studentsdashboard'); // ✅ Redirect after Google login
   }
 
   onMount(() => {

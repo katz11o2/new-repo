@@ -1,83 +1,96 @@
 <script>
   import { onMount } from 'svelte';
-  let userEmail = '';
-  let files = [];
-  let error = '';
-  let loading = true;
+  import { supabase } from '$lib/supabase';
 
-  const CLOUD_NAME = 'dcnzrofcw';
-  const CLOUD_API_KEY = '486427226727857';
-  const CLOUD_API_SECRET = 'Hi0GEBpRYUdqKvm6SLVXVYx2VKU';
+  let submissions = [];
+  let userEmail = '';
 
   onMount(async () => {
-    try {
-      const token = window.googleToken;
-      if (!token) {
-        error = "🔒 You must log in with Google.";
-        loading = false;
-        return;
-      }
+    const {
+      data: { user },
+      error: userError
+    } = await supabase.auth.getUser();
 
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      userEmail = payload.email;
+    if (userError || !user) {
+      alert('You must be logged in to view your dashboard.');
+      window.location.href = '/';
+      return;
+    }
 
-      const timestamp = Math.floor(Date.now() / 1000);
-      const folder = `submissions/${userEmail}`; // Assuming this is how you organized it
+    userEmail = user.email;
 
-      const paramsToSign = `prefix=${folder}&timestamp=${timestamp}${CLOUD_API_SECRET}`;
-      const signature = await sha1(paramsToSign);
+    const { data, error } = await supabase
+      .from('submissions')
+      .select('*')
+      .eq('email', userEmail);
 
-      const formData = new FormData();
-      formData.append('timestamp', timestamp);
-      formData.append('api_key', CLOUD_API_KEY);
-      formData.append('signature', signature);
-      formData.append('prefix', folder);
-
-      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/resources/image`, {
-        method: 'POST',
-        body: formData
-      });
-
-      const data = await res.json();
-      files = data.resources;
-    } catch (err) {
-      error = "⚠️ Failed to fetch submissions: " + err.message;
-    } finally {
-      loading = false;
+    if (error) {
+      console.error('Failed to fetch submissions:', error);
+    } else {
+      submissions = data;
     }
   });
-
-  async function sha1(message) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(message);
-    const hashBuffer = await crypto.subtle.digest('SHA-1', data);
-    return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-  }
 </script>
 
 <style>
+  .dashboard {
+    max-width: 900px;
+    margin: 3rem auto;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  h2 {
+    text-align: center;
+    color: #1e3a8a;
+    margin-bottom: 2rem;
+  }
+
   .card {
-    padding: 1rem;
-    border-radius: 10px;
-    background: white;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    margin-bottom: 1rem;
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 1.5rem;
+    transition: 0.3s;
+  }
+
+  .card:hover {
+    transform: scale(1.01);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  }
+
+  .heading {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #1e40af;
+  }
+
+  .field {
+    margin: 0.3rem 0;
+    font-size: 0.95rem;
+  }
+
+  .field strong {
+    color: #475569;
   }
 </style>
 
-{#if loading}
-  <p>Loading submissions...</p>
-{:else if error}
-  <p>{error}</p>
-{:else if files.length === 0}
-  <p>No submissions found for {userEmail}.</p>
-{:else}
-  <h2>📝 Submissions by {userEmail}</h2>
-  {#each files as file}
-    <div class="card">
-      <h3>{file.public_id}</h3>
-      <p><strong>Uploaded:</strong> {new Date(file.created_at).toLocaleString()}</p>
-      <a href={file.secure_url} target="_blank">🔗 View File</a>
-    </div>
-  {/each}
-{/if}
+<div class="dashboard">
+  <h2>Welcome, {userEmail}</h2>
+
+  {#if submissions.length === 0}
+    <p>No submissions found for your account.</p>
+  {:else}
+    {#each submissions as item}
+      <div class="card">
+        <div class="heading">{item.title}</div>
+        <div class="field"><strong>Category:</strong> {item.category}</div>
+        <div class="field"><strong>Description:</strong> {item.description}</div>
+        <div class="field"><strong>Uniqueness:</strong> {item.uniqueness}</div>
+        <div class="field"><strong>Research:</strong> {item.researchData}</div>
+        <div class="field"><strong>Marketing:</strong> {item.Marketingdata}</div>
+      </div>
+    {/each}
+  {/if}
+</div>
