@@ -1,5 +1,8 @@
 <script>
-  import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
+
+  const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dcnzrofcw/auto/upload";
+  const UPLOAD_PRESET = "svelte_upload";
 
   let form = {
     title: "",
@@ -14,147 +17,242 @@
     researchData: "",
     experimentalData: "",
     otherCategory: "",
-    confirmSubmission: false,
+    confirmSubmission: false
   };
 
-  let showPopup = false;
+  let file = null;
+  let loading = false;
+  let showSuccess = false;
 
-  const handleSubmit = () => {
+  $: showOtherCategory = form.category === "OTHERS";
+  $: showPatentField = form.uniqueness === "Yes";
+
+  function generateTextFileFromForm(formObj) {
+    const lines = Object.entries(formObj).map(([key, val]) => `${key}: ${val}`);
+    const blob = new Blob([lines.join('\n')], { type: "text/plain" });
+    return new File([blob], `${formObj.title || 'submission'}.txt`, { type: "text/plain" });
+  }
+
+  async function submitForm() {
     if (!form.confirmSubmission) {
-      alert("Please agree to the Terms and Conditions.");
+      alert("Please confirm the submission.");
       return;
     }
-    // Handle form submission here
-    console.log(form);
-  };
+
+    loading = true;
+
+    try {
+      const token = window.googleToken;
+      if (!token) throw new Error("Google sign-in token missing.");
+
+      const payload = JSON.parse(atob(token.split('.')[1]));
+
+      const textFile = generateTextFileFromForm({
+        ...form,
+        submittedAt: new Date().toISOString(),
+        submittedBy: "Student",
+        submittedByEmail: payload.email
+      });
+
+      const textFormData = new FormData();
+      textFormData.append("file", textFile);
+      textFormData.append("upload_preset", UPLOAD_PRESET);
+
+      const textRes = await fetch(CLOUDINARY_UPLOAD_URL, {
+        method: "POST",
+        body: textFormData
+      });
+
+      const textUpload = await textRes.json();
+      if (!textUpload.secure_url) throw new Error("Failed to upload text file.");
+
+      const formFileURL = textUpload.secure_url;
+
+      if (file) {
+        const visualFormData = new FormData();
+        visualFormData.append("file", file);
+        visualFormData.append("upload_preset", UPLOAD_PRESET);
+
+        const visualRes = await fetch(CLOUDINARY_UPLOAD_URL, {
+          method: "POST",
+          body: visualFormData
+        });
+
+        const visualUpload = await visualRes.json();
+        if (!visualUpload.secure_url) throw new Error("Failed to upload visual file.");
+        form.visualizedProduct = visualUpload.secure_url;
+      }
+
+      showSuccess = true;
+
+      form = {
+        title: "",
+        category: "",
+        description: "",
+        uniqueness: "",
+        existingTechnologies: "",
+        gapAnalysis: "",
+        patentability: "",
+        Marketingdata: "",
+        visualizedProduct: "",
+        researchData: "",
+        experimentalData: "",
+        otherCategory: "",
+        confirmSubmission: false
+      };
+      file = null;
+    } catch (err) {
+      console.error(err);
+      alert("❌ Error: " + err.message);
+    } finally {
+      loading = false;
+    }
+  }
 </script>
 
 <style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    font-family: Arial, sans-serif;
+  }
+
   .glass-box {
-    backdrop-filter: blur(12px);
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-    padding: 30px;
-    max-width: 800px;
-    margin: 40px auto;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-
-  input,
-  textarea {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 2rem;
     background: rgba(255, 255, 255, 0.2);
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    color: #000;
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    border: 1px solid rgba(255, 255, 255, 0.3);
   }
 
-  input::placeholder,
-  textarea::placeholder {
-    color: #333;
+  h2 {
+    text-align: center;
+    margin-bottom: 1rem;
   }
 
-  .checkbox {
-    display: flex;
-    align-items: center;
-    margin-top: 20px;
+  label {
+    font-weight: bold;
+    display: block;
+    margin-top: 1rem;
   }
 
-  .checkbox input {
-    margin-right: 10px;
-    transform: scale(1.2);
-  }
-
-  .popup {
-    position: fixed;
-    top: 0;
-    left: 0;
+  input, select, textarea {
     width: 100%;
-    height: 100%;
-    backdrop-filter: blur(8px);
-    background: rgba(0, 0, 0, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-
-  .popup-content {
-    background: rgba(255, 255, 255, 0.15);
-    padding: 25px;
-    border-radius: 15px;
-    max-width: 600px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    position: relative;
-  }
-
-  .popup-content p {
-    color: #fff;
-  }
-
-  .close-btn {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    background: #fff;
+    margin-top: 0.5rem;
+    padding: 0.6rem;
+    border-radius: 8px;
     border: none;
-    padding: 5px 10px;
-    border-radius: 6px;
-    cursor: pointer;
+    outline: none;
+    background: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
   }
 
   button {
-    padding: 10px 20px;
-    background: #007aff;
-    color: #fff;
+    margin-top: 1.5rem;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
     border: none;
-    border-radius: 8px;
-    margin-top: 20px;
+    border-radius: 10px;
+    background-color: #4caf50;
+    color: white;
     cursor: pointer;
+    width: 100%;
+  }
+
+  button[disabled] {
+    background-color: #9e9e9e;
+    cursor: not-allowed;
+  }
+
+  .success-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(20px);
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    z-index: 100;
+    text-align: center;
   }
 </style>
 
-<div class="glass-box">
-  <h2>Submit Your Idea</h2>
-
-  <input type="text" bind:value={form.title} placeholder="Title" />
-  <input type="text" bind:value={form.category} placeholder="Category" />
-  <textarea bind:value={form.description} placeholder="Description"></textarea>
-  <textarea bind:value={form.uniqueness} placeholder="Uniqueness"></textarea>
-  <textarea bind:value={form.existingTechnologies} placeholder="Existing Technologies"></textarea>
-  <textarea bind:value={form.gapAnalysis} placeholder="Gap Analysis"></textarea>
-  <textarea bind:value={form.patentability} placeholder="Patentability"></textarea>
-  <textarea bind:value={form.Marketingdata} placeholder="Marketing Data"></textarea>
-  <textarea bind:value={form.visualizedProduct} placeholder="Visualized Product"></textarea>
-  <textarea bind:value={form.researchData} placeholder="Research Data"></textarea>
-  <textarea bind:value={form.experimentalData} placeholder="Experimental Data"></textarea>
-  <input type="text" bind:value={form.otherCategory} placeholder="Other Category" />
-
-  <div class="checkbox">
-    <input
-      type="checkbox"
-      bind:checked={form.confirmSubmission}
-      on:click={() => (showPopup = true)}
-    />
-    <label>I agree to the Terms and Conditions</label>
-  </div>
-
-  <button on:click={handleSubmit}>Submit</button>
-</div>
-
-{#if showPopup}
-  <div class="popup">
-    <div class="popup-content">
-      <button class="close-btn" on:click={() => (showPopup = false)}>Close</button>
-      <h3>Terms and Conditions</h3>
-      <p>
-        By submitting this form, you agree that all the provided data is accurate and legally yours
-        to submit. This platform is not liable for any disputes. You consent to your submission being
-        stored and potentially reviewed for innovation, compliance, or internal review purposes.
-      </p>
-    </div>
+{#if showSuccess}
+  <div class="success-popup">
+    <h3>✅ Submitted Successfully!</h3>
+    <button on:click={() => { showSuccess = false; goto('/') }}>Close</button>
   </div>
 {/if}
+
+<div class="glass-box">
+  <form on:submit|preventDefault={submitForm}>
+    <h2>Submit Project</h2>
+
+    <label>Title</label>
+    <input bind:value={form.title} required />
+
+    <label>Category</label>
+    <select bind:value={form.category} required>
+      <option value="">--Select--</option>
+      <option value="SCIENCE">Science</option>
+      <option value="TECHNOLOGY">Technology</option>
+      <option value="ENGINEERING">Engineering</option>
+      <option value="MATH">Math</option>
+      <option value="OTHERS">Others</option>
+    </select>
+
+    {#if showOtherCategory}
+      <label>Other Category</label>
+      <input bind:value={form.otherCategory} />
+    {/if}
+
+    <label>Description</label>
+    <textarea bind:value={form.description} required></textarea>
+
+    <label>Is it unique?</label>
+    <select bind:value={form.uniqueness} required>
+      <option value="">--Select--</option>
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
+
+    {#if showPatentField}
+      <label>Patentability</label>
+      <textarea bind:value={form.patentability}></textarea>
+    {/if}
+
+    <label>Existing Technologies</label>
+    <textarea bind:value={form.existingTechnologies}></textarea>
+
+    <label>Gap Analysis</label>
+    <textarea bind:value={form.gapAnalysis}></textarea>
+
+    <label>Marketing Data</label>
+    <textarea bind:value={form.Marketingdata}></textarea>
+
+    <label>Research Data</label>
+    <textarea bind:value={form.researchData}></textarea>
+
+    <label>Experimental Data</label>
+    <textarea bind:value={form.experimentalData}></textarea>
+
+    <label>Upload Visual/Doc (optional)</label>
+    <input type="file" accept=".png,.jpg,.pdf,.doc,.docx" on:change={(e) => file = e.target.files[0]} />
+
+    <label>
+      <input type="checkbox" bind:checked={form.confirmSubmission} />
+      I confirm that the above information is correct.
+    </label>
+
+    <button type="submit" disabled={loading}>
+      {loading ? "Uploading..." : "Submit"}
+    </button>
+  </form>
+</div>
