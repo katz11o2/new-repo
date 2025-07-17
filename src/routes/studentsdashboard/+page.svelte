@@ -31,7 +31,12 @@
   $: showPatentField = form.uniqueness === 'Yes';
 
   onMount(async () => {
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) {
+      console.error('Session error:', sessionError.message);
+      goto('/');
+      return;
+    }
 
     if (!session) {
       goto('/');
@@ -52,7 +57,7 @@
     if (!error) {
       submissions = data;
     } else {
-      console.error('Failed to fetch submissions:', error.message);
+      console.error('❌ Failed to fetch submissions:', error.message);
     }
   }
 
@@ -79,16 +84,16 @@
       experimental_data: form.experimentalData,
       other_category: form.otherCategory,
       confirm_submission: form.confirmSubmission,
-      name: user.user_metadata.full_name || user.email,
+      name: user.user_metadata?.full_name || user.email,
       email: user.email,
-      user_id: user.id
+      user_id: user.id // ✅ Must be included for RLS
     };
 
     const { error: insertError } = await supabase.from('design_ideas').insert([payload]);
 
     if (insertError) {
-      error = '❌ Submission failed';
-      console.error(insertError);
+      error = `❌ Submission failed: ${insertError.message}`;
+      console.error('Insert error:', insertError);
     } else {
       alert('✅ Submission successful!');
       resetForm();
