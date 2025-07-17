@@ -62,33 +62,34 @@
   }
 
   async function submitForm() {
-    if (!form.confirmSubmission) {
-      alert("✅ Please confirm the submission.");
-      return;
-    }
+  if (!form.confirmSubmission) {
+    alert("✅ Please confirm the submission.");
+    return;
+  }
 
-    loading = true;
-    error = '';
+  loading = true;
+  error = '';
 
-    const payload = {
-      idea_title: form.idea_title,
-      idea_desciption: form.idea_description,
-      category: form.category,
-      uniqueness: form.uniqueness,
-      existing_technologies: form.existingTechnologies,
-      gap_analysis: form.gapAnalysis,
-      patentability: form.patentability,
-      marketing_data: form.Marketingdata,
-      visualized_product: form.visualizedProduct,
-      research_data: form.researchData,
-      experimental_data: form.experimentalData,
-      other_category: form.otherCategory,
-      confirm_submission: form.confirmSubmission,
-      name: user.user_metadata?.full_name || user.email,
-      email: user.email,
-      user_id: user.id // ✅ Must be included for RLS
-    };
+  const payload = {
+    idea_title: form.idea_title || null,
+    idea_desciption: form.idea_description || null,
+    category: form.category || null,
+    uniqueness: form.uniqueness || null,
+    existing_technologies: form.existingTechnologies || null,
+    gap_analysis: form.gapAnalysis || null,
+    patentability: form.patentability || null,
+    marketing_data: form.Marketingdata || null,
+    visualized_product: form.visualizedProduct || null,
+    research_data: form.researchData || null,
+    experimental_data: form.experimentalData || null,
+    other_category: form.otherCategory || null,
+    confirm_submission: form.confirmSubmission || false,
+    name: user.user_metadata?.full_name || user.email,
+    email: user.email,
+    user_id: user.id
+  };
 
+  try {
     const { error: insertError } = await supabase.from('design_ideas').insert([payload]);
 
     if (insertError) {
@@ -99,9 +100,14 @@
       resetForm();
       await fetchSubmissions();
     }
-
-    loading = false;
+  } catch (err) {
+    error = `❌ Unexpected error: ${err.message}`;
+    console.error('Unexpected error:', err);
   }
+
+  loading = false;
+}
+
 
   function resetForm() {
     form = {
