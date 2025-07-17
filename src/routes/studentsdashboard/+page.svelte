@@ -1,5 +1,5 @@
 <script>
-  import { supabase } from '$lib/supabaseClient'; // assumes you’ve set this up
+  import { supabase } from '$lib/supabase'; // assumes you’ve set this up
   import { onMount } from "svelte";
 
   let form = {
