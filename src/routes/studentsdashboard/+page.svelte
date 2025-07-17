@@ -1,4 +1,5 @@
 <script>
+<script>
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
   import { supabase } from '$lib/supabase';
@@ -83,7 +84,17 @@
         form.visualizedProduct = visualUpload.secure_url;
       }
 
-      alert("✅ Successfully submitted and uploaded to Cloudinary!");
+      // 👉 Insert to Supabase
+      const { error } = await supabase.from('submissions').insert([{
+        ...form,
+        submitted_by: payload.email,
+        text_file_url: formFileURL,
+        submitted_at: new Date().toISOString()
+      }]);
+
+      if (error) throw new Error("Supabase insert failed: " + error.message);
+
+      alert("✅ Successfully submitted and uploaded to Cloudinary & Supabase!");
       console.log("📄 Text File URL:", formFileURL);
       console.log("📎 Visual File URL:", form.visualizedProduct);
 
@@ -133,6 +144,10 @@
     };
     document.head.appendChild(script);
   });
+</script>
+
+<!-- rest of your form HTML remains unchanged -->
+
 </script>
 
 <form on:submit|preventDefault={submitForm}>
