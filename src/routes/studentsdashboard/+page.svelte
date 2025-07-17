@@ -148,7 +148,6 @@
 
 
 
-</script>
 
 <form on:submit|preventDefault={submitForm}>
   <h2>Submit Project</h2>
