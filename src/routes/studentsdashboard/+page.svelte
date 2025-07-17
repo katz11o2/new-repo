@@ -39,91 +39,50 @@
     });
   }
 
-  async function submitForm() {
-    if (!form.confirmSubmission || !file) {
-      alert("Please confirm the submission and upload a visual file.");
-      return;
-    }
+ async function submitForm() {
+  if (!form.confirmSubmission || !file) {
+    alert("Please confirm the submission and upload a visual file.");
+    return;
+  }
 
-    loading = true;
-    try {
-      const imageBase64 = await toBase64(file);
-      const imgRes = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
-        method: "POST",
-        body: new URLSearchParams({ image: imageBase64 })
-      });
-      const imgData = await imgRes.json();
-      if (!imgData.success) throw new Error("Image upload failed");
+  loading = true;
+  try {
+    const formData = new FormData();
+    formData.append("title", form.title);
+    formData.append("category", form.category);
+    formData.append("otherCategory", form.otherCategory);
+    formData.append("description", form.description);
+    formData.append("uniqueness", form.uniqueness);
+    formData.append("patentability", form.patentability);
+    formData.append("existingTechnologies", form.existingTechnologies);
+    formData.append("gapAnalysis", form.gapAnalysis);
+    formData.append("Marketingdata", form.Marketingdata);
+    formData.append("researchData", form.researchData);
+    formData.append("experimentalData", form.experimentalData);
+    formData.append("file", file);
 
-      form.visualizedProduct = imgData.data.url;
+    const res = await fetch("https://cambrian-sparkzone.com/api/submit.php", {
+      method: "POST",
+      body: formData
+    });
 
-      const token = window.googleToken;
-      if (!token) throw new Error("Google token missing or not set. Please sign in first.");
+    const result = await res.json();
 
-      const payload = JSON.parse(atob(token.split('.')[1]));
-
-      let binId = localStorage.getItem(BIN_KEY_STORAGE);
-      let existing = [];
-
-      if (binId) {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
-          headers: { "X-Master-Key": MASTER_KEY }
-        });
-        const json = await res.json();
-        existing = json.record || [];
-      }
-
-      existing.push({
-        ...form,
-        submittedAt: new Date().toISOString(),
-        submittedBy: "Student",
-        submittedByEmail: payload.email
-      });
-
-      const url = binId ? `https://api.jsonbin.io/v3/b/${binId}` : "https://api.jsonbin.io/v3/b";
-      const method = binId ? "PUT" : "POST";
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-          "X-Master-Key": MASTER_KEY,
-          "X-Bin-Private": "true"
-        },
-        body: JSON.stringify(existing)
-      });
-
-      const result = await response.json();
-      if (!binId) {
-        localStorage.setItem(BIN_KEY_STORAGE, result.metadata.id);
-      }
-
+    if (result.success) {
       alert("✅ Submission successful!");
       goto("/");
-
-      form = {
-        title: "",
-        category: "",
-        description: "",
-        uniqueness: "",
-        existingTechnologies: "",
-        gapAnalysis: "",
-        patentability: "",
-        Marketingdata: "",
-        visualizedProduct: "",
-        researchData: "",
-        experimentalData: "",
-        otherCategory: "",
-        confirmSubmission: false
-      };
-      file = null;
-    } catch (e) {
-      console.error(e);
-      alert("❌ Submission failed: " + e.message);
-    } finally {
-      loading = false;
+    } else {
+      alert("❌ Submission failed: " + result.error);
     }
+
+  } catch (err) {
+    console.error(err);
+    alert("❌ Submission failed: " + err.message);
+  } finally {
+    loading = false;
   }
+}
+
 
   // Google Sign-In setup
   function handleCredentialResponse(response) {
