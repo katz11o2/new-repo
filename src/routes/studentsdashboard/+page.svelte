@@ -1,12 +1,12 @@
 <script>
-  import { supabase } from '$lib/supabase';
   import { onMount } from 'svelte';
+  import { supabase } from '$lib/supabase';
   import { goto } from '$app/navigation';
 
   let user = null;
-  let loading = false;
-  let error = '';
   let submissions = [];
+  let error = '';
+  let loading = false;
 
   let form = {
     idea_title: '',
@@ -32,7 +32,12 @@
 
   onMount(async () => {
     const { data: { session } } = await supabase.auth.getSession();
-    if (!session) goto('/');
+
+    if (!session) {
+      goto('/');
+      return;
+    }
+
     user = session.user;
     await fetchSubmissions();
   });
@@ -44,7 +49,11 @@
       .eq('user_id', user.id)
       .order('created_at', { ascending: false });
 
-    if (!error) submissions = data;
+    if (!error) {
+      submissions = data;
+    } else {
+      console.error('Failed to fetch submissions:', error.message);
+    }
   }
 
   async function submitForm() {
@@ -70,14 +79,12 @@
       experimental_data: form.experimentalData,
       other_category: form.otherCategory,
       confirm_submission: form.confirmSubmission,
-      name: user.user_metadata.full_name || '',
+      name: user.user_metadata.full_name || user.email,
       email: user.email,
       user_id: user.id
     };
 
-    const { error: insertError } = await supabase
-      .from('design_ideas')
-      .insert([payload]);
+    const { error: insertError } = await supabase.from('design_ideas').insert([payload]);
 
     if (insertError) {
       error = '❌ Submission failed';
@@ -109,22 +116,29 @@
     };
   }
 
-  async function logout() {
+  async function signOut() {
     await supabase.auth.signOut();
     goto('/');
   }
 </script>
 
-<div class="p-6 max-w-4xl mx-auto">
+<style>
+  .input { @apply border p-2 rounded w-full mb-4; }
+  .btn { @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700; }
+</style>
+
+<main class="max-w-3xl mx-auto p-6">
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold text-blue-700">🚀 Submit Your Design Idea</h1>
-    <button class="bg-red-500 text-white px-4 py-1 rounded" on:click={logout}>Logout</button>
+    <h1 class="text-2xl font-bold">Welcome, {user?.user_metadata?.full_name || user?.email}</h1>
+    <button class="btn" on:click={signOut}>Logout</button>
   </div>
 
-  <form on:submit|preventDefault={submitForm} class="space-y-4">
-    <input bind:value={form.idea_title} placeholder="Idea Title" class="w-full p-3 border rounded" maxlength="100" />
+  <div class="bg-white shadow p-4 rounded mb-6">
+    <h2 class="text-xl font-semibold mb-4">🚀 Submit Your Design Idea</h2>
 
-    <select bind:value={form.category} class="w-full p-3 border rounded">
+    <input class="input" type="text" bind:value={form.idea_title} placeholder="Idea Title" maxlength="100" />
+    
+    <select class="input" bind:value={form.category}>
       <option value="">Select Category</option>
       <option value="CSE">Computer Science and Engineering</option>
       <option value="AIML">Mechanical Engineering</option>
@@ -134,56 +148,56 @@
     </select>
 
     {#if showOtherCategory}
-      <input bind:value={form.otherCategory} placeholder="Other Category" class="w-full p-3 border rounded" />
+      <input class="input" bind:value={form.otherCategory} placeholder="Other Category" />
     {/if}
 
-    <textarea bind:value={form.idea_description} placeholder="Idea Description" class="w-full p-3 border rounded" maxlength="500" />
+    <textarea class="input" bind:value={form.idea_description} placeholder="Idea Description" rows="4" maxlength="500"></textarea>
 
-    <select bind:value={form.uniqueness} class="w-full p-3 border rounded">
+    <select class="input" bind:value={form.uniqueness}>
       <option value="">Is there any uniqueness?</option>
       <option value="Yes">Yes</option>
       <option value="No">No</option>
     </select>
 
     {#if showPatentField}
-      <input bind:value={form.patentability} placeholder="Patentability Information" class="w-full p-3 border rounded" />
+      <input class="input" bind:value={form.patentability} placeholder="Patentability Information" />
     {/if}
 
-    <input bind:value={form.existingTechnologies} placeholder="Existing Technologies" class="w-full p-3 border rounded" />
-    <input bind:value={form.gapAnalysis} placeholder="Gap Analysis" class="w-full p-3 border rounded" />
-    <input bind:value={form.Marketingdata} placeholder="Marketing Data" class="w-full p-3 border rounded" />
-    <input bind:value={form.researchData} placeholder="Research Data" class="w-full p-3 border rounded" />
-    <input bind:value={form.experimentalData} placeholder="Experimental Data" class="w-full p-3 border rounded" />
-    <input bind:value={form.visualizedProduct} placeholder="Visualized Product URL or Notes" class="w-full p-3 border rounded" />
+    <input class="input" bind:value={form.existingTechnologies} placeholder="Existing Technologies" />
+    <input class="input" bind:value={form.gapAnalysis} placeholder="Gap Analysis" />
+    <input class="input" bind:value={form.Marketingdata} placeholder="Marketing Data" />
+    <input class="input" bind:value={form.researchData} placeholder="Research Data" />
+    <input class="input" bind:value={form.experimentalData} placeholder="Experimental Data" />
+    <input class="input" bind:value={form.visualizedProduct} placeholder="Visualized Product (URL or Notes)" />
 
-    <label class="flex items-center">
+    <label class="flex items-center mb-4">
       <input type="checkbox" bind:checked={form.confirmSubmission} class="mr-2" />
       I confirm the submission.
     </label>
 
-    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded" disabled={loading}>
+    <button class="btn" on:click={submitForm} disabled={loading}>
       {loading ? 'Submitting...' : 'Submit'}
     </button>
 
     {#if error}
-      <p class="text-red-500 mt-2">{error}</p>
+      <p class="text-red-600 mt-2">{error}</p>
     {/if}
-  </form>
+  </div>
 
-  <hr class="my-8" />
-
-  <h2 class="text-xl font-bold mb-4">📄 Your Submissions</h2>
-  {#if submissions.length === 0}
-    <p>No submissions yet.</p>
-  {:else}
-    <ul class="space-y-4">
-      {#each submissions as s}
-        <li class="bg-white shadow p-4 rounded">
-          <h3 class="font-semibold text-blue-700">{s.idea_title}</h3>
-          <p>{s.idea_desciption}</p>
-          <p class="text-sm text-gray-500 mt-1">Submitted: {new Date(s.created_at).toLocaleString()}</p>
-        </li>
-      {/each}
-    </ul>
-  {/if}
-</div>
+  <div class="bg-white shadow p-4 rounded">
+    <h2 class="text-xl font-semibold mb-4">📄 Your Submissions</h2>
+    {#if submissions.length === 0}
+      <p>No submissions yet.</p>
+    {:else}
+      <ul>
+        {#each submissions as sub}
+          <li class="mb-4 border-b pb-2">
+            <h3 class="font-bold">{sub.idea_title}</h3>
+            <p>{sub.idea_desciption}</p>
+            <small class="text-gray-500">Submitted on {new Date(sub.created_at).toLocaleString()}</small>
+          </li>
+        {/each}
+      </ul>
+    {/if}
+  </div>
+</main>
