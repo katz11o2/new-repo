@@ -151,7 +151,7 @@
 </style>
 
 <section class="section">
- <h1>Advisory Committee</h1>
+ <h1>Advisory Committe</h1>
     <div class="dot-line">
       <div class="dot"></div>
       <div class="dot"></div>
