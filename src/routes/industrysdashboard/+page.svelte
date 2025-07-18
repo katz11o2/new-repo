@@ -47,43 +47,51 @@
     }
   }
 
-  async function submitForm() {
-    if (!form.category || !form.title) {
-      alert('Please fill in the Category and Title.');
-      return;
-    }
-    if (!form.confirm_submission) {
-      alert('Please confirm the submission.');
-      return;
-    }
-
-    loading = true;
-    error = '';
-
-    const payload = {
-      ...form,
-      name: user.user_metadata?.full_name || user.email,
-      email: user.email,
-      user_id: user.id
-    };
-
-    try {
-      const { error: insertError } = await supabase.from('industry_challenges').insert([payload]);
-
-      if (insertError) {
-        error = `Submission failed: ${insertError.message}`;
-      } else {
-        alert('Submission successful!');
-        resetForm();
-        await fetchSubmissions();
-        activeSection = 'view';
-      }
-    } catch (err) {
-      error = `Unexpected error: ${err.message}`;
-    }
-
-    loading = false;
+ async function submitForm() {
+  if (!form.category || !form.title) {
+    alert('Please fill in the Category and Title.');
+    return;
   }
+  if (!form.confirm_submission) {
+    alert('Please confirm the submission.');
+    return;
+  }
+
+  loading = true;
+  error = '';
+
+  const payload = {
+    ...form,
+    name: user.user_metadata?.full_name || user.email,
+    email: user.email,
+    user_id: user.id,
+    created_at: new Date().toISOString() // Add if `created_at` is required
+  };
+
+  console.log('🚀 Submitting payload:', payload); // ✅ Debug log
+
+  try {
+    const { data, error: insertError } = await supabase
+      .from('design_ideas') // ✅ Changed table name
+      .insert([payload]);
+
+    if (insertError) {
+      console.error('❌ Supabase Insert Error:', insertError); // ✅ Detailed error log
+      error = `Submission failed: ${insertError.message ?? 'Unknown error occurred.'}`;
+    } else {
+      alert('✅ Submission successful!');
+      resetForm();
+      await fetchSubmissions();
+      activeSection = 'view';
+    }
+  } catch (err) {
+    console.error('❗ Unexpected JS Error:', err);
+    error = `Submission failed: ${err.message ?? 'Unexpected client-side error.'}`;
+  }
+
+  loading = false;
+}
+
 
   function resetForm() {
     form = {
