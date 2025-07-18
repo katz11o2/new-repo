@@ -115,20 +115,26 @@
 </script>
 
 <style>
+  .glass-box {
+    @apply bg-white/30 backdrop-blur-md shadow-xl rounded-2xl p-6 border border-white/40;
+  }
   .input {
-    @apply border border-gray-300 p-2 rounded w-full;
+    @apply bg-white/40 backdrop-blur-md border border-gray-300 p-3 rounded-xl w-full text-gray-800 placeholder-gray-500;
   }
   .btn {
-    @apply bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-2 px-4 rounded hover:from-blue-700 hover:to-indigo-700;
+    @apply bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-2 px-5 rounded-xl font-semibold hover:from-blue-600 hover:to-indigo-600 transition-all duration-200;
   }
   .hamburger {
-    @apply fixed top-4 left-4 z-50 md:hidden text-3xl;
+    @apply fixed top-4 left-4 z-50 md:hidden text-3xl text-white;
   }
   .sidebar {
-    @apply fixed top-0 left-0 h-full w-64 bg-white shadow-lg p-6 z-40 transform transition-transform duration-300;
+    @apply fixed top-0 left-0 h-full w-64 bg-white/20 backdrop-blur-lg p-6 z-40 transform transition-transform duration-300 shadow-xl border-r border-white/30;
   }
   .sidebar.hidden {
     transform: translateX(-100%);
+  }
+  body, html, main {
+    @apply bg-gradient-to-br from-sky-100 via-indigo-100 to-purple-100 min-h-screen;
   }
 </style>
 
@@ -138,18 +144,18 @@
   </button>
 
   <aside class={`sidebar ${isMenuOpen ? '' : 'hidden md:block'}`}>
-    <h1 class="text-3xl font-bold mb-10 text-blue-600">Student Panel</h1>
+    <h1 class="text-3xl font-extrabold mb-10 text-indigo-700">Student Panel</h1>
     <nav class="flex flex-col gap-4">
       <button on:click={() => activeTab = 'profile'} class="btn">Profile</button>
       <button on:click={() => activeTab = 'submit'} class="btn">Submit Your Idea</button>
       <button on:click={() => activeTab = 'view'} class="btn">View Your Idea</button>
-      <button on:click={signOut} class="btn bg-red-600 hover:bg-red-700">Logout</button>
+      <button on:click={signOut} class="btn bg-red-500 hover:bg-red-600">Logout</button>
     </nav>
   </aside>
 
-  <main class="flex-1 overflow-y-auto p-8 bg-gray-50">
+  <main class="flex-1 overflow-y-auto p-8">
     {#if activeTab === 'profile'}
-      <div class="bg-white shadow rounded-lg p-6">
+      <div class="glass-box">
         <h2 class="text-2xl font-bold mb-4">Profile</h2>
         <p><strong>Name:</strong> {user?.user_metadata?.full_name || 'N/A'}</p>
         <p><strong>Email:</strong> {user?.email}</p>
@@ -157,7 +163,7 @@
     {/if}
 
     {#if activeTab === 'submit'}
-      <div class="bg-white shadow rounded-lg p-6">
+      <div class="glass-box">
         <h2 class="text-2xl font-bold mb-4">Submit Your Design Idea</h2>
         <div class="grid md:grid-cols-2 gap-4">
           <input class="input" bind:value={form.idea_title} placeholder="Idea Title" />
@@ -199,17 +205,29 @@
     {/if}
 
     {#if activeTab === 'view'}
-      <div class="bg-white shadow rounded-lg p-6">
+      <div class="glass-box">
         <h2 class="text-2xl font-bold mb-4">Your Submissions</h2>
         {#if submissions.length === 0}
           <p>No submissions yet.</p>
         {:else}
           <ul class="space-y-4">
             {#each submissions as sub}
-              <li class="p-4 bg-gray-50 rounded border shadow-sm">
+              <li class="glass-box p-4">
                 <h3 class="text-lg font-bold">{sub.idea_title}</h3>
-                <p>{sub.idea_desciption}</p>
-                <small class="text-gray-500">{new Date(sub.created_at).toLocaleString()}</small>
+                <p><strong>Description:</strong> {sub.idea_desciption}</p>
+                <p><strong>Category:</strong> {sub.category}</p>
+                {#if sub.other_category}
+                  <p><strong>Other Category:</strong> {sub.other_category}</p>
+                {/if}
+                <p><strong>Uniqueness:</strong> {sub.uniqueness}</p>
+                <p><strong>Patentability:</strong> {sub.patentability}</p>
+                <p><strong>Existing Technologies:</strong> {sub.existing_technologies}</p>
+                <p><strong>Gap Analysis:</strong> {sub.gap_analysis}</p>
+                <p><strong>Marketing Data:</strong> {sub.marketing_data}</p>
+                <p><strong>Research Data:</strong> {sub.research_data}</p>
+                <p><strong>Experimental Data:</strong> {sub.experimental_data}</p>
+                <p><strong>Visualized Product:</strong> {sub.visualized_product}</p>
+                <small class="text-gray-700">Submitted on: {new Date(sub.created_at).toLocaleString()}</small>
               </li>
             {/each}
           </ul>
