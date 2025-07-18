@@ -80,7 +80,6 @@
       <h1>Sign Up</h1>
       <input type="text" bind:value={name} placeholder="Name" />
       <input type="text" bind:value={phone} placeholder="Phone" />
-      <input type="text" bind:value={college} placeholder="Full College Name" />
       <input type="text" bind:value={msmeNumber} placeholder="MSME Number" /> <!-- ✅ New input -->
       <input type="email" bind:value={email} placeholder="Email Address" />
       <input type="password" bind:value={password} placeholder="Password" />

@@ -3,7 +3,7 @@
     {
       name: "Dr. T Venkata Prabhakar",
       designation: "Chief Research Scientist,\nIndian Institute of Science (IISc)",
-      image: "/images/ad2.jpg" // use forward slashes and ensure the image exists in "static/images/"
+      image: "/images/ad2.jpg"
     },
     {
       name: "Mr. Srinivas M. Jamkhandi",
@@ -24,11 +24,13 @@
     font-family: 'Poppins', sans-serif;
     background: #fff;
   }
+
   .dot-line {
     display: flex;
     align-items: center;
     gap: 2px;
     margin-bottom: 20px;
+    animation: slideIn 1s ease;
   }
 
   .dot {
@@ -39,7 +41,7 @@
   }
 
   .oot {
-    padding: 2rem 6rem;
+    padding: 0rem 3rem 2rem 1rem;
   }
 
   .line {
@@ -55,7 +57,6 @@
     text-align: left;
     font-size: 1.5rem;
     font-weight: bold;
-    text-decoration: none;
   }
 
   .section {
@@ -63,18 +64,11 @@
     text-align: center;
   }
 
-  .title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 3rem;
-    color: #222;
-  }
-
   .cards-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 2.5rem;
+    gap: 2.8rem;
     max-width: 1200px;
     margin: auto;
     position: relative;
@@ -90,6 +84,7 @@
     transition: all 0.3s ease;
     overflow: hidden;
     z-index: 1;
+    animation: fadeIn 0.8s ease both;
   }
 
   .card::before {
@@ -122,12 +117,18 @@
     overflow: hidden;
     border: 4px solid #007bff33;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    animation: popIn 0.6s ease both;
   }
 
   .image-container img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .card:hover .image-container img {
+    transform: scale(1.05);
   }
 
   .name {
@@ -152,17 +153,32 @@
       width: 90%;
     }
   }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
 </style>
 
 <section class="section">
-<div class='oot'>
- <h1>Advisory Committee</h1>
+  <div class='oot'>
+    <h1>Advisory Committee</h1>
     <div class="dot-line">
       <div class="dot"></div>
       <div class="dot"></div>
       <div class="line"></div>
-    </div>
- </div>
+    </div>
+  </div>
   <div class="cards-container">
     {#each advisors as person}
       <div class="card">

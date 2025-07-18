@@ -73,7 +73,7 @@
     flex-direction: column;
     align-items: center;
     padding: 3rem 1rem;
-    background: linear-gradient(to right, #e0f2fe, #f8fafc);
+    background: white;
     font-family: 'Poppins', sans-serif;
   }
 
