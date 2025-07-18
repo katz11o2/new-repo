@@ -71,6 +71,7 @@
     grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
     gap: 2rem;
     padding: 0 2rem;
+    padding-bottom: 30px;
   }
 
   .card {
