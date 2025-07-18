@@ -34,18 +34,19 @@
   });
 
   async function fetchSubmissions() {
-    const { data, error } = await supabase
-      .from('industry_challenges')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false });
+  const { data, error } = await supabase
+    .from('design_ideas') // ✅ Correct table
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false });
 
-    if (!error) {
-      submissions = data;
-    } else {
-      console.error('Failed to fetch submissions:', error.message);
-    }
+  if (!error) {
+    submissions = data;
+  } else {
+    console.error('Failed to fetch submissions:', error.message);
   }
+}
+
 
  async function submitForm() {
   if (!form.category || !form.title) {
