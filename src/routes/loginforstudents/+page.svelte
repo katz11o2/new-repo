@@ -48,7 +48,7 @@
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "https://cambrian-sparkzone.com/studentsdashboard",
+        redirectTo: "http://localhost:5173/studentsdashboard",
       },
     });
 

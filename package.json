@@ -25,6 +25,7 @@
 	},
 	"dependencies": {
 		"@supabase/supabase-js": "^2.51.0",
+		"lucide-svelte": "^0.525.0",
 		"svelte-spa-router": "^4.0.1"
 	}
 }
