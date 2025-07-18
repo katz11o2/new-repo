@@ -140,12 +140,12 @@
 
 <main class="max-w-3xl mx-auto p-6">
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold">Welco, {user?.user_metadata?.full_name || user?.email}</h1>
+    <h1 class="text-2xl font-bold">Welcome, {user?.user_metadata?.full_name || user?.email}</h1>
     <button class="btn" on:click={signOut}>Logout</button>
   </div>
 
   <div class="bg-white shadow p-4 rounded mb-6">
-    <h2 class="text-xl font-semibold mb-4"> ubmit Your Design Idea</h2>
+    <h2 class="text-xl font-semibold mb-4">🚀 Submit Your Design Idea</h2>
 
     <input class="input" type="text" bind:value={form.idea_title} placeholder="Idea Title" maxlength="100" />
     
