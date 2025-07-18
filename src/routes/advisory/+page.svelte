@@ -38,6 +38,10 @@
     background-color: #1e3a8a;
   }
 
+  .oot {
+    padding: 2rem 6rem;
+  }
+
   .line {
     flex: 1;
     height: 1px;
@@ -151,12 +155,14 @@
 </style>
 
 <section class="section">
+<div class='oot'>
  <h1>Advisory Committe</h1>
     <div class="dot-line">
       <div class="dot"></div>
       <div class="dot"></div>
       <div class="line"></div>
     </div>
+ </div>
   <div class="cards-container">
     {#each advisors as person}
       <div class="card">
