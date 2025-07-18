@@ -66,7 +66,9 @@
     name: user.user_metadata?.full_name || user.email,
     email: user.email,
     user_id: user.id,
-    created_at: new Date().toISOString() // Add if `created_at` is required
+    created_at: new Date().toISOString(),
+    user_type: 'industry'
+ // Add if `created_at` is required
   };
 
   console.log('🚀 Submitting payload:', payload); // ✅ Debug log
@@ -146,7 +148,7 @@
     text-align: left;
     font-size: 1rem;
     cursor: pointer;
-    padding: 0.8rem 1rem;
+    padding: 0.8rem 1rem; 
     border-radius: 0.75rem;
     transition: background 0.3s ease;
     color: #1e3a8a;

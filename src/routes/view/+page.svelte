@@ -20,18 +20,20 @@
   });
 </script>
 
-<div class="admin-container">
-  <div class="tabs">
-    <button on:click={() => activeTab = 'student'} class:active={activeTab === 'student'}>Student Entries</button>
-    <button on:click={() => activeTab = 'industry'} class:active={activeTab === 'industry'}>Industry Entries</button>
-  </div>
+<div class="admin-wrapper">
+  <div class="glass-container">
+    <h1>Admin Dashboard</h1>
 
-  {#if loading}
-    <p>Loading entries...</p>
-  {:else if error}
-    <p class="error">{error}</p>
-  {:else}
-    <div class="entries glass">
+    <div class="tabs">
+      <button class:selected={activeTab === 'student'} on:click={() => activeTab = 'student'}>Students</button>
+      <button class:selected={activeTab === 'industry'} on:click={() => activeTab = 'industry'}>Industry</button>
+    </div>
+
+    {#if loading}
+      <p class="loading">Loading submissions...</p>
+    {:else if error}
+      <p class="error">{error}</p>
+    {:else}
       {#if activeTab === 'student'}
         {#if studentEntries.length > 0}
           {#each studentEntries as entry}
@@ -42,7 +44,7 @@
             </div>
           {/each}
         {:else}
-          <p>No student entries found.</p>
+          <p>No student submissions yet.</p>
         {/if}
       {:else}
         {#if industryEntries.length > 0}
@@ -54,67 +56,90 @@
             </div>
           {/each}
         {:else}
-          <p>No industry entries found.</p>
+          <p>No industry submissions yet.</p>
         {/if}
       {/if}
-    </div>
-  {/if}
+    {/if}
+  </div>
 </div>
 
 <style>
-  .admin-container {
+  .admin-wrapper {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    padding: 2rem;
-    font-family: sans-serif;
+    padding: 3rem 1rem;
+    background: linear-gradient(to right, #f0f4ff, #ffffff);
+    min-height: 100vh;
+  }
+
+  .glass-container {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    max-width: 850px;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    color: #2d2d2d;
   }
 
   .tabs {
     display: flex;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
   }
 
   .tabs button {
-    padding: 0.6rem 1.5rem;
-    border: none;
-    background: #e0e0e0;
-    cursor: pointer;
-    border-radius: 8px;
+    padding: 0.7rem 1.8rem;
     font-weight: 600;
+    background: #e0e0e0;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
   }
 
-  .tabs button.active {
+  .tabs button.selected {
     background: #0077ff;
     color: white;
-  }
-
-  .entries {
-    width: 100%;
-    max-width: 800px;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    transform: scale(1.05);
   }
 
   .entry-card {
-    padding: 1rem;
-    border-radius: 1rem;
     background: white;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   }
 
-  .glass {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(12px);
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  .entry-card h3 {
+    margin-bottom: 0.6rem;
+    font-size: 1.2rem;
+  }
+
+  .entry-card p {
+    margin: 0.3rem 0;
+    line-height: 1.4;
+  }
+
+  .loading {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #555;
   }
 
   .error {
+    text-align: center;
     color: red;
+    font-weight: bold;
   }
 </style>
-
