@@ -1,179 +1,150 @@
 <script>
   import { onMount } from 'svelte';
+  import { supabase } from '$lib/supabase';
+  import { goto } from '$app/navigation';
 
-  const MASTER_KEY = "$2a$10$7s2J1bfLkUw4k5xI41hADupk/1x12kJIIECHjYqWCruKDUnE0/wKu";
-  const BIN_KEY_DESIGN = "jsonbin_design_ideas";      // Faculty + Student
-  const BIN_KEY_INDUSTRY = "jsonbin_industry_ideas";  // Industry
+  let user = null;
+  let studentEntries = [];
+  let industryEntries = [];
+  let allEntries = [];
+  let activeTab = 'students';
 
-  let entries = [];
-  let loading = true;
-  let error = null;
+  // Fetch data from Supabase
+  async function fetchEntries() {
+    const { data, error } = await supabase
+      .from('design_ideas')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-  // For comment form
-  let commentText = {};
-  let selectedHOD = {};
+    if (error) {
+      console.error('Error fetching entries:', error);
+      return;
+    }
 
-  async function fetchFromBin(key) {
-    const binId = localStorage.getItem(key);
-    if (!binId) return [];
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
-      headers: { "X-Master-Key": MASTER_KEY }
-    });
-    const json = await res.json();
-    return json.record || [];
-  }
-
-  function handleSend(entryId) {
-    alert(`Sent to: ${selectedHOD[entryId] || "Not selected"}\nComment: ${commentText[entryId] || "No comment"}`);
-    // You can replace alert() with actual submission logic later
-    selectedHOD[entryId] = '';
-    commentText[entryId] = '';
+    allEntries = data;
+    studentEntries = data.filter((entry) => entry.type === 'student');
+    industryEntries = data.filter((entry) => entry.type === 'industry');
   }
 
   onMount(async () => {
-    try {
-      const [designEntries, industryEntries] = await Promise.all([
-        fetchFromBin(BIN_KEY_DESIGN),
-        fetchFromBin(BIN_KEY_INDUSTRY)
-      ]);
-      entries = [...designEntries, ...industryEntries].sort((a, b) =>
-        new Date(b.submittedAt) - new Date(a.submittedAt)
-      );
-    } catch (err) {
-      error = "Failed to load submissions.";
-      console.error(err);
-    } finally {
-      loading = false;
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+    if (sessionError) {
+      console.error(sessionError);
+      goto('/');
+      return;
     }
+
+    if (!session || !session.user) {
+      console.warn("No active session, redirecting...");
+      goto('/');
+      return;
+    }
+
+    user = session.user;
+    await fetchEntries();
   });
 </script>
 
 <style>
-  .container {
-    padding: 40px;
-    font-family: 'Poppins', sans-serif;
-    max-width: 1100px;
-    margin: auto;
+  .tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
   }
 
-  h1 {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 30px;
-    color: #1e3a8a;
-  }
-
-  .card {
-    background: rgba(255, 255, 255, 0.45);
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 20px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(147, 197, 253, 0.4);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
-  }
-
-  .card h2 {
-    color: #1d4ed8;
-    font-size: 1.3rem;
-  }
-
-  .meta {
-    color: #475569;
-    font-size: 0.9rem;
-    margin-bottom: 8px;
-  }
-
-  .img-preview {
-    margin-top: 12px;
-    max-width: 100%;
-    border-radius: 10px;
-  }
-
-  .dropdown-section {
-    margin-top: 20px;
-    background: rgba(255,255,255,0.6);
-    padding: 12px;
-    border-radius: 12px;
-  }
-
-  .dropdown-section select,
-  .dropdown-section textarea {
-    width: 100%;
-    padding: 8px;
-    border-radius: 8px;
-    margin-top: 8px;
-    border: 1px solid #94a3b8;
-    font-family: inherit;
-  }
-
-  .dropdown-section button {
-    margin-top: 10px;
-    padding: 8px 16px;
-    background-color: #2563eb;
-    color: white;
-    border: none;
-    border-radius: 8px;
+  .tab {
+    padding: 0.5rem 1rem;
+    background-color: #eee;
+    border-radius: 5px;
     cursor: pointer;
   }
 
-  .dropdown-section button:hover {
-    background-color: #1d4ed8;
+  .active-tab {
+    background-color: #ccc;
+    font-weight: bold;
+  }
+
+  .card {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
   }
 </style>
 
-<div class="container">
-  <h1>🎯 Submitted Design Ideas</h1>
+<h1 class="text-2xl font-bold mb-4">All Submissions</h1>
 
-  {#if loading}
-    <p>Loading...</p>
-  {:else if error}
-    <p style="color:red;">{error}</p>
-  {:else if entries.length === 0}
-    <p>No submissions found.</p>
-  {:else}
-    {#each entries as entry, i}
-      <div class="card">
-        <h2>{entry.title}</h2>
-        <p class="meta"><strong>Submitted By:</strong> {entry.submittedBy || "Unknown"}</p>
-        <p class="meta"><strong>Category:</strong> {entry.category}</p>
-        {#if entry.otherCategory}
-          <p class="meta"><strong>Other Category:</strong> {entry.otherCategory}</p>
-        {/if}
-        <p><strong>Description:</strong> {entry.description}</p>
-        {#if entry.uniqueness}
-          <p><strong>Unique?</strong> {entry.uniqueness}</p>
-        {/if}
-        {#if entry.patentability}
-          <p><strong>Patent Info:</strong> {entry.patentability}</p>
-        {/if}
-        <p><strong>Technologies:</strong> {entry.existingTechnologies}</p>
-        <p><strong>Gap Analysis:</strong> {entry.gapAnalysis}</p>
-        <p><strong>Market Data:</strong> {entry.Marketingdata}</p>
-        {#if entry.visualizedProduct}
-          <img class="img-preview" src={entry.visualizedProduct} alt="Visual Preview" />
-        {/if}
-        <p class="meta">📅 {new Date(entry.submittedAt).toLocaleString()}</p>
-
-        <!-- ✅ New Dropdown and Comment Section -->
-        <div class="dropdown-section">
-          <label><strong>Send to HOD:</strong></label>
-          <select bind:value={selectedHOD[i]}>
-            <option disabled selected value="">Select HOD</option>
-            <option>EEE HOD</option>
-            <option>ECE HOD</option>
-            <option>CSE HOD</option>
-            <option>AIML HOD</option>
-            <option>CIVIL HOD</option>
-            <option>MECH HOD</option>
-          </select>
-
-          <label><strong>Add Comment:</strong></label>
-          <textarea rows="3" bind:value={commentText[i]} placeholder="Write your comment..."></textarea>
-
-          <button on:click={() => handleSend(i)}>Send</button>
-        </div>
-      </div>
-    {/each}
-  {/if}
+<div class="tabs">
+  <div class="tab {activeTab === 'students' ? 'active-tab' : ''}" on:click={() => activeTab = 'students'}>Students</div>
+  <div class="tab {activeTab === 'industry' ? 'active-tab' : ''}" on:click={() => activeTab = 'industry'}>Industry</div>
+  <div class="tab {activeTab === 'all' ? 'active-tab' : ''}" on:click={() => activeTab = 'all'}>All</div>
 </div>
+
+{#if activeTab === 'students'}
+  {#each studentEntries as sub}
+    <div class="card">
+      <h3>{sub.idea_title || sub.title}</h3>
+      <p><strong>Category:</strong> {sub.category}</p>
+      {#if sub.other_category}<p><strong>Other Category:</strong> {sub.other_category}</p>{/if}
+      <p><strong>Description:</strong> {sub.idea_description || sub.description}</p>
+      <p><strong>Uniqueness:</strong> {sub.uniqueness}</p>
+      <p><strong>Gap Analysis:</strong> {sub.gapAnalysis}</p>
+      <p><strong>Existing Tech:</strong> {sub.existingTechnologies || sub.existingTech}</p>
+      <p><strong>Marketing:</strong> {sub.marketing_data || sub.marketData}</p>
+      <p><strong>Research:</strong> {sub.research_data}</p>
+      <p><strong>Experimental:</strong> {sub.experimental_data}</p>
+      <p><strong>Financials:</strong> {sub.financials}</p>
+      <p><strong>Patentability:</strong> {sub.patentability}</p>
+      <p><strong>Visual Product:</strong> {sub.visualized_product}</p>
+      <p><strong>Submitted by:</strong> {sub.name} ({sub.email})</p>
+      <p><strong>Submitted at:</strong> {new Date(sub.created_at).toLocaleString()}</p>
+    </div>
+  {/each}
+{/if}
+
+{#if activeTab === 'industry'}
+  {#each industryEntries as sub}
+    <div class="card">
+      <h3>{sub.idea_title || sub.title}</h3>
+      <p><strong>Category:</strong> {sub.category}</p>
+      {#if sub.other_category}<p><strong>Other Category:</strong> {sub.other_category}</p>{/if}
+      <p><strong>Description:</strong> {sub.idea_description || sub.description}</p>
+      <p><strong>Uniqueness:</strong> {sub.uniqueness}</p>
+      <p><strong>Gap Analysis:</strong> {sub.gapAnalysis}</p>
+      <p><strong>Existing Tech:</strong> {sub.existingTechnologies || sub.existingTech}</p>
+      <p><strong>Marketing:</strong> {sub.marketing_data || sub.marketData}</p>
+      <p><strong>Research:</strong> {sub.research_data}</p>
+      <p><strong>Experimental:</strong> {sub.experimental_data}</p>
+      <p><strong>Financials:</strong> {sub.financials}</p>
+      <p><strong>Patentability:</strong> {sub.patentability}</p>
+      <p><strong>Visual Product:</strong> {sub.visualized_product}</p>
+      <p><strong>Submitted by:</strong> {sub.name} ({sub.email})</p>
+      <p><strong>Submitted at:</strong> {new Date(sub.created_at).toLocaleString()}</p>
+    </div>
+  {/each}
+{/if}
+
+{#if activeTab === 'all'}
+  {#each allEntries as sub}
+    <div class="card">
+      <h3>{sub.idea_title || sub.title}</h3>
+      <p><strong>Category:</strong> {sub.category}</p>
+      {#if sub.other_category}<p><strong>Other Category:</strong> {sub.other_category}</p>{/if}
+      <p><strong>Description:</strong> {sub.idea_description || sub.description}</p>
+      <p><strong>Uniqueness:</strong> {sub.uniqueness}</p>
+      <p><strong>Gap Analysis:</strong> {sub.gapAnalysis}</p>
+      <p><strong>Existing Tech:</strong> {sub.existingTechnologies || sub.existingTech}</p>
+      <p><strong>Marketing:</strong> {sub.marketing_data || sub.marketData}</p>
+      <p><strong>Research:</strong> {sub.research_data}</p>
+      <p><strong>Experimental:</strong> {sub.experimental_data}</p>
+      <p><strong>Financials:</strong> {sub.financials}</p>
+      <p><strong>Patentability:</strong> {sub.patentability}</p>
+      <p><strong>Visual Product:</strong> {sub.visualized_product}</p>
+      <p><strong>Submitted by:</strong> {sub.name} ({sub.email})</p>
+      <p><strong>Submitted at:</strong> {new Date(sub.created_at).toLocaleString()}</p>
+    </div>
+  {/each}
+{/if}
