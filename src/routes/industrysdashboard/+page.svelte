@@ -1,141 +1,327 @@
 <script>
   import { onMount } from 'svelte';
   import { supabase } from '$lib/supabase';
+  import { goto } from '$app/navigation';
 
-  let activeTab = 'students';
-  let students = [];
-  let industries = [];
+  let user = null;
+  let activeSection = 'submit';
+  let submissions = [];
+  let error = '';
+  let loading = false;
 
-  const fetchData = async () => {
-    const { data: studentData } = await supabase.from('student_ideas').select('*').order('created_at', { ascending: false });
-    const { data: industryData } = await supabase.from('industry_ideas').select('*').order('created_at', { ascending: false });
-    students = studentData || [];
-    industries = industryData || [];
+  let form = {
+    category: '',
+    title: '',
+    description: '',
+    uniqueness: '',
+    existingTech: '',
+    gapAnalysis: '',
+    patentability: '',
+    marketData: '',
+    financials: '',
+    visualized_product: '',
+    confirm_submission: false
   };
 
-  onMount(fetchData);
+  onMount(async () => {
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError || !session) {
+      goto('/');
+      return;
+    }
+    user = session.user;
+    await fetchSubmissions();
+  });
+
+  async function fetchSubmissions() {
+  const { data, error } = await supabase
+    .from('design_ideas') // ✅ Correct table
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false });
+
+  if (!error) {
+    submissions = data;
+  } else {
+    console.error('Failed to fetch submissions:', error.message);
+  }
+}
+
+
+ async function submitForm() {
+  if (!form.category || !form.title) {
+    alert('Please fill in the Category and Title.');
+    return;
+  }
+  if (!form.confirm_submission) {
+    alert('Please confirm the submission.');
+    return;
+  }
+
+  loading = true;
+  error = '';
+
+  const payload = {
+    ...form,
+    name: user.user_metadata?.full_name || user.email,
+    email: user.email,
+    user_id: user.id,
+    created_at: new Date().toISOString() // Add if `created_at` is required
+  };
+
+  console.log('🚀 Submitting payload:', payload); // ✅ Debug log
+
+  try {
+    const { data, error: insertError } = await supabase
+      .from('design_ideas') // ✅ Changed table name
+      .insert([payload]);
+
+    if (insertError) {
+      console.error('❌ Supabase Insert Error:', insertError); // ✅ Detailed error log
+      error = `Submission failed: ${insertError.message ?? 'Unknown error occurred.'}`;
+    } else {
+      alert('✅ Submission successful!');
+      resetForm();
+      await fetchSubmissions();
+      activeSection = 'view';
+    }
+  } catch (err) {
+    console.error('❗ Unexpected JS Error:', err);
+    error = `Submission failed: ${err.message ?? 'Unexpected client-side error.'}`;
+  }
+
+  loading = false;
+}
+
+
+  function resetForm() {
+    form = {
+      category: '',
+      title: '',
+      description: '',
+      uniqueness: '',
+      existingTech: '',
+      gapAnalysis: '',
+      patentability: '',
+      marketData: '',
+      financials: '',
+      visualized_product: '',
+      confirm_submission: false
+    };
+  }
+
+  async function signOut() {
+    await supabase.auth.signOut();
+    goto('/');
+  }
 </script>
 
 <style>
-  .glass-card {
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 1rem;
-    padding: 2rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-    max-width: 1000px;
-    margin: auto;
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
   }
 
-  .tab-button {
-    padding: 0.75rem 1.5rem;
+  .layout {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  .sidebar {
+    background: linear-gradient(to bottom, #ffffffaa, #ffffff22);
+    backdrop-filter: blur(16px);
+    width: 240px;
+    height: 100vh;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .sidebar button {
+    background: none;
     border: none;
-    border-radius: 1rem;
-    background: #fff;
-    cursor: pointer;
-    margin: 0.5rem;
-    font-weight: bold;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    transition: all 0.3s;
-  }
-
-  .tab-button.active {
-    background-color: #007bff;
-    color: white;
-  }
-
-  table {
-    width: 100%;
-    margin-top: 1rem;
-    border-collapse: collapse;
-  }
-
-  th, td {
-    padding: 0.75rem;
     text-align: left;
-    border-bottom: 1px solid #ccc;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.8rem 1rem;
+    border-radius: 0.75rem;
+    transition: background 0.3s ease;
+    color: #1e3a8a;
+    font-weight: 600;
   }
 
-  th {
-    background-color: #f0f0f0;
+  .sidebar button:hover {
+    background: rgba(255, 255, 255, 0.2);
   }
 
-  @media screen and (max-width: 768px) {
-    table, thead, tbody, th, td, tr {
-      display: block;
-    }
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: linear-gradient(to right, #f0f4ff, #e8f0ff);
+    overflow-y: auto;
+  }
 
-    td {
-      position: relative;
-      padding-left: 50%;
-    }
+  main {
+    padding: 2rem;
+    flex: 1;
+  }
 
-    td::before {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 45%;
-      padding-left: 1rem;
-      white-space: nowrap;
-    }
+  .glass {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(14px);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    padding: 2rem;
+  }
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: 0.9rem;
+    margin-bottom: 1.25rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 1rem;
+    font-size: 1rem;
+    background-color: #f8fafc;
+    transition: border 0.2s ease;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    border-color: #1e3a8a;
+    outline: none;
+    background-color: white;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  button.submit-btn {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 0.9rem 1.5rem;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  button.submit-btn:hover {
+    background-color: #294faa;
+  }
+
+  label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #334155;
+  }
+
+  .submission-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+
+  h2 {
+    margin-bottom: 1.5rem;
+    color: #1e3a8a;
+  }
+
+  h3 {
+    margin-top: 0;
+    color: #1e293b;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
   }
 </style>
 
-<main class="min-h-screen bg-gradient-to-br from-blue-100 to-purple-200 p-6 flex flex-col items-center justify-center">
-  <div class="glass-card">
-    <h1 class="text-3xl font-bold text-center mb-6">Admin Dashboard</h1>
-
-    <div class="flex justify-center mb-4">
-      <button class="tab-button {activeTab === 'students' ? 'active' : ''}" on:click={() => activeTab = 'students'}>Student Entries</button>
-      <button class="tab-button {activeTab === 'industries' ? 'active' : ''}" on:click={() => activeTab = 'industries'}>Industry Entries</button>
-    </div>
-
-    {#if activeTab === 'students'}
-      <h2 class="text-xl font-semibold mb-2">Student Submissions</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Category</th>
-            <th>College</th>
-            <th>Submitted At</th>
-          </tr>
-        </thead>
-        <tbody>
-          {#each students as sub}
-            <tr>
-              <td>{sub.idea_title || sub.title}</td>
-              <td>{sub.category}</td>
-              <td>{sub.college}</td>
-              <td>{new Date(sub.created_at).toLocaleString()}</td>
-            </tr>
-          {/each}
-        </tbody>
-      </table>
-    {:else}
-      <h2 class="text-xl font-semibold mb-2">Industry Submissions</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Company</th>
-            <th>MSME No</th>
-            <th>Submitted At</th>
-          </tr>
-        </thead>
-        <tbody>
-          {#each industries as sub}
-            <tr>
-              <td>{sub.idea_title || sub.title}</td>
-              <td>{sub.category}</td>
-              <td>{sub.company}</td>
-              <td>{sub.msme_number}</td>
-              <td>{new Date(sub.created_at).toLocaleString()}</td>
-            </tr>
-          {/each}
-        </tbody>
-      </table>
-    {/if}
+<div class="layout">
+  <div class="sidebar">
+    <button on:click={() => activeSection = 'submit'}>Submit Challenge</button>
+    <button on:click={() => activeSection = 'view'}>View Submissions</button>
+    <button on:click={signOut}>Logout</button>
   </div>
-</main>
+
+  <div class="main-content">
+    <main>
+      <div class="glass">
+        {#if activeSection === 'submit'}
+          <h2>Submit a Challenge</h2>
+
+          <select bind:value={form.category}>
+            <option value="">Select Category</option>
+            <option value="New Product Development">New Product Development</option>
+            <option value="New Process Development">New Process Development</option>
+            <option value="New Features in Existing Product">New Features in Existing Product</option>
+            <option value="Problems in Existing Product">Problems in Existing Product</option>
+            <option value="Problems in Existing Processes">Problems in Existing Processes</option>
+          </select>
+
+          <input bind:value={form.title} placeholder="Enter a descriptive title" />
+          <textarea bind:value={form.description} placeholder="Explain the problem in detail"></textarea>
+          <input bind:value={form.uniqueness} placeholder="What makes it unique?" />
+          <input bind:value={form.existingTech} placeholder="What exists already?" />
+          <input bind:value={form.gapAnalysis} placeholder="What's missing in current process?" />
+          <input bind:value={form.patentability} placeholder="Is it patentable?" />
+          <input bind:value={form.marketData} placeholder="Any marketing data?" />
+          <input bind:value={form.financials} placeholder="Any cost estimates or funding info" />
+          <input bind:value={form.visualized_product} placeholder="Product Visual (URL or Notes)" />
+
+          <label><input type="checkbox" bind:checked={form.confirm_submission} /> I confirm the submission.</label>
+
+          <button class="submit-btn" on:click={submitForm} disabled={loading}>
+            {loading ? 'Submitting...' : 'Submit'}
+          </button>
+          {#if error}
+            <p style="color:red">{error}</p>
+          {/if}
+        {/if}
+
+        {#if activeSection === 'view'}
+          <h2>Your Submissions</h2>
+          {#if submissions.length === 0}
+            <p>No submissions yet.</p>
+          {:else}
+            {#each submissions as sub}
+              <div class="submission-card">
+                <h3>{sub.title}</h3>
+                <p><strong>Category:</strong> {sub.category}</p>
+                <p><strong>Description:</strong> {sub.description}</p>
+                <p><strong>Uniqueness:</strong> {sub.uniqueness}</p>
+                <p><strong>Existing Technologies:</strong> {sub.existingTech}</p>
+                <p><strong>Gap Analysis:</strong> {sub.gapAnalysis}</p>
+                <p><strong>Patentability:</strong> {sub.patentability}</p>
+                <p><strong>Market Data:</strong> {sub.marketData}</p>
+                <p><strong>Financials:</strong> {sub.financials}</p>
+                <p><strong>Visualized Product:</strong> {sub.visualized_product}</p>
+                <p><strong>Submitted by:</strong> {sub.name} ({sub.email})</p>
+                <p><strong>Submitted at:</strong> {new Date(sub.created_at).toLocaleString()}</p>
+              </div>
+            {/each}
+          {/if}
+        {/if}
+      </div>
+    </main>
+  </div>
+</div>

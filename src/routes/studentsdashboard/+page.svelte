@@ -69,7 +69,7 @@
     }
 
     loading = true;
-    error = '';
+    error = ''; 
 
   const payload = {
   idea_title: form.idea_title || null,
@@ -88,7 +88,8 @@ gapAnalysis: form.gapAnalysis || null,
   confirm_submission: form.confirm_submission || false, // ✅ FIXED casing
   name: user.user_metadata?.full_name || user.email,
   email: user.email,
-  user_id: user.id
+  user_id: user.id,
+  user_type: 'student'
 };
 
 
