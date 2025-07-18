@@ -1,189 +1,263 @@
 <script>
+  import { supabase } from "$lib/supabase";
   import { goto } from "$app/navigation";
 
-  let msmename = "";
-  let msmemember = "";
+  let name = "";
   let phone = "";
+  let college = "";
   let email = "";
   let password = "";
+  let msmeNumber = ""; // ✅ New field
+  let otp = "";
   let captchaInput = "";
+  let step = "signup";
   let captcha = Math.floor(1000 + Math.random() * 9000).toString();
   let isChecked = false;
-  let companyType = "";
 
   function handleSignup() {
     if (
-      msmename &&
-      msmemember &&
-      phone &&
-      email &&
-      password &&
-      captchaInput === captcha &&
-      companyType
+      name === "123" &&
+      phone === "123" &&
+      college === "123" &&
+      email === "123@gmail.com" &&
+      password === "123" &&
+      msmeNumber === "123" &&
+      captchaInput === captcha
     ) {
-      alert("Signup Successful");
-      goto("/industrysdashboard");
+      step = "otp";
     } else {
-      alert("Please fill all fields correctly and choose a company type.");
+      alert("Invalid details or captcha!");
     }
   }
 
-  function redirectToLogin() {
+  function verifyOTP() {
+    if (otp === "123") {
+      step = "nda";
+    } else {
+      alert("Invalid OTP!");
+    }
+  }
+
+  function agreeAndProceed() {
+    if (!isChecked) {
+      alert("Please agree to the terms before proceeding.");
+      return;
+    }
+    goto("/facultydashboard");
+  }
+
+  async function signInWithGoogle() {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: "https://cambrian-sparkzone.com/industrysdashboard", // ✅ Redirect changed
+      },
+    });
+
+    if (error) {
+      console.error("Error signing in:", error.message);
+    }
+  }
+
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    if (session) {
+      goto("/studentsdashboard");
+    }
+  });
+
+  function redirectToRegister() {
     goto("/register");
   }
 </script>
 
 <svelte:head>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 </svelte:head>
+
+<main>
+  <div class="glass">
+    {#if step === "signup"}
+      <h1>Sign Up</h1>
+      <input type="text" bind:value={name} placeholder="Name" />
+      <input type="text" bind:value={phone} placeholder="Phone" />
+      <input type="text" bind:value={college} placeholder="Full College Name" />
+      <input type="text" bind:value={msmeNumber} placeholder="MSME Number" /> <!-- ✅ New input -->
+      <input type="email" bind:value={email} placeholder="Email Address" />
+      <input type="password" bind:value={password} placeholder="Password" />
+      <div class="captcha">{captcha}</div>
+      <input type="text" bind:value={captchaInput} placeholder="Enter Captcha" />
+      <button on:click={handleSignup}>Sign Up</button>
+      <div class="divider">or</div>
+      <button class="google-btn" on:click={signInWithGoogle}>Sign in with Google</button>
+
+    {:else if step === "otp"}
+      <h1>Enter OTP</h1>
+      <input type="text" bind:value={otp} placeholder="Enter OTP" />
+      <button on:click={verifyOTP}>Verify OTP</button>
+      <div class="divider">or</div>
+      <button class="google-btn" on:click={signInWithGoogle}>Sign in with Google</button>
+
+    {:else if step === "nda"}
+      <h1>Non-Disclosure Agreement</h1>
+      <p>This NDA ensures confidentiality of shared information. Please read and agree before proceeding.</p>
+      <label>
+        <input type="checkbox" bind:checked={isChecked} />
+        I agree to the NDA terms
+      </label>
+      <button on:click={agreeAndProceed}>I Agree</button>
+      <div class="divider">or</div>
+      <button class="google-btn" on:click={signInWithGoogle}>Sign in with Google</button>
+    {/if}
+
+    <div class="register-link" on:click={redirectToRegister}>
+      Already have an account? Click here to login
+    </div>
+  </div>
+</main>
 
 <style>
   * {
     font-family: "Poppins", sans-serif;
   }
 
-  .wrapper {
+  main {
+    background: white;
     min-height: 100vh;
-    background: linear-gradient(to right, #f4f7fa, #ffffff);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 30px 20px;
+    padding: 40px 20px;
   }
 
-  .form-container {
-    width: 100%;
-    max-width: 420px;
-    padding: 30px 25px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-    color: #003366;
-    animation: fadePop 0.4s ease-in-out;
-  }
-
-  h2 {
+  .glass {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(15px);
+    border-radius: 1.5rem;
+    padding: 3rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     text-align: center;
-    font-weight: 600;
-    font-size: 1.6rem;
-    margin-bottom: 20px;
+    animation: fadeInUp 0.6s ease;
+    max-width: 420px;
+    width: 100%;
+  }
+
+  .glass:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  h1 {
+    font-size: 1.7rem;
     color: #003366;
+    font-weight: 600;
+    margin-bottom: 1rem;
   }
 
   input,
   button {
     width: 100%;
     padding: 12px;
-    margin-top: 10px;
+    margin: 8px 0;
     border-radius: 10px;
     font-size: 0.95rem;
-    transition: all 0.3s ease;
   }
 
   input {
     border: 1px solid #ccc;
-    background: #fff;
+    background: #fdfdfd;
+    color: #222;
+    transition: all 0.2s ease;
   }
 
   input:focus {
     outline: none;
-    border-color: #003366;
-    box-shadow: 0 0 5px rgba(0, 51, 102, 0.2);
+    border-color: #005fa3;
+    box-shadow: 0 0 5px rgba(0, 95, 163, 0.3);
+  }
+
+  button {
+    background-color: #003366;
+    color: white;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #005fa3;
+  }
+
+  .google-btn {
+    background-color: #4285f4;
+    color: white;
+    border: none;
+    font-weight: 600;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .google-btn:hover {
+    background-color: #357ae8;
   }
 
   .captcha {
-    text-align: center;
+    font-size: 1.3rem;
     font-weight: bold;
-    font-size: 1.2rem;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.4);
     padding: 12px;
     border-radius: 10px;
-    margin: 12px 0 5px;
+    margin: 10px 0 5px;
+    text-align: center;
     color: #003366;
     letter-spacing: 2px;
   }
 
-  .checkbox-group {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 12px;
-    flex-wrap: wrap;
-  }
-
-  .checkbox-group label {
+  label {
     font-size: 0.9rem;
+    margin-top: 12px;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+    color: #333;
   }
 
-  button {
-    background: #003366;
-    color: white;
-    border: none;
-    font-weight: 600;
-    margin-top: 18px;
-    cursor: pointer;
+  p {
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+    line-height: 1.5;
+    color: #333;
   }
 
-  button:hover {
-    background: #005fa3;
-  }
-
-  .login-link {
-    text-align: center;
-    font-size: 0.9rem;
-    margin-top: 18px;
+  .register-link {
     color: #003366;
     text-decoration: underline;
     cursor: pointer;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 12px;
   }
 
-  .login-link:hover {
+  .register-link:hover {
     color: #005fa3;
   }
 
-  @keyframes fadePop {
+  .divider {
+    margin: 1rem 0;
+    font-size: 0.85rem;
+    color: #999;
+  }
+
+  @keyframes fadeInUp {
     from {
       opacity: 0;
-      transform: scale(0.96);
+      transform: translateY(40px);
     }
     to {
       opacity: 1;
-      transform: scale(1);
+      transform: translateY(0);
     }
   }
 </style>
-
-<div class="wrapper">
-  <div class="form-container">
-    <h2>Sign Up as MSME</h2>
-
-    <input type="text" bind:value={msmename} placeholder="Name of MSME" />
-    <input type="text" bind:value={msmemember} placeholder="MSME Number" />
-    <input type="text" bind:value={phone} placeholder="Phone Number" />
-    <input type="email" bind:value={email} placeholder="Email Address" />
-    <input type="password" bind:value={password} placeholder="Password" />
-
-    <div class="captcha">{captcha}</div>
-    <input type="text" bind:value={captchaInput} placeholder="Enter Captcha" />
-
-    <div class="checkbox-group">
-      <label><input type="radio" bind:group={companyType} value="Micro" /> Micro</label>
-      <label><input type="radio" bind:group={companyType} value="Small" /> Small</label>
-      <label><input type="radio" bind:group={companyType} value="Medium" /> Medium</label>
-    </div>
-
-    <button on:click={handleSignup}>Sign Up</button>
-
-    <div class="login-link" on:click={redirectToLogin}>
-      Already have an account? Login here
-    </div>
-  </div>
-</div>
