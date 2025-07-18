@@ -1,249 +1,156 @@
 <script>
-  import { goto } from "$app/navigation";
+  import { onMount } from 'svelte';
+  import { supabase } from '$lib/supabase';
+  import { goto } from '$app/navigation';
 
-  const MASTER_KEY = "$2a$10$7s2J1bfLkUw4k5xI41hADupk/1x12kJIIECHjYqWCruKDUnE0/wKu";
-  const BIN_KEY_STORAGE = "jsonbin_industry_ideas";
-  const IMGBB_API_KEY = "6b78d56b527f6dba58807d358ac35142";
+  let user = null;
+  let loading = false;
+  let error = '';
+  let success = '';
+  let file = null;
 
-  let statement = {
-    category: "",
-    title: "",
-    description: "",
-    uniqueness: "",
-    existingTech: "",
-    gapAnalysis: "",
-    patentability: "",
-    marketData: "",
-    financials: ""
+  let form = {
+    idea_title: '',
+    category: '',
+    idea_description: '',
+    existingTechnologies: '',
+    technologyDifferentiation: '',
+    targetCustomers: '',
+    targetMarket: '',
+    visualized_product: ''
   };
 
-  let file = null;
-  let loading = false;
+  // Get the current user
+  onMount(async () => {
+    const { data: { user: currentUser } } = await supabase.auth.getUser();
+    if (!currentUser) goto('/');
+    user = currentUser;
+  });
 
-  const categories = [
-    "New Product Development",
-    "New Process Development",
-    "New Features in Existing Product",
-    "Problems in Existing Product",
-    "Problems in Existing Processes"
-  ];
+  async function handleFileUpload() {
+    if (!file) return '';
 
-  async function toBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result.split(",")[1]);
-      reader.onerror = (err) => reject(err);
-    });
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}.${fileExt}`;
+    const filePath = `${user.id}/${fileName}`;
+
+    const { data, error: uploadError } = await supabase
+      .storage
+      .from('submissions') // Replace with your actual bucket name
+      .upload(filePath, file);
+
+    if (uploadError) {
+      error = 'File upload failed.';
+      console.error(uploadError);
+      return '';
+    }
+
+    const { data: publicUrlData } = supabase
+      .storage
+      .from('submissions')
+      .getPublicUrl(filePath);
+
+    return publicUrlData.publicUrl;
   }
 
   async function handleSubmit() {
-    if (!statement.title || !statement.category) {
-      alert("Please fill in Title and Category.");
-      return;
-    }
-
     loading = true;
+    error = '';
+    success = '';
 
-    try {
-      let imageUrl = "";
-      if (file) {
-        const base64 = await toBase64(file);
-        const imgRes = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
-          method: "POST",
-          body: new URLSearchParams({ image: base64 })
-        });
-        const imgJson = await imgRes.json();
-        imageUrl = imgJson?.data?.url || "";
-      }
+    const fileUrl = await handleFileUpload();
+    form.visualized_product = fileUrl;
 
-      let binId = localStorage.getItem(BIN_KEY_STORAGE);
-      let existing = [];
+    const { data, error: insertError } = await supabase
+      .from('design_ideas')
+      .insert([{ ...form, user_id: user.id }]);
 
-      if (binId) {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
-          headers: { "X-Master-Key": MASTER_KEY }
-        });
-        const json = await res.json();
-        existing = json.record || [];
-      }
-
-     existing.push({
-  ...statement,
-  visualizedProduct: imageUrl,
-  submittedAt: new Date().toISOString(),
-  submittedBy: "Industry"
-});
-
-
-      const url = binId
-        ? `https://api.jsonbin.io/v3/b/${binId}`
-        : "https://api.jsonbin.io/v3/b";
-
-      const method = binId ? "PUT" : "POST";
-
-      const saveRes = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-          "X-Master-Key": MASTER_KEY,
-          "X-Bin-Private": "true"
-        },
-        body: JSON.stringify(existing)
-      });
-
-      const result = await saveRes.json();
-      if (!binId) {
-        localStorage.setItem(BIN_KEY_STORAGE, result.metadata.id);
-      }
-
-      alert("✅ Challenge submitted successfully!");
-      goto("/");
-
-      // Reset form
-      statement = {
-        category: "",
-        title: "",
-        description: "",
-        uniqueness: "",
-        existingTech: "",
-        gapAnalysis: "",
-        patentability: "",
-        marketData: "",
-        financials: ""
+    if (insertError) {
+      error = 'Submission failed. Please try again.';
+      console.error(insertError);
+    } else {
+      success = 'Idea submitted successfully!';
+      form = {
+        idea_title: '',
+        category: '',
+        idea_description: '',
+        existingTechnologies: '',
+        technologyDifferentiation: '',
+        targetCustomers: '',
+        targetMarket: '',
+        visualized_product: ''
       };
       file = null;
-
-    } catch (err) {
-      console.error(err);
-      alert("❌ Submission failed.");
-    } finally {
-      loading = false;
     }
+
+    loading = false;
   }
 </script>
 
 <style>
-  .form-section {
-    background: linear-gradient(to bottom right, #f1f5f9, #ffffff);
-    padding: 60px 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .form-card {
-    width: 100%;
-    max-width: 760px;
-    background: white;
-    padding: 40px;
+  .glass-box {
+    background: rgba(255, 255, 255, 0.08);
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    backdrop-filter: blur(10px);
-    border: 1px solid #e2e8f0;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 2rem auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px);
+    color: white;
   }
 
-  .form-card h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 30px;
-    text-align: center;
-    color: #1e3a8a;
-  }
-
-  label {
-    font-weight: 600;
-    margin-bottom: 6px;
-    display: block;
-    color: #334155;
-  }
-
-  input,
-  select,
-  textarea {
+  input, textarea, select {
     width: 100%;
-    padding: 12px 14px;
-    font-size: 1rem;
-    margin-bottom: 18px;
-    border: 1.8px solid #cbd5e1;
+    margin: 0.5rem 0;
+    padding: 0.75rem;
     border-radius: 10px;
-    background-color: #f8fafc;
-    transition: border 0.2s ease;
-  }
-
-  input:focus,
-  select:focus,
-  textarea:focus {
-    border-color: #1e3a8a;
-    outline: none;
-    background-color: white;
-  }
-
-  textarea {
-    resize: vertical;
-    min-height: 100px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
   }
 
   button {
-    width: 100%;
-    background-color: #1e3a8a;
-    color: white;
-    padding: 14px;
-    font-size: 1rem;
-    border-radius: 10px;
-    font-weight: 600;
+    padding: 0.75rem 1.5rem;
     border: none;
+    background: #4f46e5;
+    color: white;
+    border-radius: 10px;
     cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
+    margin-top: 1rem;
   }
 
   button:hover {
-    background-color: #294faa;
+    background: #4338ca;
+  }
+
+  .status-message {
+    margin-top: 1rem;
+    font-weight: bold;
   }
 </style>
 
-<div class="form-section">
-  <div class="form-card">
-    <h2>Submit a Challenge</h2>
+<div class="glass-box">
+  <h2 class="text-2xl font-bold mb-4 text-center">Industry Submission Form</h2>
 
-    <label>Category</label>
-    <select bind:value={statement.category}>
-      <option value="" disabled>Select a category</option>
-      {#each categories as category}
-        <option value={category}>{category}</option>
-      {/each}
-    </select>
+  <form on:submit|preventDefault={handleSubmit}>
+    <input type="text" placeholder="Idea Title" bind:value={form.idea_title} required />
+    <input type="text" placeholder="Category" bind:value={form.category} required />
+    <textarea placeholder="Idea Description" bind:value={form.idea_description} rows="3" required></textarea>
+    <textarea placeholder="Existing Technologies" bind:value={form.existingTechnologies} rows="2" required></textarea>
+    <textarea placeholder="Technology Differentiation" bind:value={form.technologyDifferentiation} rows="2" required></textarea>
+    <textarea placeholder="Target Customers" bind:value={form.targetCustomers} rows="2" required></textarea>
+    <textarea placeholder="Target Market" bind:value={form.targetMarket} rows="2" required></textarea>
 
-    <label>Title</label>
-    <input bind:value={statement.title} placeholder="Enter a descriptive title" />
+    <label class="block mt-2">Upload Visualized Product (PDF/Image)</label>
+    <input type="file" accept=".pdf,.png,.jpg,.jpeg" on:change={(e) => file = e.target.files[0]} />
 
-    <label>Description</label>
-    <textarea bind:value={statement.description} placeholder="Explain the problem in detail"></textarea>
+    <button type="submit" disabled={loading}>{loading ? 'Submitting...' : 'Submit Idea'}</button>
 
-    <label>Uniqueness</label>
-    <input bind:value={statement.uniqueness} placeholder="What makes it unique?" />
-
-    <label>Existing Technologies</label>
-    <input bind:value={statement.existingTech} placeholder="What exists already?" />
-
-    <label>Gap Analysis</label>
-    <input bind:value={statement.gapAnalysis} placeholder="What's missing in current process?" />
-
-    <label>Patentability</label>
-    <input bind:value={statement.patentability} placeholder="Is it patentable?" />
-
-    <label>Market Data</label>
-    <input bind:value={statement.marketData} placeholder="Any marketing data?" />
-
-    <label>Financials</label>
-    <input bind:value={statement.financials} placeholder="Any cost estimates or funding info" />
-
-    <label>Upload Attachment (Optional)</label>
-    <input type="file" accept="image/*,.pdf,.docx" on:change={(e) => file = e.target.files[0]} />
-
-    <button on:click={handleSubmit} disabled={loading}>
-      {loading ? "Submitting..." : "Submit Challenge"}
-    </button>
-  </div>
+    {#if error}
+      <div class="status-message text-red-500">{error}</div>
+    {/if}
+    {#if success}
+      <div class="status-message text-green-400">{success}</div>
+    {/if}
+  </form>
 </div>
