@@ -84,7 +84,7 @@
       max-width: 800px;
       font-size: 1.15rem;
       font-weight: 500;
-      line-height: 1.7;
+      line-height: 2.5;
       color: #333;
       padding: 0 1rem;
       animation: fadeIn 1.5s ease-in-out;
@@ -130,9 +130,9 @@
   
     <div class="description">
       <p>
-        Meet our Points of Contact who guide and inspire.<br />
-        Empowering innovation, collaboration, and creativity.<br />
-        Dedicated to making every event impactful and memorable.
-      </p>
+      Point of Contact<br />
+      Name: Mr.Arun Singh <br>
+      Contact number: +91 95355 17571
+    </p>
     </div>
   </div>

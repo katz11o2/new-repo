@@ -1,9 +1,9 @@
 <script>
   const images = [
-    'https://i.postimg.cc/YStCGmC6/IMG20230904091154-01.jpg',
-      'https://i.postimg.cc/0N0nN4MF/284A9787.jpg',
-    'https://i.postimg.cc/sXKTTL37/IMG20230904091222-01.jpg',
-    'https://i.postimg.cc/cCHX2cJj/IMG20230904091245-01.jpg'
+    'https://i.postimg.cc/N0Cyb8WL/Whats-App-Image-2025-04-24-at-13-07-15-4da42ecc.jpg',
+      'https://engg.cambridge.edu.in/wp-content/uploads/2023/01/Copy-of-DSC_0203-2048x1362.jpg',
+    'https://engg.cambridge.edu.in/wp-content/uploads/2023/07/IMG_0404-1536x1024.jpg',
+    'https://engg.cambridge.edu.in/wp-content/uploads/2023/07/WhatsApp-Image-2023-07-26-at-12.54.39-PM-1536x1020.jpeg'
   
   ];
 </script>
@@ -112,7 +112,7 @@
 <div class="page">
   <div class="greeting">
     <div class="header">
-      <h2>Auditorium</h2>
+      <h2>Cambrian Incubation Center</h2>
       <div class="flex items-center gap-3 mt-2 mb-1">
         <span class="w-2 h-2 bg-blue-900 rounded-full"></span>
         <span class="w-2 h-2 bg-blue-900 rounded-full"></span>

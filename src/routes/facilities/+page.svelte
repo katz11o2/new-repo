@@ -22,7 +22,7 @@
       title: "Gym",
       image: "https://engg.cambridge.edu.in/wp-content/uploads/2023/06/DSC_0548-1-2048x1361.jpg",
       description: "Acoustically treated Gym for high-impact interactions.",
-      link: "/seminar2"
+      link: "/gym"
     },
     {
       title: "Classrooms",
@@ -100,11 +100,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    opacity: 0;
+    animation: fadeIn 0.8s ease forwards;
+    animation-delay: calc(var(--i) * 0.1s);
   }
 
   .facility-box:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
   }
 
   .facility-image {
@@ -113,6 +116,11 @@
     object-fit: cover;
     border-radius: 12px;
     margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+  }
+
+  .facility-box:hover .facility-image {
+    transform: scale(1.03);
   }
 
   .facility-title {
@@ -120,6 +128,11 @@
     font-weight: 600;
     color: #111827;
     margin-bottom: 0.5rem;
+    transition: color 0.3s ease;
+  }
+
+  .facility-box:hover .facility-title {
+    color: #2563eb;
   }
 
   .facility-description {
@@ -127,6 +140,17 @@
     color: #374151;
     text-align: center;
     line-height: 1.5;
+  }
+
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
   }
 
   @media (max-width: 1024px) {
@@ -146,8 +170,12 @@
   <h2>Campus Facilities</h2>
 
   <div class="facilities-grid">
-    {#each facilities as facility}
-      <a href={facility.link} class="facility-box">
+    {#each facilities as facility, i}
+      <a
+        href={facility.link}
+        class="facility-box"
+        style="--i: {i}"
+      >
         <img class="facility-image" src={facility.image} alt={facility.title} />
         <div class="facility-title">{facility.title}</div>
         <div class="facility-description">{facility.description}</div>

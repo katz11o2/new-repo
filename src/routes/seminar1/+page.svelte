@@ -1,11 +1,9 @@
 <script>
-  const images = [
-    'https://i.postimg.cc/YStCGmC6/IMG20230904091154-01.jpg',
-      'https://i.postimg.cc/0N0nN4MF/284A9787.jpg',
-    'https://i.postimg.cc/sXKTTL37/IMG20230904091222-01.jpg',
-    'https://i.postimg.cc/cCHX2cJj/IMG20230904091245-01.jpg'
-  
-  ];
+ const images = [
+  '/images/20241017_150016.jpg',
+  '/images/20241017_150022.jpg'
+];
+
 </script>
 
 <style>
@@ -87,7 +85,6 @@
     line-height: 2.5;
     color: #333;
     padding: 1rem 1rem;
-   
     animation: fadeIn 1.5s ease-in-out;
   }
 
@@ -112,7 +109,7 @@
 <div class="page">
   <div class="greeting">
     <div class="header">
-      <h2>Auditorium</h2>
+      <h2>Seminar Halls</h2>
       <div class="flex items-center gap-3 mt-2 mb-1">
         <span class="w-2 h-2 bg-blue-900 rounded-full"></span>
         <span class="w-2 h-2 bg-blue-900 rounded-full"></span>
@@ -134,7 +131,6 @@
       Point of Contact<br />
       Name: Mr.Arun Singh <br>
       Contact number: +91 95355 17571
-
     </p>
   </div>
 </div>

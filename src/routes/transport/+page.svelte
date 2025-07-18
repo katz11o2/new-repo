@@ -1,8 +1,8 @@
 <script>
     const images = [
-      'https://i.postimg.cc/4NzKYG1T/1.jpg',
-      'https://i.postimg.cc/BZPPGHLb/1.jpg'
-]
+  'https://engg.cambridge.edu.in/wp-content/uploads/2022/01/transport-2048x1367.webp',
+    'https://engg.cambridge.edu.in/wp-content/uploads/2022/01/transport-1-2048x1362.webp'
+    ];
   </script>
   
   <style>
@@ -108,11 +108,11 @@
   <div class="page">
     <div class="greeting">
       <div class="header">
-        <h2>Classrooms</h2>
+        <h2>Transport</h2>
         <div class="flex items-center gap-3 mt-2 mb-1">
           <span class="w-2 h-2 bg-blue-900 rounded-full"></span>
           <span class="w-2 h-2 bg-blue-900 rounded-full"></span>
-          <div class="w-[150px] h-0.5 bg-blue-900 ml-2"></div>
+          <div class="w-[480px] h-0.5 bg-blue-900 ml-2"></div>
         </div>
       </div>
     </div>
@@ -126,7 +126,7 @@
     </div>
   
     <div class="description">
-      <p>
+       <p>
       Point of Contact<br />
       Name: Mr.Arun Singh <br>
       Contact number: +91 95355 17571

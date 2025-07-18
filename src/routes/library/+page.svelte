@@ -1,8 +1,8 @@
 <script>
     const images = [
-    'https://engg.cambridge.edu.in/wp-content/uploads/2025/02/RMC08321-2048x1365.jpg.webp',
+    'https://engg.cambridge.edu.in/wp-content/uploads/2025/05/WhatsApp-Image-2025-05-28-at-12.34.23-PM-2048x1361.jpeg',
       
-      'https://engg.cambridge.edu.in/wp-content/uploads/2023/06/DSC_0058-2048x1362.jpg',
+      'https://engg.cambridge.edu.in/wp-content/uploads/2025/05/WhatsApp-Image-2025-05-28-at-12.34.23-PM-3-2048x1358.jpeg',
     
     ];
   </script>
@@ -83,7 +83,7 @@
       max-width: 800px;
       font-size: 1.15rem;
       font-weight: 500;
-      line-height: 1.7;
+      line-height: 2.5;
       color: #333;
       padding: 0 1rem;
       animation: fadeIn 1.5s ease-in-out;
@@ -110,7 +110,7 @@
   <div class="page">
     <div class="greeting">
       <div class="header">
-        <h2>Cambarian Incubation Center (CIC)</h2>
+        <h2>Library</h2>
         <div class="flex items-center gap-3 mt-2 mb-1">
           <span class="w-2 h-2 bg-blue-900 rounded-full"></span>
           <span class="w-2 h-2 bg-blue-900 rounded-full"></span>
@@ -128,10 +128,10 @@
     </div>
   
     <div class="description">
-      <p>
-        Meet our Points of Contact who guide and inspire.<br />
-        Empowering innovation, collaboration, and creativity.<br />
-        Dedicated to making every event impactful and memorable.
-      </p>
+       <p>
+      Point of Contact<br />
+      Name: Mr.Arun Singh <br>
+      Contact number: +91 95355 17571
+    </p>
     </div>
   </div>
