@@ -34,7 +34,6 @@
     }
   });
 </script>
-
 <style>
   body {
     padding-top: 50px;
@@ -48,6 +47,7 @@
     margin-bottom: 2rem;
     padding-top: 2rem;
     gap: 1rem;
+    flex-wrap: wrap;
   }
 
   .toggle-buttons button {
@@ -71,7 +71,6 @@
     grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
     gap: 2rem;
     padding: 2rem 2rem;
-   
   }
 
   .card {
@@ -99,6 +98,7 @@
     margin: 0.4rem 0;
     line-height: 1.4;
     word-wrap: break-word;
+    font-size: 1rem;
   }
 
   .card strong {
@@ -114,7 +114,32 @@
     font-size: 0.9rem;
     margin-bottom: 1rem;
   }
+
+  @media (max-width: 768px) {
+    .card-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+      padding: 1rem;
+    }
+
+    .card {
+      padding: 1.2rem;
+    }
+
+    .card h3 {
+      font-size: 1rem;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+    }
+
+    .entry-number {
+      font-size: 0.8rem;
+    }
+  }
 </style>
+
 
 <!-- Toggle Section -->
 <div class="toggle-buttons">
