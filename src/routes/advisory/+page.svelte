@@ -24,6 +24,35 @@
     font-family: 'Poppins', sans-serif;
     background: #fff;
   }
+  .dot-line {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-bottom: 20px;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #1e3a8a;
+  }
+
+  .line {
+    flex: 1;
+    height: 1px;
+    background-color: #1e3a8a;
+    max-width: 10%;
+  }
+
+  h1 {
+    color: #1e3a8a;
+    margin-bottom: 8px;
+    text-align: left;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+  }
 
   .section {
     padding: 4rem 1rem;
@@ -122,7 +151,12 @@
 </style>
 
 <section class="section">
-  <div class="title">Advisory Committee</div>
+ <h1>Advisory Committee</h1>
+    <div class="dot-line">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="line"></div>
+    </div>
   <div class="cards-container">
     {#each advisors as person}
       <div class="card">
