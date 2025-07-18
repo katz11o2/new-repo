@@ -1,261 +1,320 @@
 <script>
-    import { goto } from "$app/navigation";
+  import { onMount } from 'svelte';
+  import { supabase } from '$lib/supabase';
+  import { goto } from '$app/navigation';
 
-  let form = {
-    title: "",
-    category: "",
-    description: "",
-    uniqueness: "",
-    existingTechnologies: "",
-    gapAnalysis: "",
-    patentability: "",
-    Marketingdata: "",
-    visualizedProduct: "",
-    researchData: "",
-    experimentalData: "",
-    otherCategory: "",
-    confirmSubmission: false
-  };
-
-  let file;
+  let user = null;
+  let activeSection = 'submit';
+  let submissions = [];
+  let error = '';
   let loading = false;
 
-  const MASTER_KEY = "$2a$10$7s2J1bfLkUw4k5xI41hADupk/1x12kJIIECHjYqWCruKDUnE0/wKu";
-  const BIN_KEY_STORAGE = "jsonbin_design_ideas";
-  const IMGBB_API_KEY = "6b78d56b527f6dba58807d358ac35142";
+  let form = {
+    idea_title: '',
+    category: '',
+    idea_description: '',
+    uniqueness: '',
+    existingTechnologies: '',
+    gapAnalysis: '',
+    patentability: '',
+    marketing_data: '',
+    visualized_product: '',
+    research_data: '',
+    experimental_data: '',
+    other_category: '',
+    confirm_submission: false
+  };
 
   let showOtherCategory = false;
-  $: showOtherCategory = form.category === "OTHERS";
+  $: showOtherCategory = form.category === 'OTHERS';
 
   let showPatentField = false;
-  $: showPatentField = form.uniqueness === "Yes";
+  $: showPatentField = form.uniqueness === 'Yes';
 
-  async function toBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result.split(",")[1]);
-      reader.onerror = error => reject(error);
-    });
+  onMount(async () => {
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) {
+      console.error('Session error:', sessionError.message);
+      goto('/');
+      return;
+    }
+
+    if (!session) {
+      goto('/');
+      return;
+    }
+
+    user = session.user;
+    await fetchSubmissions();
+  });
+
+  async function fetchSubmissions() {
+    const { data, error } = await supabase
+      .from('design_ideas')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false });
+
+    if (!error) {
+      submissions = data;
+    } else {
+      console.error('Failed to fetch submissions:', error.message);
+    }
   }
 
   async function submitForm() {
-    if (!form.confirmSubmission || !file) {
-      alert("Please confirm the submission and upload a visual file.");
+    if (!form.confirmSubmission) {
+      alert("Please confirm the submission.");
       return;
     }
 
     loading = true;
+    error = '';
+
+  const payload = {
+  idea_title: form.idea_title || null,
+  idea_description: form.idea_description || null, // ✅ FIXED spelling
+  category: form.category || null,
+  uniqueness: form.uniqueness || null,
+ existingTechnologies: form.existingTechnologies || null,
+gapAnalysis: form.gapAnalysis || null,
+
+  patentability: form.patentability || null,
+  marketing_data: form.marketing_data || null, // ✅ FIXED casing
+  visualized_product: form.visualized_product || null, // ✅ FIXED casing
+  research_data: form.research_data || null, // ✅ FIXED casing
+  experimental_data: form.experimental_data || null, // ✅ FIXED casing
+  other_category: form.other_category || null, // ✅ FIXED casing
+  confirm_submission: form.confirm_submission || false, // ✅ FIXED casing
+  name: user.user_metadata?.full_name || user.email,
+  email: user.email,
+  user_id: user.id
+};
+
+
     try {
-      const imageBase64 = await toBase64(file);
-      const imgRes = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
-        method: "POST",
-        body: new URLSearchParams({ image: imageBase64 })
-      });
-      const imgData = await imgRes.json();
-      form.visualizedProduct = imgData.data.url;
+      const { error: insertError } = await supabase.from('design_ideas').insert([payload]);
 
-      let binId = localStorage.getItem(BIN_KEY_STORAGE);
-      let existing = [];
-
-      if (binId) {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
-          headers: { "X-Master-Key": MASTER_KEY }
-        });
-        const json = await res.json();
-        existing = json.record || [];
+      if (insertError) {
+        error = `Submission failed: ${insertError.message}`;
+      } else {
+        alert('Submission successful!');
+        resetForm();
+        await fetchSubmissions();
+        activeSection = 'view';
       }
-
-      existing.push({
-  ...form,
-  submittedAt: new Date().toISOString(),
-  submittedBy: "Faculty"
-});
-
-
-      const url = binId ? `https://api.jsonbin.io/v3/b/${binId}` : "https://api.jsonbin.io/v3/b";
-      const method = binId ? "PUT" : "POST";
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-          "X-Master-Key": MASTER_KEY,
-          "X-Bin-Private": "true"
-        },
-        body: JSON.stringify(existing)
-      });
-
-      const result = await response.json();
-      if (!binId) {
-        localStorage.setItem(BIN_KEY_STORAGE, result.metadata.id);
-      }
-
-      alert("✅ Submission successful!");
-      goto("/");
-      form = {
-        title: "",
-        category: "",
-        description: "",
-        uniqueness: "",
-        existingTechnologies: "",
-        gapAnalysis: "",
-        patentability: "",
-        Marketingdata: "",
-        visualizedProduct: "",
-        researchData: "",
-        experimentalData: "",
-        otherCategory: "",
-        confirmSubmission: false
-      };
-      file = null;
-    } catch (e) {
-      console.error(e);
-      alert("❌ Submission failed.");
-    } finally {
-      loading = false;
+    } catch (err) {
+      error = `Unexpected error: ${err.message}`;
     }
+
+    loading = false;
+  }
+
+  function resetForm() {
+    form = {
+  idea_title: '',
+  category: '',
+  idea_description: '',
+  uniqueness: '',
+  existingTechnologies: '',
+  gapAnalysis: '',
+  patentability: '',
+  marketing_data: '', // ✅ FIXED casing
+  visualized_product: '', // ✅ FIXED casing
+  research_data: '', // ✅ FIXED casing
+  experimental_data: '', // ✅ FIXED casing
+  other_category: '', // ✅ FIXED casing
+  confirm_submission: false // ✅ FIXED casing
+};
+
+  }
+
+  async function signOut() {
+    await supabase.auth.signOut();
+    goto('/');
   }
 </script>
 
 <style>
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: url('https://www.transparenttextures.com/patterns/cubes.png'), linear-gradient(to top right, #dbeafe, #f0f9ff);
-    background-size: cover;
+  body, html {
     margin: 0;
     padding: 0;
+    height: 100%;
   }
 
-  .glass-box {
-    background: rgba(255, 255, 255, 0.45);
-    backdrop-filter: blur(14px);
-    border-radius: 20px;
-    padding: 2rem;
-    max-width: 900px;
-    width: 100%;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
-    border: 1px solid rgba(147, 197, 253, 0.4);
-    margin: 60px auto;
-    animation: fadeIn 0.6s ease;
+  .layout {
+    display: flex;
+    min-height: 100vh;
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+  .sidebar {
+    background: linear-gradient(to bottom, #ffffffaa, #ffffff22);
+    backdrop-filter: blur(16px);
+    width: 240px;
+    height: 100vh;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
   }
 
-  form input, form textarea, form select {
-    background: rgba(255, 255, 255, 0.85);
-    border: 1px solid #dbeafe;
-    border-radius: 10px;
-    padding: 12px;
-    width: 100%;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-  }
-
-  form input:focus, form textarea:focus, form select:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-  }
-
-  button {
-    background: #3b82f6;
-    color: white;
-    font-size: 1.1rem;
+  .sidebar button {
+    background: none;
     border: none;
-    border-radius: 10px;
-    padding: 12px;
+    text-align: left;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.8rem 1rem;
+    border-radius: 0.75rem;
+    transition: background 0.3s ease;
+  }
+
+  .sidebar button:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: linear-gradient(to right, #f0f4ff, #e8f0ff);
+    overflow-y: auto;
+  }
+
+  main {
+    padding: 2rem;
+    flex: 1;
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(14px);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    padding: 2rem;
+  }
+
+  input, textarea, select {
     width: 100%;
+    padding: 0.9rem;
+    margin-bottom: 1.25rem;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+    font-size: 1rem;
+  }
+
+  button.submit-btn {
+    background-color: #4f46e5;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.75rem;
     cursor: pointer;
     transition: background 0.3s ease;
   }
 
-  button:hover {
-    background: #2563eb;
+  button.submit-btn:hover {
+    background-color: #4338ca;
   }
 
-  h1 {
-    text-align: center;
-    font-size: 2rem;
-    color: #1e3a8a;
-    margin-bottom: 1.5rem;
-  }
-
-  .checkbox {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  .submission-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
     margin-bottom: 1rem;
-  }
-
-  .checkbox input {
-    width: auto;
-  }
-
-  .upload-label {
-    font-weight: 600;
-    color: #2563eb;
-    margin-bottom: 0.5rem;
-    display: block;
-  }
-
-  .note {
-    font-size: 0.9rem;
-    color: #1e40af;
-    font-style: italic;
-    text-align: center;
-    margin-bottom: 1rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   }
 </style>
 
-<div class="glass-box">
-  <h1>🚀 Submit Your Design Idea</h1>
-  <form on:submit|preventDefault={submitForm}>
-    <input maxlength="100" bind:value={form.title} placeholder="Title" />
+<div class="layout">
+  <div class="sidebar">
+    <button on:click={() => activeSection = 'submit'}>Submit Idea</button>
+    <button on:click={() => activeSection = 'view'}>View Submissions</button>
+    <button on:click={signOut}>Logout</button>
+  </div>
 
-    <select bind:value={form.category}>
-      <option value="">Select Category</option>
-      <option value="CSE">Computer Science and Engineering</option>
-      <option value="AIML">Mechanical Engineering</option>
-      <option value="EEE">Electrical Engineering</option>
-      <option value="MECH">Chemical Engineering</option>
-      <option value="OTHERS">Others</option>
-    </select>
+  <div class="main-content">
+    <main>
+      <div class="glass">
+        {#if activeSection === 'submit'}
+          <h2>Submit Your Idea</h2>
+          <input type="text" bind:value={form.idea_title} placeholder="Idea Title" maxlength="100" />
 
-    {#if showOtherCategory}
-      <input maxlength="100" bind:value={form.otherCategory} placeholder="Specify other category" />
-    {/if}
+          <select bind:value={form.category}>
+            <option value="">Select Category</option>
+            <option value="CSE">Computer Science and Engineering</option>
+            <option value="AIML">Mechanical Engineering</option>
+            <option value="EEE">Electrical Engineering</option>
+            <option value="MECH">Chemical Engineering</option>
+            <option value="OTHERS">Others</option>
+          </select>
 
-    <textarea maxlength="100" bind:value={form.description} placeholder="Description"></textarea>
+          {#if showOtherCategory}
+            <input bind:value={form.other_category} placeholder="Other Category" />
+          {/if}
 
-    <select bind:value={form.uniqueness}>
-      <option value="">Is there any uniqueness?</option>
-      <option value="Yes">Yes</option>
-      <option value="No">No</option>
-    </select>
+          <textarea bind:value={form.idea_description} placeholder="Idea Description" rows="4" maxlength="500"></textarea>
 
-    {#if showPatentField}
-      <input maxlength="100" bind:value={form.patentability} placeholder="Patentability Info" />
-    {/if}
+          <select bind:value={form.uniqueness}>
+            <option value="">Is there any uniqueness?</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
 
-    <input maxlength="100" bind:value={form.existingTechnologies} placeholder="Existing Technologies" />
-    <input maxlength="100" bind:value={form.gapAnalysis} placeholder="Gap-Analysis / Problem Elimination" />
-    <input maxlength="100" bind:value={form.Marketingdata} placeholder="Market / Marketing Data" />
+          {#if showPatentField}
+            <input bind:value={form.patentability} placeholder="Patentability Information" />
+          {/if}
 
-    <label class="upload-label">Upload Visualized Product</label>
-    <input type="file" on:change={(e) => file = e.target.files[0]} accept="image/*,.pdf,.docx" />
+          <input bind:value={form.existingTechnologies} placeholder="Existing Technologies" />
+          <input bind:value={form.gapAnalysis} placeholder="Gap Analysis" />
+          <input bind:value={form.marketing_data} placeholder="Marketing Data" />
+          <input bind:value={form.research_data} placeholder="Research Data" />
+          <input bind:value={form.experimental_data} placeholder="Experimental Data" />
+          <input bind:value={form.visualized_product} placeholder="Visualized Product (URL or Notes)" />
 
-    <div class="note">Only visual files are accepted (PDF, DOCX, images).</div>
+          <label class="flex items-center mb-4">
+            <input type="checkbox" bind:checked={form.confirmSubmission} class="mr-2" />
+            I confirm the submission.
+          </label>
 
-    <div class="checkbox">
-      <input type="checkbox" bind:checked={form.confirmSubmission} />
-      <span>I confirm the submission and understand the terms.</span>
-    </div>
+          <button class="submit-btn" on:click={submitForm} disabled={loading}>
+            {loading ? 'Submitting...' : 'Submit'}
+          </button>
 
-    <button type="submit" disabled={loading}>{loading ? 'Submitting...' : 'Submit'}</button>
-  </form>
+          {#if error}
+            <p style="color:red">{error}</p>
+          {/if}
+        {/if}
+
+        {#if activeSection === 'view'}
+  <h2>Your Submissions</h2>
+  {#if submissions.length === 0}
+    <p>No submissions yet.</p>
+  {:else}
+    {#each submissions as sub}
+      <div class="submission-card">
+        <h3>{sub.idea_title}</h3>
+        <p><strong>Category:</strong> {sub.category}</p>
+        {#if sub.other_category}<p><strong>Other Category:</strong> {sub.other_category}</p>{/if}
+        <p><strong>Description:</strong> {sub.idea_description}</p>
+        <p><strong>Uniqueness:</strong> {sub.uniqueness}</p>
+        {#if sub.patentability}<p><strong>Patentability:</strong> {sub.patentability}</p>{/if}
+        <p><strong>Existing Technologies:</strong> {sub.existingTechnologies}</p>
+        <p><strong>Gap Analysis:</strong> {sub.gapAnalysis}</p>
+        <p><strong>Marketing Data:</strong> {sub.marketing_data}</p>
+        <p><strong>Research Data:</strong> {sub.research_data}</p>
+        <p><strong>Experimental Data:</strong> {sub.experimental_data}</p>
+        <p><strong>Visualized Product:</strong> {sub.visualized_product}</p>
+        <p><strong>Submitted by:</strong> {sub.name} ({sub.email})</p>
+        <p><strong>Submitted at:</strong> {new Date(sub.created_at).toLocaleString()}</p>
+      </div>
+    {/each}
+  {/if}
+{/if}
+
+      </div>
+    </main>
+  </div>
 </div>
