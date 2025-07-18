@@ -5,125 +5,100 @@
   let allEntries = [];
   let studentEntries = [];
   let industryEntries = [];
-  let activeTab = 'students';
+  let activeType = 'student';
 
-  const industryKeywords = [
-    "New Product Development",
-    "New Process Development",
-    "New Features in Existing Product",
-    "Problems in Existing Product",
-    "Problems in Existing Processes"
+  const industryCategories = [
+    'New Product Development',
+    'New Process Development',
+    'New Features in Existing Product',
+    'Problems in Existing Product',
+    'Problems in Existing Processes'
   ];
 
-  onMount(async () => {
+  const fetchEntries = async () => {
     const { data, error } = await supabase.from('design_ideas').select('*');
-    if (!error) {
+    if (!error && data) {
       allEntries = data;
-
-      studentEntries = allEntries.filter(entry => {
-        return !industryKeywords.includes(entry.category);
-      });
-
-      industryEntries = allEntries.filter(entry => {
-        return industryKeywords.includes(entry.category);
-      });
+      studentEntries = data.filter(
+        (entry) => !industryCategories.includes(entry.category)
+      );
+      industryEntries = data.filter((entry) => industryCategories.includes(entry.category));
+    } else {
+      console.error(error);
     }
-  });
+  };
+
+  onMount(fetchEntries);
 </script>
 
 <style>
-  .glass {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    border-radius: 1rem;
-    padding: 1.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    margin-bottom: 1rem;
+  .toggle-btn {
+    @apply bg-gray-100 text-black px-4 py-2 rounded-xl m-2 shadow-md cursor-pointer hover:bg-gray-300 transition;
   }
-
-  .toggle-buttons {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 2rem;
+  .active-btn {
+    @apply bg-blue-600 text-white;
   }
-
-  .toggle-buttons button {
-    margin: 0 0.5rem;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.75rem;
-    border: none;
-    font-weight: bold;
-    background-color: #ddd;
-    cursor: pointer;
-    transition: background 0.3s ease;
+  .card {
+    @apply bg-white shadow-md rounded-2xl p-6 mb-6 w-full max-w-3xl mx-auto backdrop-blur-md bg-opacity-30;
   }
-
-  .toggle-buttons button.active {
-    background-color: #0070f3;
-    color: white;
+  .field {
+    @apply mb-2;
   }
-
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-    gap: 1.5rem;
+  .label {
+    @apply font-semibold;
   }
-
-  .card h3 {
-    margin: 0 0 0.5rem;
-    font-size: 1.1rem;
-    color: #0070f3;
-  }
-
-  .card p {
-    margin: 0.2rem 0;
-    word-break: break-word;
-  }
-
-  .card strong {
-    color: #333;
+  .value {
+    @apply text-gray-700;
   }
 </style>
 
-<div class="toggle-buttons">
-  <button on:click={() => activeTab = 'students'} class:active={activeTab === 'students'}>Student Entries</button>
-  <button on:click={() => activeTab = 'industry'} class:active={activeTab === 'industry'}>Industry Entries</button>
+<div class="flex justify-center my-6">
+  <button
+    class="toggle-btn {activeType === 'student' ? 'active-btn' : ''}"
+    on:click={() => (activeType = 'student')}
+  >
+    Student Entries
+  </button>
+  <button
+    class="toggle-btn {activeType === 'industry' ? 'active-btn' : ''}"
+    on:click={() => (activeType = 'industry')}
+  >
+    Industry Entries
+  </button>
 </div>
 
-{#if activeTab === 'students'}
-  <div class="card-grid">
-    {#each studentEntries as entry}
-      <div class="glass card">
-        <h3>{entry.idea_title || entry.title || 'No Title'}</h3>
-        <p><strong>Category:</strong> {entry.category}</p>
-        <p><strong>Description:</strong> {entry.idea_description || entry.description}</p>
-        <p><strong>Uniqueness:</strong> {entry.uniqueness}</p>
-        <p><strong>Existing Technologies:</strong> {entry.existingTechnologies}</p>
-        <p><strong>Gap Analysis:</strong> {entry.gapAnalysis}</p>
-        <p><strong>Patentability:</strong> {entry.patentability}</p>
-        <p><strong>Marketing Data:</strong> {entry.marketing_data}</p>
-        <p><strong>Visualized Product:</strong> {entry.visualized_product}</p>
-        <p><strong>Research Data:</strong> {entry.research_data}</p>
-        <p><strong>Experimental Data:</strong> {entry.experimental_data}</p>
-        <p><strong>Other Category:</strong> {entry.other_category}</p>
-      </div>
-    {/each}
-  </div>
+{#if activeType === 'student'}
+  {#each studentEntries as entry}
+    <div class="card">
+      <div class="field"><span class="label">Title:</span> <span class="value">{entry.idea_title}</span></div>
+      <div class="field"><span class="label">Category:</span> <span class="value">{entry.category}</span></div>
+      <div class="field"><span class="label">Idea Description:</span> <span class="value">{entry.idea_description}</span></div>
+      <div class="field"><span class="label">Uniqueness:</span> <span class="value">{entry.uniqueness}</span></div>
+      <div class="field"><span class="label">Existing Technologies:</span> <span class="value">{entry.existingTechnologies}</span></div>
+      <div class="field"><span class="label">Gap Analysis:</span> <span class="value">{entry.gapAnalysis}</span></div>
+      <div class="field"><span class="label">Patentability:</span> <span class="value">{entry.patentability}</span></div>
+      <div class="field"><span class="label">Marketing Data:</span> <span class="value">{entry.marketing_data}</span></div>
+      <div class="field"><span class="label">Visualized Product:</span> <span class="value">{entry.visualized_product}</span></div>
+      <div class="field"><span class="label">Research Data:</span> <span class="value">{entry.research_data}</span></div>
+      <div class="field"><span class="label">Experimental Data:</span> <span class="value">{entry.experimental_data}</span></div>
+      <div class="field"><span class="label">Other Category:</span> <span class="value">{entry.other_category}</span></div>
+      <div class="field"><span class="label">Submitted:</span> <span class="value">{entry.confirm_submission ? 'Yes' : 'No'}</span></div>
+    </div>
+  {/each}
 {:else}
-  <div class="card-grid">
-    {#each industryEntries as entry}
-      <div class="glass card">
-        <h3>{entry.title || entry.idea_title || 'No Title'}</h3>
-        <p><strong>Category:</strong> {entry.category}</p>
-        <p><strong>Description:</strong> {entry.description || entry.idea_description}</p>
-        <p><strong>Uniqueness:</strong> {entry.uniqueness}</p>
-        <p><strong>Existing Tech:</strong> {entry.existingTech}</p>
-        <p><strong>Gap Analysis:</strong> {entry.gapAnalysis}</p>
-        <p><strong>Patentability:</strong> {entry.patentability}</p>
-        <p><strong>Market Data:</strong> {entry.marketData}</p>
-        <p><strong>Financials:</strong> {entry.financials}</p>
-        <p><strong>Visualized Product:</strong> {entry.visualized_product}</p>
-      </div>
-    {/each}
-  </div>
+  {#each industryEntries as entry}
+    <div class="card">
+      <div class="field"><span class="label">Title:</span> <span class="value">{entry.title}</span></div>
+      <div class="field"><span class="label">Category:</span> <span class="value">{entry.category}</span></div>
+      <div class="field"><span class="label">Description:</span> <span class="value">{entry.description}</span></div>
+      <div class="field"><span class="label">Uniqueness:</span> <span class="value">{entry.uniqueness}</span></div>
+      <div class="field"><span class="label">Existing Tech:</span> <span class="value">{entry.existingTech}</span></div>
+      <div class="field"><span class="label">Gap Analysis:</span> <span class="value">{entry.gapAnalysis}</span></div>
+      <div class="field"><span class="label">Patentability:</span> <span class="value">{entry.patentability}</span></div>
+      <div class="field"><span class="label">Market Data:</span> <span class="value">{entry.marketData}</span></div>
+      <div class="field"><span class="label">Financials:</span> <span class="value">{entry.financials}</span></div>
+      <div class="field"><span class="label">Visualized Product:</span> <span class="value">{entry.visualized_product}</span></div>
+      <div class="field"><span class="label">Submitted:</span> <span class="value">{entry.confirm_submission ? 'Yes' : 'No'}</span></div>
+    </div>
+  {/each}
 {/if}
