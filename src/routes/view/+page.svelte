@@ -1,152 +1,124 @@
-<script>
-  import { onMount } from 'svelte';
-  import { supabase } from '$lib/supabase';
+  <script>
+    import { onMount } from 'svelte';
+    import { supabase } from '$lib/supabase';
+    import { goto } from '$app/navigation';
 
-  let studentEntries = [];
-  let industryEntries = [];
-  let activeTab = 'student';
-  let loading = true;
-  let error = '';
+    let user = null;
+    let studentEntries = [];
+    let industryEntries = [];
+    let error = '';
+    let loading = false;
 
-  onMount(async () => {
-    const { data, error: fetchError } = await supabase.from('design_ideas').select('*');
-    if (fetchError) {
-      error = fetchError.message;
-    } else {
-      studentEntries = data.filter(entry => entry.usertype === 'student');
-      industryEntries = data.filter(entry => entry.usertype !== 'student');
+    // Fetch submissions separately for student and industry
+    async function fetchEntries() {
+      loading = true;
+
+      // Fetch student entries
+      const { data: studentData, error: studentError } = await supabase
+        .from('design_ideas')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (studentError) {
+        error = 'Error fetching student submissions.';
+        console.error(studentError);
+      } else {
+        studentEntries = studentData;
+      }
+
+      // Fetch industry entries
+      const { data: industryData, error: industryError } = await supabase
+        .from('industry_ideas')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (industryError) {
+        error = 'Error fetching industry submissions.';
+        console.error(industryError);
+      } else {
+        industryEntries = industryData;
+      }
+
+      loading = false;
     }
-    loading = false;
-  });
-</script>
 
-<div class="admin-wrapper">
-  <div class="tabs">
-    <button on:click={() => activeTab = 'student'} class:active={activeTab === 'student'}>Student</button>
-    <button on:click={() => activeTab = 'industry'} class:active={activeTab === 'industry'}>Industry</button>
-  </div>
+    onMount(async () => {
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+      if (sessionError || !session?.user) {
+        goto('/');
+        return;
+      }
+
+      user = session.user;
+      await fetchEntries();
+    });
+  </script>
+
+  <style>
+    .section {
+      margin: 2rem 0;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+
+    .loading {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 1.25rem;
+    }
+  </style>
 
   {#if loading}
-    <p class="message">Loading entries...</p>
-  {:else if error}
-    <p class="error">{error}</p>
+    <div class="loading">Loading submissions...</div>
   {:else}
-    <div class="entries glass">
-      {#if activeTab === 'student'}
-        {#if studentEntries.length > 0}
-          {#each studentEntries as entry}
-            <div class="entry-card">
-              <h2>{entry.idea_title}</h2>
-              <p><strong>Category:</strong> {entry.category}</p>
-              <p><strong>Description:</strong> {entry.idea_description}</p>
-              <p><strong>Name:</strong> {entry.name}</p>
-              <p><strong>Email:</strong> {entry.email}</p>
-              <p><strong>User Type:</strong> {entry.usertype}</p>
-            </div>
-          {/each}
-        {:else}
-          <p class="message">No student entries found.</p>
-        {/if}
+    <div class="section">
+      <h2>🎓 Student Submissions</h2>
+      {#if studentEntries.length === 0}
+        <p>No student submissions found.</p>
       {:else}
-        {#if industryEntries.length > 0}
-          {#each industryEntries as entry}
-            <div class="entry-card">
-              <h2>{entry.idea_title}</h2>
-              <p><strong>Category:</strong> {entry.category}</p>
-              <p><strong>Description:</strong> {entry.idea_description}</p>
-              <p><strong>Company:</strong> {entry.company}</p>
-              <p><strong>Email:</strong> {entry.email}</p>
-              <p><strong>User Type:</strong> {entry.usertype}</p>
-            </div>
-          {/each}
-        {:else}
-          <p class="message">No industry entries found.</p>
-        {/if}
+        {#each studentEntries as sub}
+          <div class="card">
+            <h3>{sub.idea_title || sub.title}</h3>
+            <p><strong>Category:</strong> {sub.category}</p>
+            <p><strong>Description:</strong> {sub.idea_description || sub.description}</p>
+            <p><strong>Uniqueness:</strong> {sub.uniqueness}</p>
+            <p><strong>Existing Tech:</strong> {sub.existingTechnologies}</p>
+            <p><strong>Market Data:</strong> {sub.marketData}</p>
+            <p><strong>Submitted by:</strong> {sub.name} ({sub.email})</p>
+            <p><strong>Submitted at:</strong> {new Date(sub.created_at).toLocaleString()}</p>
+          </div>
+        {/each}
+      {/if}
+    </div>
+
+    <div class="section">
+      <h2>🏭 Industry Submissions</h2>
+      {#if industryEntries.length === 0}
+        <p>No industry submissions found.</p>
+      {:else}
+        {#each industryEntries as sub}
+          <div class="card">
+            <h3>{sub.idea_title || sub.title}</h3>
+            <p><strong>Category:</strong> {sub.category}</p>
+            <p><strong>Description:</strong> {sub.idea_description || sub.description}</p>
+            <p><strong>Market Data:</strong> {sub.marketData}</p>
+            <p><strong>Visualized Product:</strong> {sub.visualized_product}</p>
+            <p><strong>Submitted by:</strong> {sub.name} ({sub.email})</p>
+            <p><strong>Submitted at:</strong> {new Date(sub.created_at).toLocaleString()}</p>
+          </div>
+        {/each}
       {/if}
     </div>
   {/if}
-</div>
-
-<style>
-  .admin-wrapper {
-    max-width: 960px;
-    margin: 2rem auto;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: 'Segoe UI', sans-serif;
-  }
-
-  .tabs {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .tabs button {
-    padding: 0.6rem 1.5rem;
-    border: none;
-    background: #ddd;
-    cursor: pointer;
-    border-radius: 8px;
-    font-weight: 600;
-    transition: 0.3s;
-  }
-
-  .tabs button.active {
-    background: #4b6cb7;
-    color: white;
-    transform: scale(1.05);
-  }
-
-  .entries {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .entry-card {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(8px);
-    padding: 1.2rem 1.5rem;
-    border-radius: 1rem;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    transition: 0.3s;
-  }
-
-  .entry-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-  }
-
-  .glass {
-    background: rgba(255, 255, 255, 0.6);
-    border-radius: 20px;
-    padding: 2rem;
-    backdrop-filter: blur(12px);
-  }
-
-  .error {
-    color: red;
-    font-weight: bold;
-  }
-
-  .message {
-    font-size: 1.1rem;
-    color: #333;
-    text-align: center;
-    margin-top: 1rem;
-  }
-
-  @media (max-width: 600px) {
-    .entry-card {
-      padding: 1rem;
-    }
-    .tabs {
-      flex-direction: column;
-      align-items: stretch;
-    }
-  }
-</style>
