@@ -21,125 +21,132 @@
 </script>
 
 <div class="admin-wrapper">
-  <div class="glass-container">
-    <h1>Admin Dashboard</h1>
+  <div class="tabs">
+    <button on:click={() => activeTab = 'student'} class:active={activeTab === 'student'}>Student</button>
+    <button on:click={() => activeTab = 'industry'} class:active={activeTab === 'industry'}>Industry</button>
+  </div>
 
-    <div class="tabs">
-      <button class:selected={activeTab === 'student'} on:click={() => activeTab = 'student'}>Students</button>
-      <button class:selected={activeTab === 'industry'} on:click={() => activeTab = 'industry'}>Industry</button>
-    </div>
-
-    {#if loading}
-      <p class="loading">Loading submissions...</p>
-    {:else if error}
-      <p class="error">{error}</p>
-    {:else}
+  {#if loading}
+    <p class="message">Loading entries...</p>
+  {:else if error}
+    <p class="error">{error}</p>
+  {:else}
+    <div class="entries glass">
       {#if activeTab === 'student'}
         {#if studentEntries.length > 0}
           {#each studentEntries as entry}
             <div class="entry-card">
-              <h3>{entry.idea_title}</h3>
+              <h2>{entry.idea_title}</h2>
               <p><strong>Category:</strong> {entry.category}</p>
               <p><strong>Description:</strong> {entry.idea_description}</p>
+              <p><strong>Name:</strong> {entry.name}</p>
+              <p><strong>Email:</strong> {entry.email}</p>
+              <p><strong>User Type:</strong> {entry.usertype}</p>
             </div>
           {/each}
         {:else}
-          <p>No student submissions yet.</p>
+          <p class="message">No student entries found.</p>
         {/if}
       {:else}
         {#if industryEntries.length > 0}
           {#each industryEntries as entry}
             <div class="entry-card">
-              <h3>{entry.idea_title}</h3>
+              <h2>{entry.idea_title}</h2>
               <p><strong>Category:</strong> {entry.category}</p>
               <p><strong>Description:</strong> {entry.idea_description}</p>
+              <p><strong>Company:</strong> {entry.company}</p>
+              <p><strong>Email:</strong> {entry.email}</p>
+              <p><strong>User Type:</strong> {entry.usertype}</p>
             </div>
           {/each}
         {:else}
-          <p>No industry submissions yet.</p>
+          <p class="message">No industry entries found.</p>
         {/if}
       {/if}
-    {/if}
-  </div>
+    </div>
+  {/if}
 </div>
 
 <style>
   .admin-wrapper {
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 2rem;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    padding: 3rem 1rem;
-    background: linear-gradient(to right, #f0f4ff, #ffffff);
-    min-height: 100vh;
-  }
-
-  .glass-container {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(12px);
-    border-radius: 20px;
-    padding: 2.5rem;
-    max-width: 850px;
-    width: 100%;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  }
-
-  h1 {
-    text-align: center;
-    margin-bottom: 2rem;
-    font-size: 1.8rem;
-    color: #2d2d2d;
+    font-family: 'Segoe UI', sans-serif;
   }
 
   .tabs {
     display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
   }
 
   .tabs button {
-    padding: 0.7rem 1.8rem;
-    font-weight: 600;
-    background: #e0e0e0;
+    padding: 0.6rem 1.5rem;
     border: none;
-    border-radius: 12px;
+    background: #ddd;
     cursor: pointer;
-    transition: all 0.3s ease;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: 0.3s;
   }
 
-  .tabs button.selected {
-    background: #0077ff;
+  .tabs button.active {
+    background: #4b6cb7;
     color: white;
     transform: scale(1.05);
   }
 
+  .entries {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
   .entry-card {
-    background: white;
-    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
     padding: 1.2rem 1.5rem;
-    margin-bottom: 1rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border-radius: 1rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
   }
 
-  .entry-card h3 {
-    margin-bottom: 0.6rem;
-    font-size: 1.2rem;
+  .entry-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
   }
 
-  .entry-card p {
-    margin: 0.3rem 0;
-    line-height: 1.4;
-  }
-
-  .loading {
-    text-align: center;
-    font-size: 1.1rem;
-    color: #555;
+  .glass {
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 20px;
+    padding: 2rem;
+    backdrop-filter: blur(12px);
   }
 
   .error {
-    text-align: center;
     color: red;
     font-weight: bold;
+  }
+
+  .message {
+    font-size: 1.1rem;
+    color: #333;
+    text-align: center;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    .entry-card {
+      padding: 1rem;
+    }
+    .tabs {
+      flex-direction: column;
+      align-items: stretch;
+    }
   }
 </style>
