@@ -145,7 +145,7 @@
   </div>
 
   <div class="bg-white shadow p-4 rounded mb-6">
-    <h2 class="text-xl font-semibold mb-4">🚀 Submit Your Design Idea</h2>
+    <h2 class="text-xl font-semibold mb-4"> ubmit Your Design Idea</h2>
 
     <input class="input" type="text" bind:value={form.idea_title} placeholder="Idea Title" maxlength="100" />
     
