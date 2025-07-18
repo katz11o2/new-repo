@@ -124,6 +124,7 @@
 
     .card {
       padding: 1.2rem;
+       margin: 0 10px;
     }
 
     .card h3 {
