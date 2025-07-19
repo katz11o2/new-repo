@@ -10,7 +10,7 @@
   main {
     font-family: 'Inter', sans-serif;
     background: #ffffff;
-    min-height: 80vh;
+    min-height: 50vh;
     padding: 30px 20px;
     display: flex;
     flex-direction: column;
