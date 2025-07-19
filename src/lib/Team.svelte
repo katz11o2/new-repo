@@ -140,7 +140,7 @@
 
   .glass-box {
     backdrop-filter: blur(16px);
-    background: rgba(255, 255, 255, 0.3);
+    background: #ffffff;
     border: 2px solid #addcff; /* Light blue border */
     border-radius: 20px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
