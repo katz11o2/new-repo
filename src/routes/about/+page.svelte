@@ -350,7 +350,7 @@
       <div class="right-arrow"><div class="arrow-left"></div></div>
 
       <div class="flow-diagram">
-        <div class="box-hod"><a >All Hods</a></div>
+        <div class="box-hod"><a>All Hods</a></div>
         <div class="arrow-up"></div>
         <div class="box-hod"><a href="/head-cic">Head - CIC</a></div>
         <div class="arrow-up"></div>
