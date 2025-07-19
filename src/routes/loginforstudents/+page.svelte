@@ -411,7 +411,7 @@ By accepting the ‘NDA’ it means that idea-proposer has accepted the aforesai
   }
 
   .view-btn {
-    background-color: #888;
+    background-color: #984ccb;
     color: #fff;
   }
 
