@@ -1,17 +1,24 @@
 <script>
   import { supabase } from "$lib/supabase";
   import { goto } from "$app/navigation";
+  import { onMount } from "svelte";
 
   let name = "";
   let phone = "";
   let college = "";
   let email = "";
   let password = "";
-  let otp = "";
   let captchaInput = "";
-  let step = "signup";
   let captcha = Math.floor(1000 + Math.random() * 9000).toString();
-  let isChecked = false;
+
+  let showNdaModal = false;
+  let ndaAccepted = false;
+  let ndaScrolledToEnd = false;
+  let signature = "";
+
+  onMount(() => {
+    ndaAccepted = localStorage.getItem("ndaAccepted") === "true";
+  });
 
   function handleSignup() {
     if (
@@ -22,26 +29,10 @@
       password === "123" &&
       captchaInput === captcha
     ) {
-      step = "otp";
+      goto("/facultydashboard");
     } else {
       alert("Invalid details or captcha!");
     }
-  }
-
-  function verifyOTP() {
-    if (otp === "123") {
-      step = "nda";
-    } else {
-      alert("Invalid OTP!");
-    }
-  }
-
-  function agreeAndProceed() {
-    if (!isChecked) {
-      alert("Please agree to the terms before proceeding.");
-      return;
-    }
-    goto("/facultydashboard");
   }
 
   async function signInWithGoogle() {
@@ -66,6 +57,21 @@
   function redirectToRegister() {
     goto("/register");
   }
+
+  function handleNdaScroll(event) {
+    const element = event.target;
+    ndaScrolledToEnd = element.scrollTop + element.clientHeight >= element.scrollHeight - 10;
+  }
+
+  function submitNdaAgreement() {
+    if (signature.trim() === "") {
+      alert("Please provide your signature.");
+      return;
+    }
+    ndaAccepted = true;
+    localStorage.setItem("ndaAccepted", "true");
+    showNdaModal = false;
+  }
 </script>
 
 <svelte:head>
@@ -74,42 +80,57 @@
 
 <main>
   <div class="glass">
-    {#if step === "signup"}
-      <h1>Sign Up</h1>
-      <input type="text" bind:value={name} placeholder="Name" />
-      <input type="text" bind:value={phone} placeholder="Phone" />
-      <input type="text" bind:value={college} placeholder="Full College Name" />
-      <input type="email" bind:value={email} placeholder="Email Address" />
-      <input type="password" bind:value={password} placeholder="Password" />
-      <div class="captcha">{captcha}</div>
-      <input type="text" bind:value={captchaInput} placeholder="Enter Captcha" />
-      <button on:click={handleSignup}>Sign Up</button>
-      <div class="divider">or</div>
-      <button class="google-btn" on:click={signInWithGoogle}>Sign in with Google</button>
+    <h1>Sign Up</h1>
+    <input type="text" bind:value={name} placeholder="Name" />
+    <input type="text" bind:value={phone} placeholder="Phone" />
+    <input type="text" bind:value={college} placeholder="Full College Name" />
+    <input type="email" bind:value={email} placeholder="Email Address" />
+    <input type="password" bind:value={password} placeholder="Password" />
+    <div class="captcha">{captcha}</div>
+    <input type="text" bind:value={captchaInput} placeholder="Enter Captcha" />
 
-    {:else if step === "otp"}
-      <h1>Enter OTP</h1>
-      <input type="text" bind:value={otp} placeholder="Enter OTP" />
-      <button on:click={verifyOTP}>Verify OTP</button>
-      <div class="divider">or</div>
-      <button class="google-btn" on:click={signInWithGoogle}>Sign in with Google</button>
+   {#if !ndaAccepted}
+  <div class="nda-section">
+    <label>
+      <input type="checkbox" disabled checked />
+      I have read and agree to the non-disclosure document
+    </label>
+    <button class="view-btn" on:click={() => (showNdaModal = true)}>View & Agree</button>
+  </div>
+{/if}
 
-    {:else if step === "nda"}
-      <h1>Non-Disclosure Agreement</h1>
-      <p>This NDA ensures confidentiality of shared information. Please read and agree before proceeding.</p>
-      <label>
-        <input type="checkbox" bind:checked={isChecked} />
-        I agree to the NDA terms
-      </label>
-      <button on:click={agreeAndProceed}>I Agree</button>
-      <div class="divider">or</div>
-      <button class="google-btn" on:click={signInWithGoogle}>Sign in with Google</button>
-    {/if}
+
+    <button on:click={handleSignup}>Sign Up</button>
+    <div class="divider">or</div>
+    <button class="google-btn" on:click={signInWithGoogle}>Sign in with Google</button>
 
     <div class="register-link" on:click={redirectToRegister}>
       Already have an account? Click here to login
     </div>
   </div>
+
+  {#if showNdaModal}
+    <div class="nda-modal">
+      <div class="nda-content" on:scroll={handleNdaScroll}>
+        <h2>Non-Disclosure Agreement</h2>
+        <p>
+          This NDA is a legal agreement between you and the organization. It outlines that you will not share any
+          confidential or sensitive information with outside parties, and you agree to protect all proprietary
+          materials shared with you during your participation...
+          <br /><br />Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur non augue sit amet leo
+          fermentum accumsan. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+          laudantium, totam rem aperiam...
+          <br /><br />[Add more content if needed for scrolling]
+        </p>
+        {#if ndaScrolledToEnd}
+          <div class="nda-sign">
+            <input type="text" bind:value={signature} placeholder="Enter your signature" />
+            <button on:click={submitNdaAgreement}>Submit</button>
+          </div>
+        {/if}
+      </div>
+    </div>
+  {/if}
 </main>
 
 <style>
@@ -124,6 +145,7 @@
     align-items: center;
     justify-content: center;
     padding: 40px 20px;
+    position: relative;
   }
 
   .glass {
@@ -136,6 +158,7 @@
     animation: fadeInUp 0.6s ease;
     max-width: 420px;
     width: 100%;
+    z-index: 1;
   }
 
   .glass:hover {
@@ -212,22 +235,6 @@
     letter-spacing: 2px;
   }
 
-  label {
-    font-size: 0.9rem;
-    margin-top: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #333;
-  }
-
-  p {
-    font-size: 0.85rem;
-    margin-bottom: 10px;
-    line-height: 1.5;
-    color: #333;
-  }
-
   .register-link {
     color: #003366;
     text-decoration: underline;
@@ -245,6 +252,71 @@
     margin: 1rem 0;
     font-size: 0.85rem;
     color: #999;
+  }
+
+  .nda-section {
+    text-align: left;
+    font-size: 0.85rem;
+    margin: 12px 0;
+  }
+
+  .nda-section label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #333;
+  }
+
+  .view-btn {
+    background-color: #888;
+    color: #fff;
+    margin-top: 6px;
+  }
+
+  .nda-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 20px;
+  }
+
+  .nda-content {
+    background: white;
+    max-height: 70vh;
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    overflow-y: auto;
+    border-radius: 12px;
+    text-align: left;
+    position: relative;
+  }
+
+  .nda-content h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+    color: #003366;
+  }
+
+  .nda-content p {
+    font-size: 0.9rem;
+    color: #222;
+    line-height: 1.6;
+  }
+
+  .nda-sign {
+    margin-top: 20px;
+  }
+
+  .nda-sign input {
+    margin-bottom: 10px;
   }
 
   @keyframes fadeInUp {

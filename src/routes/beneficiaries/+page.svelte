@@ -59,22 +59,46 @@
 
   const logos = [
     {
+      src: 'https://yt3.googleusercontent.com/ytc/AIdro_k25WdDTqLECJsyXGUUGr5DEN8b0FkoY_DH7rMCHWmbvQ=s160-c-k-c0x00ffffff-no-rj',
+      alt: 'LTI',
+      label: 'Persapien Innovation per life',
+      href: 'https://www.persapien.com'
+    },
+    {
+      src: 'images/logo.png',
+      alt: 'NASSCOM',
+      label: 'Sanarys Pvt Ltd.',
+      href: 'https://www.sanarys.com/wp-content/uploads/2016/11/logo.png'
+    },
+    {
+      src: 'https://static.wixstatic.com/media/042ffa_c8d0f4597e204291ba8d733418f29039~mv2.png/v1/fill/w_111,h_111,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Untitled%20design.png',
+      alt: 'Deloitte',
+      label: 'Banashree Renewable Energy ',
+      href: 'https://banashreesystems.com'
+    },
+    {
+      src: 'https://www.sportskpi.com/wp-content/uploads/2019/01/cropped-Sports-KPI-sun-board-1-3-300x50.png',
+      alt: 'TCS',
+      label: 'Sportskpi',
+      href: 'https://www.sportskpi.com/'
+    },
+    {
       src: 'https://static.wixstatic.com/media/f51316_4cce72566b71423cb7925545f11f01ad~mv2.png',
       alt: 'Logo 1',
       label: 'Galactic 3D',
       href: 'https://www.galactic-3d.com/'
     },
     {
-      src: 'https://s.yimg.com/fz/api/res/1.2/7.CXxxjgs46XbH0BAQSn7A--~C/YXBwaWQ9c3JjaGRkO2ZpPWZpdDtoPTI0MDtxPTgwO3c9MjQw/https://s.yimg.com/zb/imgv1/fb61c8b0-7ef7-35fc-8c81-12f94c74d988/t_500x300',
+      src: 'https://cdn.prod.website-files.com/64a7fb90b8691fe80e27ab72/64f749855d8950c6ec77d89a_Primary%20Logo%20W%3Abg.svg',
       alt: 'Samsung',
-      label: 'Samsung',
-      href: 'https://www.samsung.com'
+      label: 'Okulo Aerospace Private Limited ',
+      href: 'https://www.okuloaerospace.com/'
     },
     {
-      src: 'https://static.wixstatic.com/media/6cc8a6_649b4f2565b1402385688354e1bb9d23~mv2.png',
+      src: 'https://yt3.googleusercontent.com/ulp6_QBF2777NeGb_BEX5S8PTY_CNw46tE2ec37dDU7ApaHKEmMiyjzw24x_ynqNOXI5fOjU=s160-c-k-c0x00ffffff-no-rj',
       alt: 'Logo 3',
-      label: 'Persapien Innovation',
-      href: 'https://static.wixstatic.com/media/6cc8a6_649b4f2565b1402385688354e1bb9d23~mv2.png'
+      label: 'EOS',
+      href: 'https://www.eos.info/'
     },
     {
       src: 'https://dynamic.placementindia.com/recruiter_comp_logo/767881_20181001105507.jpg',
@@ -83,13 +107,39 @@
       href: 'https://example.com/4'
     },
     {
-      src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTURTbQTSs0hlF1I70gibdLhIQAIZk7S2Pvxw&s',
+      src: 'https://www.tranetechnologies.com/content/dam/cs-corporate/images/logos/logo-TT.svg',
       alt: 'Logo 5',
-      label: 'Brewcha',
-      href: 'https://example.com/5'
+      label: 'Trane Technology	',
+      href: 'https://www.tranetechnologies.com'
+    },
+    {
+      src: 'https://cdn.codeground.org/nsr/images/layout/logo-sr.png',
+      alt: 'Startup India',
+      label: 'Samsung ',
+      href: 'https://research.samsung.com/sri-b'
+    },
+    {
+      src: 'https://www.synopsys.com/content/experience-fragments/synopsys/en-us/global/eda/topnav/master/_jcr_content/root/topnav_copy.coreimg.svg/1706807034006/synopsys-logo-color.svg',
+      alt: 'Make in India',
+      label: 'Synopsis ',
+      href: 'https://www.synopsys.com/'
+    },
+    {
+      src: 'https://static.wixstatic.com/media/f51316_4cce72566b71423cb7925545f11f01ad~mv2.png/v1/crop/x_0,y_28,w_4266,h_3824/fill/w_81,h_72,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/G3D%20H-%20LOGO.png',
+      alt: 'CII',
+      label: 'Galactic 3D',
+      href: 'https://www.galactic-3d.com/'
+    },
+    {
+      src: 'https://wipro-3d.com/images/Wipro-Water%20Logo-new-svg.svg',
+      alt: 'FICCI',
+      label: 'Wipro 3D',
+      href: 'https://wipro-3d.com/'
     }
+   
   ];
 </script>
+
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
@@ -200,7 +250,7 @@
 
   .logo-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 2fr));
     gap: 1.5rem;
     padding: 1rem 2rem 3rem;
   }
