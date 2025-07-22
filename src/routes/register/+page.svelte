@@ -73,11 +73,7 @@ async function handleLogin() {
   }
 
   // Auto-redirect if already signed in
-  supabase.auth.getSession().then(({ data: { session } }) => {
-    if (session) {
-      goto("/studentsdashboard");
-    }
-  });
+  
 
   function redirectToRegister() {
     goto("/login");
