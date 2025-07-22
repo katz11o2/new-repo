@@ -26,7 +26,7 @@ async function handleLogin() {
   }
 
   const { data, error } = await supabase
-    .from("fromdesign_ideas")
+    .from("design_ideas")
     .select("*")
     .eq("email", email)
     .eq("password", password)
