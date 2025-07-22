@@ -149,7 +149,7 @@
 
 <!-- Instruction always visible -->
 <p style="font-size: 12px; color: #666; text-align: left; margin: 4px 0 0 4px;">
-  Must be exactly 8 characters, include one special character, and not start with one.
+  *Must be exactly 8 characters <br> *Must Include one special character <br> *Must not start with Special Character.
 </p>
 
 <!-- Error shown only when typed but invalid -->
