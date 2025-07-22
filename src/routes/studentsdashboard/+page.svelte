@@ -88,9 +88,8 @@ gapAnalysis: form.gapAnalysis || null,
   experimental_data: form.experimental_data || null, // ✅ FIXED casing
   other_category: form.other_category || null, // ✅ FIXED casing
   confirm_submission: form.confirm_submission || false, // ✅ FIXED casing
-  name: user.user_metadata?.full_name || user.email,
-  
-  user_id: user.id,
+  name: user.email,
+
   user_type: 'student'
 };
 
