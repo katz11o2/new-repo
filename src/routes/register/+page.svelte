@@ -14,7 +14,7 @@
   let isChecked = false;
 
   // Manual signup simulation
-  async function handleSignup() {
+async function handleSignup() {
   if (!email || !password || !captchaInput) {
     alert("Please fill in all fields.");
     return;
@@ -25,28 +25,41 @@
     return;
   }
 
-const { data, error } = await supabase.auth.signUp({
-  email,
-  password
-});
+  // ✅ 1. Sign up the user
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+  });
 
+  if (error) {
+    alert("❌ " + error.message);
+    return;
+  }
 
-if (data.session) {
+  const { user } = data;
+
+  // ✅ 2. Insert extra user data into 'students' table
+  if (user) {
+    const { error: insertError } = await supabase
+      .from("students")
+      .insert({
+        id: user.id,
+        name,
+        phone,
+        college,
+        email,
+      });
+
+    if (insertError) {
+      alert("⚠️ Signup succeeded, but could not save user data.");
+    }
+  }
+
+  // ✅ 3. Redirect to dashboard (if email confirmation is OFF)
+  alert("✅ Signup successful! Redirecting...");
   goto("/studentsdashboard");
 }
 
-
-if (error) {
-  alert("❌ Email or password incorrect.");
-  return;
-}
-
-// If login was successful
-goto("/studentsdashboard");
-
- // or directly: goto("/facultydashboard");
-
-}
 
 
  
