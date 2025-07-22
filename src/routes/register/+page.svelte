@@ -53,7 +53,7 @@ goto("/facultydashboard");
       alert("Please agree to the terms before proceeding.");
       return;
     }
-    goto("/facultydashboard");
+    goto("/studentsdashboard");
   }
 
   async function signInWithGoogle() {
