@@ -7,35 +7,46 @@
   let college = "";
   let email = "";
   let password = "";
-  let otp = "";
+  
   let captchaInput = "";
   let step = "signup";
   let captcha = Math.floor(1000 + Math.random() * 9000).toString();
   let isChecked = false;
 
   // Manual signup simulation
-  function handleSignup() {
-    if (
-      name === "123" &&
-      phone === "123" &&
-      college === "123" &&
-      email === "123@gmail.com" &&
-      password === "123" &&
-      captchaInput === captcha
-    ) {
-      step = "otp";
-    } else {
-      alert("Invalid details or captcha!");
-    }
+  async function handleSignup() {
+  if (!email || !password || !captchaInput) {
+    alert("Please fill in all fields.");
+    return;
   }
 
-  function verifyOTP() {
-    if (otp === "123") {
-      step = "nda";
-    } else {
-      alert("Invalid OTP!");
-    }
+  if (captchaInput !== captcha) {
+    alert("❌ Invalid captcha!");
+    return;
   }
+
+  // Fetch from your Supabase table (change table name if needed)
+  const { data, error } = await supabase
+    .from("design_ideas") // or "users" if that's your user table
+    .select("*")
+    .eq("email", email)
+    .eq("password", password) // ❗ Not recommended in real apps — hash passwords!
+    .single();
+
+  if (error || !data) {
+    alert("❌ Email or password incorrect.");
+    return;
+  }
+
+  // If user found and captcha passed
+  // If user found and captcha passed
+goto("/facultydashboard");
+ // or directly: goto("/facultydashboard");
+
+}
+
+
+ 
 
   function agreeAndProceed() {
     if (!isChecked) {
@@ -88,12 +99,7 @@
       <div class="divider">or</div>
       <button class="google-btn" on:click={signInWithGoogle}>Continue with Google</button>
 
-    {:else if step === "otp"}
-      <h1>Enter OTP</h1>
-      <input type="text" bind:value={otp} placeholder="Enter OTP" />
-      <button on:click={verifyOTP}>Verify OTP</button>
-      <div class="divider">or</div>
-      <button class="google-btn" on:click={signInWithGoogle}>Continue with Google</button>
+  
 
     {:else if step === "nda"}
       <h1>Non-Disclosure Agreement</h1>
