@@ -26,12 +26,16 @@
   }
 
   // Fetch from your Supabase table (change table name if needed)
-  const { data, error } = await supabase
-    .from("design_ideas") // or "users" if that's your user table
-    .select("*")
-    .eq("email", email)
-    .eq("password", password) // ❗ Not recommended in real apps — hash passwords!
-    .single();
+  const { data, error } = await supabase.auth.signInWithPassword({
+  email,
+  password
+});
+
+if (data?.session) {
+  goto("/studentsdashboard");
+}
+
+
 
   if (error || !data) {
     alert("❌ Email or password incorrect.");
