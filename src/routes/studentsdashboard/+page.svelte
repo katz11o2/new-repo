@@ -31,28 +31,31 @@
   let showPatentField = false;
   $: showPatentField = form.uniqueness === 'Yes';
 
- onMount(async () => {
+onMount(async () => {
   let email = sessionStorage.getItem("userEmail");
 
   // fallback to Supabase Auth (for Google login)
- if (!email) {
-  const { data: { session }, error } = await supabase.auth.getSession();
+  if (!email) {
+    const { data: { session }, error } = await supabase.auth.getSession();
 
-  if (session && session.user?.email) {
-    email = session.user.email;
-    sessionStorage.setItem("userEmail", email); // Save for future
-  } else {
-    // fallback failed — redirect
-    goto('/');
-    return;
+    if (session && session.user?.email) {
+      email = session.user.email;
+      sessionStorage.setItem("userEmail", email);
+    } else {
+      // not logged in — allow access anyway
+      console.log("User not authenticated, continuing as guest.");
+    }
   }
-}
 
- user = { email };
-console.log('Logged in as:', email);
-// only setting email — not full session
-  await fetchSubmissions();
+  if (email) {
+    user = { email };
+    console.log('Logged in as:', email);
+    await fetchSubmissions();
+  } else {
+    console.log("No user email found. Skipping fetchSubmissions.");
+  }
 });
+
 
 
   async function fetchSubmissions() {
