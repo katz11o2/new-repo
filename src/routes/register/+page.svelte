@@ -25,19 +25,25 @@ async function handleLogin() {
     return;
   }
 
-  // ✅ 1. Log in the user
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+  const { data, error } = await supabase
+    .from("fromdesign_ideas")
+    .select("*")
+    .eq("email", email)
+    .eq("password", password)
+    .single();
 
   if (error) {
-    alert("❌ Email or password incorrect.");
+    console.error("DB error:", error);
+    alert("❌ Something went wrong.");
     return;
   }
 
-  // ✅ 2. Redirect to dashboard
-  alert("✅ Login successful! Redirecting...");
+  if (!data) {
+    alert("❌ Invalid email or password.");
+    return;
+  }
+
+  alert("✅ Login successful!");
   goto("/studentsdashboard");
 }
 
