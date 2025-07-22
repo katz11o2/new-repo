@@ -44,7 +44,9 @@
     email = session.user.email;
   }
 
-  user = { email }; // only setting email — not full session
+ user = { email };
+console.log('Logged in as:', email);
+// only setting email — not full session
   await fetchSubmissions();
 });
 

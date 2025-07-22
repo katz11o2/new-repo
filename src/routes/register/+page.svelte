@@ -44,7 +44,9 @@ async function handleLogin() {
   }
 
     alert("✅ Login successful!");
-  goto(`/studentsdashboard?email=${encodeURIComponent(email)}`);
+ sessionStorage.setItem("userEmail", email);
+goto("/studentsdashboard");
+
 
 }
 
