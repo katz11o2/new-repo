@@ -5,7 +5,7 @@
   let name = "";
   let phone = "";
   let college = "";
-  let email = "";
+  let Email = "";
   let password = "";
   
   let captchaInput = "";
@@ -15,7 +15,7 @@
 
   // Manual signup simulation
 async function handleLogin() {
-  if (!email || !password || !captchaInput) {
+  if (!Email || !password || !captchaInput) {
     alert("Please fill in all fields.");
     return;
   }
@@ -28,7 +28,7 @@ async function handleLogin() {
   const { data, error } = await supabase
     .from("fromdesign_ideas")
     .select("*")
-    .eq("email", email)
+    .eq("Email", Email)
     .eq("password", password)
     .single();
 
@@ -39,7 +39,7 @@ async function handleLogin() {
   }
 
   if (!data) {
-    alert("❌ Invalid email or password.");
+    alert("❌ Invalid Email or password.");
     return;
   }
 
@@ -94,7 +94,7 @@ async function handleLogin() {
       <h1>Login</h1>
      
     
-      <input type="email" bind:value={email} placeholder="Email Address" />
+      <input type="Email" bind:value={Email} placeholder="Email Address" />
       <input type="password" bind:value={password} placeholder="Password" />
       <div class="captcha">{captcha}</div>
       <input type="text" bind:value={captchaInput} placeholder="Enter Captcha" />
