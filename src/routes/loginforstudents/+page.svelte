@@ -3,11 +3,13 @@
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
 
-  let name = "";
+  let Name = "";
   let phone = "";
   let college = "";
-  let email = "";
+  let Email = "";
   let password = "";
+  let confirmPassword = "";
+
   let captchaInput = "";
   let captcha = Math.floor(1000 + Math.random() * 9000).toString();
 
@@ -34,26 +36,71 @@
     });
   }
 
-  function handleSignup() {
-    if (
-      name === "123" &&
-      phone === "123" &&
-      college === "123" &&
-      email === "123@gmail.com" &&
-      password === "123" &&
-      captchaInput === captcha
-    ) {
-      goto("/studentsdashboard");
-    } else {
-      alert("Invalid details or captcha!");
-    }
+  async function handleSignup() {
+  const nameRegex = /^[A-Za-z. ]+$/;
+  const phoneRegex = /^[0-9]{10}$/;
+  const passwordRegex = /^(?![!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8}$/;
+
+  if (!nameRegex.test(Name)) {
+    alert("❌ Name should contain only letters, spaces, or dots.");
+    return;
   }
+
+  if (!phoneRegex.test(phone)) {
+    alert("❌ Phone number must be exactly 10 digits.");
+    return;
+  }
+
+  if (!passwordRegex.test(password)) {
+    alert("❌ Password must be 8 characters and cannot start with a special character.");
+    return;
+  }
+  
+  if (password !== confirmPassword) {
+  alert("❌ Passwords do not match.");
+  return;
+}
+
+
+  if (captchaInput !== captcha) {
+    alert("❌ Incorrect captcha.");
+    return;
+  }
+
+  if (!ndaAccepted) {
+    alert("❌ Please accept the NDA.");
+    return;
+  }
+
+  const { data, error } = await supabase.from("design_ideas").insert([
+    {
+  name: Name,
+  phone,
+  college,
+  email: Email,
+  password,
+  signature,
+}
+
+  ]);
+
+  if (error) {
+    alert("❌ Sign-up failed: " + error.message);
+    console.error("Supabase error:", error);
+    return;
+  }
+
+  alert("✅ Signed up successfully!");
+  goto("/register");
+
+}
+
 
   async function signInWithGoogle() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "https://cambrian-sparkzone.com/studentsdashboard",
+        redirectTo: "https://cambrian-sparkzone.com/register",
       },
     });
 
@@ -108,11 +155,13 @@
 <main>
   <div class="glass">
     <h1>Sign Up</h1>
-    <input type="text" bind:value={name} placeholder="Name" />
+    <input type="text" bind:value={Name} placeholder="Name" />
     <input type="text" bind:value={phone} placeholder="Phone" />
     <input type="text" bind:value={college} placeholder="Full College Name" />
-    <input type="email" bind:value={email} placeholder="Email Address" />
+   <input type="email" bind:value={Email} placeholder="Email Address" />
     <input type="password" bind:value={password} placeholder="Password" />
+    <input type="password" bind:value={confirmPassword} placeholder="Confirm Password" />
+
     <div class="captcha">{captcha}</div>
     <input type="text" bind:value={captchaInput} placeholder="Enter Captcha" />
 
