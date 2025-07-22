@@ -31,28 +31,30 @@
   let showPatentField = false;
   $: showPatentField = form.uniqueness === 'Yes';
 
-  onMount(async () => {
+ onMount(async () => {
+  let email = sessionStorage.getItem("userEmail");
+
+  // fallback to Supabase Auth (for Google login)
+  if (!email) {
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-    if (sessionError) {
-      console.error('Session error:', sessionError.message);
+    if (!session || !session.user) {
       goto('/');
       return;
     }
+    email = session.user.email;
+  }
 
-    if (!session) {
-      goto('/');
-      return;
-    }
+  user = { email }; // only setting email — not full session
+  await fetchSubmissions();
+});
 
-    user = session.user;
-    await fetchSubmissions();
-  });
 
   async function fetchSubmissions() {
     const { data, error } = await supabase
       .from('design_ideas')
       .select('*')
-      .eq('user_id', user.id)
+      .eq('email', user.email)
+
       .order('created_at', { ascending: false });
 
     if (!error) {
@@ -87,7 +89,7 @@ gapAnalysis: form.gapAnalysis || null,
   other_category: form.other_category || null, // ✅ FIXED casing
   confirm_submission: form.confirm_submission || false, // ✅ FIXED casing
   name: user.user_metadata?.full_name || user.email,
-  email: user.email,
+  
   user_id: user.id,
   user_type: 'student'
 };

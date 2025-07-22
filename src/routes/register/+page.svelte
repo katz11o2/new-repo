@@ -43,8 +43,9 @@ async function handleLogin() {
     return;
   }
 
-  alert("✅ Login successful!");
-  goto("/studentsdashboard");
+    alert("✅ Login successful!");
+  goto(`/studentsdashboard?email=${encodeURIComponent(email)}`);
+
 }
 
 
