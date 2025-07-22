@@ -14,7 +14,7 @@
   let isChecked = false;
 
   // Manual signup simulation
-async function handleSignup() {
+async function handleLogin() {
   if (!email || !password || !captchaInput) {
     alert("Please fill in all fields.");
     return;
@@ -25,38 +25,19 @@ async function handleSignup() {
     return;
   }
 
-  // ✅ 1. Sign up the user
-  const { data, error } = await supabase.auth.signUp({
+  // ✅ 1. Log in the user
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
   if (error) {
-    alert("❌ " + error.message);
+    alert("❌ Email or password incorrect.");
     return;
   }
 
-  const { user } = data;
-
-  // ✅ 2. Insert extra user data into 'students' table
-  if (user) {
-    const { error: insertError } = await supabase
-      .from("students")
-      .insert({
-        id: user.id,
-        name,
-        phone,
-        college,
-        email,
-      });
-
-    if (insertError) {
-      alert("⚠️ Signup succeeded, but could not save user data.");
-    }
-  }
-
-  // ✅ 3. Redirect to dashboard (if email confirmation is OFF)
-  alert("✅ Signup successful! Redirecting...");
+  // ✅ 2. Redirect to dashboard
+  alert("✅ Login successful! Redirecting...");
   goto("/studentsdashboard");
 }
 
@@ -111,7 +92,8 @@ async function handleSignup() {
       <input type="password" bind:value={password} placeholder="Password" />
       <div class="captcha">{captcha}</div>
       <input type="text" bind:value={captchaInput} placeholder="Enter Captcha" />
-      <button on:click={handleSignup}>Continue</button>
+   <button on:click={handleLogin}>Login</button>
+
       <div class="divider">or</div>
       <button class="google-btn" on:click={signInWithGoogle}>Continue with Google</button>
 
