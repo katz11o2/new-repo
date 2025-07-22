@@ -35,14 +35,18 @@
   let email = sessionStorage.getItem("userEmail");
 
   // fallback to Supabase Auth (for Google login)
-  if (!email) {
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-    if (!session || !session.user) {
-      goto('/');
-      return;
-    }
+ if (!email) {
+  const { data: { session }, error } = await supabase.auth.getSession();
+
+  if (session && session.user?.email) {
     email = session.user.email;
+    sessionStorage.setItem("userEmail", email); // Save for future
+  } else {
+    // fallback failed — redirect
+    goto('/');
+    return;
   }
+}
 
  user = { email };
 console.log('Logged in as:', email);
