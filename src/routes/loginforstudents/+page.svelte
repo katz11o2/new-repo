@@ -16,9 +16,7 @@
   let showNdaModal = false;
   let ndaAccepted = false;
   let ndaScrolledToEnd = false;
-  let signature = "";
-  let canvasEl;
-  let signaturePad;
+  
 
  onMount(() => {
   ndaAccepted = false; // Always false on refresh
@@ -26,15 +24,7 @@
 
 
   // ✅ FIX: SignaturePad initializes only when canvas appears
-  $: if (canvasEl && !signaturePad) {
-    import('signature_pad').then(module => {
-      const SignaturePad = module.default;
-      signaturePad = new SignaturePad(canvasEl, {
-        backgroundColor: "#fff",
-        penColor: "#003366",
-      });
-    });
-  }
+ 
 
   async function handleSignup() {
   const nameRegex = /^[A-Za-z. ]+$/;
@@ -55,7 +45,7 @@
     alert("❌ Password must be 8 characters and cannot start with a special character.");
     return;
   }
-  
+
   if (password !== confirmPassword) {
   alert("❌ Passwords do not match.");
   return;
@@ -79,7 +69,7 @@
   college,
   email: Email,
   password,
-  signature,
+  
 }
 
   ]);
@@ -129,23 +119,18 @@
   }
 }
 
+function acceptNda() {
+  if (!ndaScrolledToEnd) {
+    alert("Please scroll to the bottom before accepting.");
+    return;
+  }
+  ndaAccepted = true;
+  showNdaModal = false;
+}
 
-  function submitNdaAgreement() {
-    if (signaturePad.isEmpty()) {
-      alert("Please provide your signature.");
-      return;
-    }
-    signature = signaturePad.toDataURL();
-    ndaAccepted = true;
+  
    
-    showNdaModal = false;
-  }
-
-  function clearSignature() {
-    if (signaturePad) {
-      signaturePad.clear();
-    }
-  }
+  
 
   function closeModal() {
     showNdaModal = false;
@@ -154,7 +139,7 @@
 
 <main>
   <div class="glass">
-    <h1>Sign Up</h1>
+    <h1>Register/Sign Up</h1>
     <input type="text" bind:value={Name} placeholder="Name" />
     <input type="text" bind:value={phone} placeholder="Phone" />
     <input type="text" bind:value={college} placeholder="Full College Name" />
@@ -235,19 +220,22 @@ By accepting the ‘NDA’ it means that idea-proposer has accepted the aforesai
 
 
           {#if ndaScrolledToEnd}
-            <div class="center-sign-box">
-              <div class="signature-box">
-                <canvas bind:this={canvasEl} width="500" height="150"></canvas>
-                <button on:click={clearSignature}>Clear Signature</button>
-                <button on:click={submitNdaAgreement} class="submit-btn">Submit</button>
-              </div>
+  <div class="center-sign-box">
+    <label style="display: flex; align-items: center; gap: 10px; font-weight: 500;">
+      <input type="checkbox" bind:checked={ndaAccepted} />
+      I agree to the terms of the NDA
+    </label>
+              <button on:click={acceptNda} class="submit-btn" style="margin-top: 12px;">Confirm</button>
             </div>
           {/if}
-        </div>
-      </div>
-    </div>
+
+        </div> <!-- close nda-content -->
+      </div> <!-- close nda-content-wrapper -->
+    </div> <!-- close nda-modal -->
   {/if}
 </main>
+
+
 
 <style>
   * {
