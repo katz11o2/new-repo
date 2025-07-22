@@ -31,20 +31,19 @@
   password
 });
 
-if (data?.session) {
+if (data.session) {
   goto("/studentsdashboard");
 }
 
 
+if (error) {
+  alert("❌ Email or password incorrect.");
+  return;
+}
 
-  if (error || !data) {
-    alert("❌ Email or password incorrect.");
-    return;
-  }
+// If login was successful
+goto("/studentsdashboard");
 
-  // If user found and captcha passed
-  // If user found and captcha passed
-goto("/facultydashboard");
  // or directly: goto("/facultydashboard");
 
 }
