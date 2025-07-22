@@ -25,11 +25,11 @@
     return;
   }
 
-  // Fetch from your Supabase table (change table name if needed)
-  const { data, error } = await supabase.auth.signInWithPassword({
+const { data, error } = await supabase.auth.signUp({
   email,
   password
 });
+
 
 if (data.session) {
   goto("/studentsdashboard");
