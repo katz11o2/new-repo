@@ -133,40 +133,41 @@ goto("/studentsdashboard");
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 40px 20px;
+    padding: 20px 10px;
   }
 
   .glass {
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(15px);
-    border-radius: 1.5rem;
-    padding: 3rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    padding: 0.75rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     text-align: center;
     animation: fadeInUp 0.6s ease;
-    max-width: 420px;
+    max-width: 360px;
     width: 100%;
   }
 
   .glass:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   }
 
   h1 {
-    font-size: 1.7rem;
+    font-size: 1.05rem;
     color: #0066cc;
     font-weight: 600;
-    margin-bottom: 1rem;
+    margin-bottom: 0.6rem;
   }
 
   input,
   button {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 10px;
-    font-size: 0.95rem;
+    width: 90%;
+    padding: 5px 8px;
+    margin: 4px auto;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    display: block;
   }
 
   input {
@@ -179,7 +180,7 @@ goto("/studentsdashboard");
   input:focus {
     outline: none;
     border-color: #66aaff;
-    box-shadow: 0 0 5px rgba(102, 170, 255, 0.4);
+    box-shadow: 0 0 4px rgba(102, 170, 255, 0.3);
   }
 
   button {
@@ -200,10 +201,14 @@ goto("/studentsdashboard");
     color: white;
     border: none;
     font-weight: 600;
-    padding: 12px;
-    border-radius: 10px;
+    font-size: 0.7rem;
+    padding: 6px;
+    border-radius: 6px;
     cursor: pointer;
     transition: background 0.3s ease;
+    width: 90%;
+    margin: 4px auto;
+    display: block;
   }
 
   .google-btn:hover {
@@ -211,30 +216,30 @@ goto("/studentsdashboard");
   }
 
   .captcha {
-    font-size: 1.2rem;
+    font-size: 0.95rem;
     font-weight: bold;
     background: rgba(255, 255, 255, 0.4);
-    padding: 12px;
-    border-radius: 10px;
-    margin: 10px 0 5px;
+    padding: 5px;
+    border-radius: 6px;
+    margin: 6px 0 4px;
     text-align: center;
     color: #004080;
     letter-spacing: 2px;
   }
 
   label {
-    font-size: 0.9rem;
-    margin-top: 12px;
+    font-size: 0.7rem;
+    margin-top: 6px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     color: #333;
   }
 
   p {
-    font-size: 0.85rem;
-    margin-bottom: 10px;
-    line-height: 1.5;
+    font-size: 0.68rem;
+    margin-bottom: 6px;
+    line-height: 1.4;
     color: #333;
   }
 
@@ -242,9 +247,9 @@ goto("/studentsdashboard");
     color: #005bb5;
     text-decoration: underline;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.7rem;
     text-align: center;
-    margin-top: 12px;
+    margin-top: 8px;
   }
 
   .register-link:hover {
@@ -252,8 +257,8 @@ goto("/studentsdashboard");
   }
 
   .divider {
-    margin: 1rem 0;
-    font-size: 0.85rem;
+    margin: 0.6rem 0;
+    font-size: 0.7rem;
     color: #777;
   }
 

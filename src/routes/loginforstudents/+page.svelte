@@ -251,251 +251,231 @@
 
 
 
-  <style>
-    * {
-      font-family: "Poppins", sans-serif;
+ <style>
+  * {
+    font-family: "Poppins", sans-serif;
+  }
+
+  main {
+    background: white;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 10px;
+    position: relative;
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(15px);
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    animation: fadeInUp 0.6s ease;
+    max-width: 300px;
+    width: 100%;
+    z-index: 1;
+  }
+
+  .glass:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  h1 {
+    font-size: 1rem;
+    color: #003366;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  input,
+  button {
+    width: 100%;
+    padding: 5px 8px;
+    margin: 4px 0;
+    border-radius: 4px;
+    font-size: 0.75rem;
+  }
+
+  input {
+    border: 1px solid #ccc;
+    background: #fdfdfd;
+    color: #222;
+    transition: all 0.2s ease;
+  }
+
+  input:focus {
+    outline: none;
+    border-color: #005fa3;
+    box-shadow: 0 0 5px rgba(0, 95, 163, 0.3);
+  }
+
+  button {
+    background-color: #003366;
+    color: white;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #005fa3;
+  }
+
+  .google-btn {
+    background-color: #4285f4;
+    color: white;
+    border: none;
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .google-btn:hover {
+    background-color: #357ae8;
+  }
+
+  .captcha {
+    font-size: 0.85rem;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.4);
+    padding: 5px;
+    border-radius: 8px;
+    margin: 8px 0 4px;
+    text-align: center;
+    color: #003366;
+    letter-spacing: 2px;
+  }
+
+  p,
+  .nda-text {
+    font-size: 0.7rem;
+    margin: 2px 0;
+    line-height: 1.3;
+    text-align: left;
+  }
+
+  .divider {
+    margin: 0.75rem 0;
+    font-size: 0.75rem;
+    color: #999;
+  }
+
+  .register-link {
+    color: #003366;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.75rem;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .register-link:hover {
+    color: #005fa3;
+  }
+
+  .nda-section {
+    margin: 8px 0;
+  }
+
+  .view-btn {
+    background-color: #984ccb;
+    color: #fff;
+    font-size: 0.7rem;
+    padding: 5px;
+    border-radius: 6px;
+  }
+
+  .nda-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 0;
+  }
+
+  .nda-content-wrapper {
+    width: 100%;
+    max-width: 640px;
+    max-height: 85vh;
+    background: #fff;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nda-content {
+    overflow-y: auto;
+    padding: 16px;
+    flex-grow: 1;
+  }
+
+  .nda-content h2 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    color: #003366;
+  }
+
+  .nda-content p {
+    font-size: 0.7rem;
+    color: #222;
+    line-height: 1.6;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    left: 16px;
+    font-size: 1.2rem;
+    background: transparent;
+    border: none;
+    color: #003366;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .center-sign-box {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .submit-btn {
+    font-size: 0.75rem;
+    padding: 5px 8px;
+    border-radius: 6px;
+  }
+
+  canvas {
+    width: 100%;
+    height: 120px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
     }
-
-    main {
-      background: white;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 20px;
-      position: relative;
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
+  }
+</style>
 
-    .nda-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.55);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-      padding: 0;
-    }
-
-    .nda-content-wrapper {
-      width: 100%;
-      max-width: 640px;
-      max-height: 85vh;
-      background: #fff;
-      border-radius: 12px;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .nda-content {
-      overflow-y: auto;
-      padding: 16px;
-      flex-grow: 1;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 10px;
-      left: 16px;
-      font-size: 1.4rem;
-      background: transparent;
-      border: none;
-      color: #003366;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .center-sign-box {
-      margin-top: 20px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .signature-box {
-      border: 2px solid #003366;
-      background: white;
-      padding: 16px;
-      border-radius: 10px;
-      text-align: center;
-      max-width: 520px;
-      width: 100%;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .signature-box button {
-      margin-top: 10px;
-      margin-right: 10px;
-      background: #003366;
-      color: white;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .signature-box .submit-btn {
-      background-color: #28a745;
-    }
-
-    .signature-box button:hover {
-      opacity: 0.9;
-    }
-
-    .glass {
-      background: rgba(255, 255, 255, 0.6);
-      backdrop-filter: blur(15px);
-      border-radius: 1.5rem;
-      padding: 1.5rem;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      animation: fadeInUp 0.6s ease;
-      max-width: 320px;
-      width: 100%;
-      z-index: 1;
-    }
-
-    .glass:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-    }
-
-    h1 {
-      font-size: 1.2rem;
-      color: #003366;
-      font-weight: 600;
-      margin-bottom: 1rem;
-    }
-
-    input,
-button {
-  width: 100%;
-  padding: 6px 10px; /* Smaller height */
-  margin: 5px 0;
-  border-radius: 6px;
-  font-size: 0.8rem; /* Smaller text */
-}
-
-
-    input {
-      border: 1px solid #ccc;
-      background: #fdfdfd;
-      color: #222;
-      transition: all 0.2s ease;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: #005fa3;
-      box-shadow: 0 0 5px rgba(0, 95, 163, 0.3);
-    }
-
-    button {
-      background-color: #003366;
-      color: white;
-      border: none;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #005fa3;
-    }
-
-    .google-btn {
-      background-color: #4285f4;
-      color: white;
-      border: none;
-      font-weight: 600;
-       font-size: 0.8rem;
-      padding:8px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .google-btn:hover {
-      background-color: #357ae8;
-    }
-
-    .captcha {
-      font-size: 1rem;
-      font-weight: bold;
-      background: rgba(255, 255, 255, 0.4);
-      padding:6px;
-      border-radius: 10px;
-      margin: 10px 0 5px;
-      text-align: center;
-      color: #003366;
-      letter-spacing: 2px;
-    }
-
-    .register-link {
-      color: #003366;
-      text-decoration: underline;
-      cursor: pointer;
-      font-size: 0.9rem;
-      text-align: center;
-      margin-top: 12px;
-    }
-
-    .register-link:hover {
-      color: #005fa3;
-    }
-
-    .divider {
-      margin: 1rem 0;
-      font-size: 0.85rem;
-      color: #999;
-    }
-
-    .nda-section {
-      margin: 12px 0;
-    }
-
-    .nda-text {
-      font-size: 0.85rem;
-      color: #333;
-      margin-bottom: 6px;
-      text-align: left;
-      width: 100%;
-    }
-
-    .view-btn {
-      background-color: #984ccb;
-      color: #fff;
-    }
-
-    .nda-content h2 {
-      margin-top: 0;
-      font-size: 1.5rem;
-      color: #003366;
-    }
-
-    .nda-content p {
-      font-size: 0.75rem;
-      color: #222;
-      line-height: 1.6;
-    }
-
-    canvas {
-      width: 100%;
-      height: 150px;
-      background: white;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(40px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  </style>

@@ -29,7 +29,7 @@ Description: ${description}
   }
 
   .page {
-    padding: 4rem 1rem;
+    padding: 2rem 0.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -38,80 +38,79 @@ Description: ${description}
 
   .heading {
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     animation: fadeSlideUp 0.8s ease both;
   }
 
   .heading h1 {
-    font-size: 3rem;
+    font-size: 2rem;
     color: #101820;
     font-weight: 700;
     margin-bottom: 0.5rem;
   }
 
   .heading h2 {
-    font-size: 1.4rem;
+    font-size: 1rem;
     font-weight: 400;
     color: #505050;
   }
 
   .heading p {
     color: #555;
-    max-width: 700px;
+    max-width: 600px;
     margin: 1rem auto 0;
-    font-size: 1rem;
-    line-height: 1.6;
+    font-size: 0.9rem;
+    line-height: 1.4;
   }
 
   .container {
     display: flex;
     flex-wrap: wrap;
-    gap: 2rem;
+    gap: 1rem;
     justify-content: center;
     width: 100%;
-    max-width: 1200px;
+    max-width: 900px;
     animation: fadeSlideUp 1.2s ease both;
   }
 
   .card {
-    flex: 1 1 360px;
-    padding: 2.5rem;
+    flex: 1 1 280px;
+    padding: 1.2rem;
     background: #ffffffaa;
-    border-radius: 20px;
-    backdrop-filter: blur(18px);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08);
+    border-radius: 14px;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.06);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     animation: fadeSlideUp 0.8s ease forwards;
   }
 
   .card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 35px 60px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08);
   }
 
   .left h3 {
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
     color: #1e1e1e;
   }
 
   ::placeholder {
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.95rem;
-  color: #999;
-  opacity: 1; /* Override Safari’s default lower opacity */
-}
-
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    color: #999;
+    opacity: 1;
+  }
 
   .left p {
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #333;
-    margin: 0.4rem 0;
+    margin: 0.3rem 0;
   }
 
   form {
     display: grid;
-    gap: 1.4rem;
+    gap: 1rem;
   }
 
   .form-field {
@@ -120,19 +119,20 @@ Description: ${description}
   }
 
   .form-field label {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
     font-weight: 600;
     color: #222;
+    font-size: 0.85rem;
   }
 
   .form-field input,
   .form-field select,
   .form-field textarea {
-    padding: 1rem;
+    padding: 0.6rem 0.8rem;
     border: none;
-    border-radius: 14px;
+    border-radius: 10px;
     background: #f9f9f9;
-    font-size: 1rem;
+    font-size: 0.9rem;
     transition: box-shadow 0.2s ease, background 0.3s;
     box-shadow: inset 0 0 0 1px #ccc;
   }
@@ -147,13 +147,13 @@ Description: ${description}
 
   textarea {
     resize: vertical;
-    min-height: 100px;
+    min-height: 60px;
   }
 
   button {
-    padding: 1rem;
-    font-size: 1rem;
-    border-radius: 14px;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 10px;
     font-weight: 600;
     background: linear-gradient(135deg, #0077ff, #00c6ff);
     color: #fff;
@@ -164,7 +164,7 @@ Description: ${description}
 
   button:hover {
     transform: scale(1.02);
-    box-shadow: 0 10px 25px rgba(0, 119, 255, 0.3);
+    box-shadow: 0 10px 20px rgba(0, 119, 255, 0.25);
   }
 
   @keyframes fadeSlideUp {
@@ -178,6 +178,7 @@ Description: ${description}
     }
   }
 </style>
+
 
 <div class="page">
   <div class="heading">
