@@ -85,68 +85,88 @@
     background: linear-gradient(135deg, #ffffff, #e0eaff);
   }
 
+  .field {
+  margin: 8px 0;
+  padding: 0 6px; /* Equal padding from left and right */
+}
+
   .form-container {
-    width: 340px;
-    padding: 25px 30px;
-    border-radius: 20px;
+    width: 320px;
+    padding: 20px;
+    border-radius: 16px;
     background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(0, 0, 0, 0.1);
     text-align: center;
   }
 
   h2 {
-    font-size: 1.6rem;
-    margin-bottom: 20px;
+    font-size: 1.2rem;
+    margin-bottom: 16px;
     color: #1e3a8a;
   }
 
   input {
     width: 100%;
-    padding: 10px;
-    margin-top: 12px;
-    border-radius: 10px;
+    padding: 6px 5px;
+    margin-top: 10px;
+    border-radius: 8px;
     border: 1px solid #1e3a8a;
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   input:focus {
     outline: none;
     border-color: #3b82f6;
-    box-shadow: 0 0 6px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 4px rgba(59, 130, 246, 0.3);
   }
 
   button {
-    margin-top: 20px;
-    padding: 10px;
+    margin-top: 14px;
+    padding: 8px;
     width: 100%;
     background-color: #1e3a8a;
     color: white;
     font-weight: 500;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   button:hover {
     background-color: #365dc9;
   }
+
+  .password-rules {
+    margin-top: 8px;
+    text-align: left;
+    font-size: 0.7rem;
+    color: #444;
+    line-height: 1.4;
+  }
 </style>
+
 
 <div class="wrapper">
   <div class="form-container">
-    {#if isRegistering}
-      <h2>Set Your Credentials</h2>
-      <input type="text" placeholder="New Username" bind:value={newUsername} />
-      <input type="password" placeholder="New Password" bind:value={newPassword} />
-      <button on:click={handleRegister}>Register</button>
-    {:else}
-      <h2>Welcome Admin Login</h2>
-      <input type="text" placeholder="Username" bind:value={username} />
-      <input type="password" placeholder="Password" bind:value={password} />
-      <button on:click={handleLogin}>Login</button>
-    {/if}
-  </div>
+  {#if isRegistering}
+    <h2>Set Your Credentials</h2>
+    <div class="field"><input type="text" placeholder="New Username" bind:value={newUsername} /></div>
+    <div class="field"><input type="password" placeholder="New Password" bind:value={newPassword} /></div>
+    <div class="password-rules">
+      * Must be exactly 8 characters<br />
+      * Must include one special character<br />
+      * Must not start with a special character.
+    </div>
+    <div class="field"><button on:click={handleRegister}>Register</button></div>
+  {:else}
+    <h2>Welcome Admin Login</h2>
+    <div class="field"><input type="text" placeholder="Username" bind:value={username} /></div>
+    <div class="field"><input type="password" placeholder="Password" bind:value={password} /></div>
+    <div class="field"><button on:click={handleLogin}>Login</button></div>
+  {/if}
+</div>
+
 </div>
