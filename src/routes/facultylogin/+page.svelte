@@ -291,7 +291,7 @@
 
     .nda-content {
       overflow-y: auto;
-      padding: 30px;
+      padding: 16px;
       flex-grow: 1;
     }
 
@@ -347,11 +347,11 @@
       background: rgba(255, 255, 255, 0.6);
       backdrop-filter: blur(15px);
       border-radius: 1.5rem;
-      padding: 3rem;
+      padding: 1.5rem;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
       text-align: center;
       animation: fadeInUp 0.6s ease;
-      max-width: 420px;
+      max-width: 320px;
       width: 100%;
       z-index: 1;
     }
@@ -362,20 +362,21 @@
     }
 
     h1 {
-      font-size: 1.7rem;
+      font-size: 1.2rem;
       color: #003366;
       font-weight: 600;
       margin-bottom: 1rem;
     }
 
     input,
-    button {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      border-radius: 10px;
-      font-size: 0.95rem;
-    }
+button {
+  width: 100%;
+  padding: 6px 10px; /* Smaller height */
+  margin: 5px 0;
+  border-radius: 6px;
+  font-size: 0.8rem; /* Smaller text */
+}
+
 
     input {
       border: 1px solid #ccc;
@@ -408,7 +409,8 @@
       color: white;
       border: none;
       font-weight: 600;
-      padding: 12px;
+       font-size: 0.8rem;
+      padding:8px;
       border-radius: 10px;
       cursor: pointer;
       transition: background 0.3s ease;
@@ -419,10 +421,10 @@
     }
 
     .captcha {
-      font-size: 1.3rem;
+      font-size: 1rem;
       font-weight: bold;
       background: rgba(255, 255, 255, 0.4);
-      padding: 12px;
+      padding:6px;
       border-radius: 10px;
       margin: 10px 0 5px;
       text-align: center;
@@ -473,7 +475,7 @@
     }
 
     .nda-content p {
-      font-size: 0.9rem;
+      font-size: 0.75rem;
       color: #222;
       line-height: 1.6;
     }

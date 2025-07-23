@@ -1,16 +1,70 @@
 <script>
   import { goto } from "$app/navigation";
+  import { supabase } from "$lib/supabase";
 
   let username = "";
   let password = "";
+  let newUsername = "";
+  let newPassword = "";
 
-  function handleLogin() {
-    if (username === "123" && password === "123") {
-      goto("/view"); // Redirect to /view on successful login
-    } else {
-      alert("Invalid credentials!");
-    }
+  let isRegistering = false;
+
+ async function handleLogin() {
+  const trimmedUsername = username.trim();
+  const trimmedPassword = password.trim();
+
+  if (trimmedUsername === "123" && trimmedPassword === "123") {
+    isRegistering = true;
+    return;
   }
+
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("username", trimmedUsername)
+    .eq("password", trimmedPassword)
+    .single();
+
+  if (data) {
+    goto("/view");
+  } else {
+    alert("Invalid credentials!");
+  }
+}
+
+
+ async function handleRegister() {
+  const trimmedUsername = newUsername.trim();
+  const trimmedPassword = newPassword.trim();
+
+  if (!trimmedUsername || !trimmedPassword) {
+    alert("Both fields are required.");
+    return;
+  }
+
+  const { count } = await supabase
+    .from("users")
+    .select("*", { count: "exact", head: true });
+
+  if (count >= 4) {
+    alert("Maximum of 4 users already registered.");
+    return;
+  }
+
+  const { error } = await supabase
+    .from("users")
+    .insert([{ username: trimmedUsername, password: trimmedPassword }]);
+
+  if (error) {
+    alert("Error creating user.");
+  } else {
+    alert("User created! Please login now.");
+    isRegistering = false;
+    username = trimmedUsername;
+    password = trimmedPassword;
+  }
+}
+
 </script>
 
 <svelte:head>
@@ -83,9 +137,16 @@
 
 <div class="wrapper">
   <div class="form-container">
-    <h2>Welcome Admin Login</h2>
-    <input type="text" placeholder="Username" bind:value={username} />
-    <input type="password" placeholder="Password" bind:value={password} />
-    <button on:click={handleLogin}>Login</button>
+    {#if isRegistering}
+      <h2>Set Your Credentials</h2>
+      <input type="text" placeholder="New Username" bind:value={newUsername} />
+      <input type="password" placeholder="New Password" bind:value={newPassword} />
+      <button on:click={handleRegister}>Register</button>
+    {:else}
+      <h2>Welcome Admin Login</h2>
+      <input type="text" placeholder="Username" bind:value={username} />
+      <input type="password" placeholder="Password" bind:value={password} />
+      <button on:click={handleLogin}>Login</button>
+    {/if}
   </div>
 </div>
