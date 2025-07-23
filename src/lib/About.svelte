@@ -29,16 +29,16 @@
 </script>
 
 <style>
-  .image-banner {
-    width: 100%;
-    margin-top: 1px;
-    position: relative;
-    overflow: hidden;
-  }
+    .image-banner {
+      width: 100%;
+      margin-top: 1px;
+      position: relative;
+      overflow: hidden;
+    }
 
   .image-banner img {
     width: 100%;
-    height: auto;
+    min-height: 70vh;
     object-fit: cover;
     display: block;
     animation: slideFade 1s ease-in-out, glow 4s infinite;
