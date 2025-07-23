@@ -267,17 +267,20 @@
   }
 
   .glass {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(15px);
-    border-radius: 1rem;
-    padding: 1rem;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    animation: fadeInUp 0.6s ease;
-    max-width: 300px;
-    width: 100%;
-    z-index: 1;
-  }
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(15px);
+  border-radius: 1rem;
+  padding: 1.5rem 1.5rem; /* Increased padding for equal spacing */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  animation: fadeInUp 0.6s ease;
+  max-width: 320px; /* slightly wider */
+  width: 100%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content horizontally */
+}
 
   .glass:hover {
     transform: translateY(-3px);
@@ -292,13 +295,15 @@
   }
 
   input,
-  button {
-    width: 100%;
-    padding: 5px 8px;
-    margin: 4px 0;
-    border-radius: 4px;
-    font-size: 0.75rem;
-  }
+button {
+  width: 100%;
+  max-width: 260px; /* keeps fields centered with padding on sides */
+  padding: 6px 10px;
+  margin: 5px 0;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  box-sizing: border-box;
+} 
 
   input {
     border: 1px solid #ccc;
