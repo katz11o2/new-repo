@@ -14,7 +14,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 100px;
     box-sizing: border-box;
   }
 
@@ -30,8 +30,13 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+    transition: opacity 1.2s ease-out, transform 1.2s ease-out, transform 0.3s ease;
     box-sizing: border-box;
+  }
+
+  .container:hover {
+    transform: scale(1.01);
+    box-shadow: 0 10px 40px rgba(31, 38, 135, 0.3);
   }
 
   .fade-in {
@@ -45,6 +50,12 @@
     text-align: center;
     margin-bottom: 20px;
     color: #222;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+  }
+
+  h1:hover {
+    color: #000;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   }
 
   p {
@@ -52,6 +63,11 @@
     line-height: 1.8;
     color: #444;
     text-align: justify;
+    transition: color 0.3s ease;
+  }
+
+  p:hover {
+    color: #333;
   }
 
   @media (max-width: 600px) {
@@ -82,10 +98,12 @@
 
 <div class="wrapper">
   <div class="container {fadeIn ? 'fade-in' : ''}">
-    <h1 class="text">Research and Development</h1>
-   <p>
-  Research and Development (R&D) serves as the backbone of technological advancement and societal progress. It fosters a culture of inquiry, experimentation, and continuous improvement, empowering institutions and industries to stay ahead in a rapidly evolving global landscape. By integrating theoretical frameworks with practical applications, R&D initiatives drive the creation of cutting-edge products, improved processes, and transformative solutions. Whether through academic research labs, corporate innovation centers, or public-private partnerships, the focus remains on generating knowledge, solving real-world problems, and enhancing economic and social outcomes. Sustained investment in R&D not only leads to technological breakthroughs but also cultivates a skilled workforce and a robust innovation ecosystem.
+    <h1 class="text"> Research and Development Partnership</h1>
+    <p>
+      A partnership between learned academia and industry is designed to establish a professional platform to enable impactful
+      Research and Development (R&D) serves as the backbone of technological advancement and societal progress. It fosters a culture of inquiry, experimentation, and continuous improvement, empowering institutions and industries to stay ahead in a rapidly evolving global landscape. By integrating theoretical frameworks with practical applications, R&D initiatives drive the creation of cutting-edge products, improved processes, and transformative solutions. Whether through academic research labs, corporate innovation centers, or public-private partnerships, the focus remains on generating knowledge, solving real-world problems, and enhancing economic and social outcomes. Sustained investment in R&D not only leads to technological breakthroughs but also cultivates a skilled workforce and a robust innovation ecosystem.
 </p>
-
   </div>
 </div>
+
+ 

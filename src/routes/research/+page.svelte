@@ -14,7 +14,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 100px;
     box-sizing: border-box;
   }
 
@@ -30,8 +30,13 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+    transition: opacity 1.2s ease-out, transform 1.2s ease-out, transform 0.3s ease;
     box-sizing: border-box;
+  }
+
+  .container:hover {
+    transform: scale(1.01);
+    box-shadow: 0 10px 40px rgba(31, 38, 135, 0.3);
   }
 
   .fade-in {
@@ -45,6 +50,12 @@
     text-align: center;
     margin-bottom: 20px;
     color: #222;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+  }
+
+  h1:hover {
+    color: #000;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   }
 
   p {
@@ -52,6 +63,11 @@
     line-height: 1.8;
     color: #444;
     text-align: justify;
+    transition: color 0.3s ease;
+  }
+
+  p:hover {
+    color: #333;
   }
 
   @media (max-width: 600px) {
@@ -83,14 +99,13 @@
 <div class="wrapper">
   <div class="container {fadeIn ? 'fade-in' : ''}">
     <h1 class="text">Industry Problem Solving</h1>
-   <p>
-   A partnership between learned academia and industry is designed to establish a professional platform to enable impactful
-    collaboration to take on real-world challenges and build innovative solutions through intense research by participating research faculty.
-    Such a professional relationship will involve expertise, resources, and technological capabilities of industry, especially MSMEs, with
-    the intellectual and research-oriented knowledge from the academic world. The primary objective is to intensely drive innovation in
-    product/process development. Expected outcomes from such partnerships shall include accelerated yet relevant Innovation, access to
-    resources, practical application including experimentation and related data acquisition and analysis, knowledge transfer, etc.
-  </p>
+    <p>
+      A partnership between learned academia and industry is designed to establish a professional platform to enable impactful
+      collaboration to take on real-world challenges and build innovative solutions through intense research by participating research faculty.
+      Such a professional relationship will involve expertise, resources, and technological capabilities of industry, especially MSMEs, with
+      the intellectual and research-oriented knowledge from the academic world. The primary objective is to intensely drive innovation in
+      product/process development. Expected outcomes from such partnerships shall include accelerated yet relevant Innovation, access to
+      resources, practical application including experimentation and related data acquisition and analysis, knowledge transfer, etc.
+    </p>
   </div>
 </div>
-

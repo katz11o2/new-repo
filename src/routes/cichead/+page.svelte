@@ -1,8 +1,3 @@
-
-
-
-
-
 <script>
   import { onMount } from 'svelte';
   onMount(() => {
@@ -29,7 +24,6 @@
     max-width: 1200px;
     margin: auto;
     padding: 5rem 2rem;
-    font-family: 'Poppins', sans-serif;
   }
 
   .heading {
@@ -47,12 +41,11 @@
     margin-bottom: 1.5rem;
   }
 
- 
-
+  
   .glass-box {
     display: flex;
     flex-wrap: wrap;
-    gap: 2rem;
+    gap: 6rem;
     padding: 2rem;
     border-radius: 20px;
     background: rgba(255, 255, 255, 0.2);
@@ -80,12 +73,11 @@
   }
 
   .ceo-quote {
-  font-style: italic;
-  color: #555;
-  margin-top: 0.5rem;
-  text-align: center;
-}
-
+    font-style: italic;
+    color: #555;
+    margin-top: 0.5rem;
+    text-align: center;
+  }
 
   .ceo-message {
     flex: 1;
@@ -100,11 +92,10 @@
   }
 
   .ceo-message p {
-  text-align: justify;
-  font-size: 1rem;
-  margin: -70px 0 0 0; /* moved text slightly up */
-}
-
+    text-align: justify;
+    font-size: 1rem;
+    margin-top: -70px;
+  }
 
   /* Animation */
   .fade-in {
@@ -129,7 +120,7 @@
 </style>
 
 <div class="container">
-  <div class="heading fade-in"> Head – CIC's Message</div>
+  <div class="heading fade-in">Head – CIC's Message</div>
   <div class="heading-decor fade-in">
     <div class="blue-dot"></div>
     <div class="blue-dot"></div>
@@ -139,25 +130,19 @@
   <div class="glass-box fade-in">
     <div class="ceo-image fade-in">
       <img src="https://engg.cambridge.edu.in/wp-content/uploads/2023/06/536e21ff-2f83-4f7f-8cfb-f3707a562081.jpg" alt="Chairman Image" />
-      <div class="ceo-quote">
+      <div class="ceo-quote fade-in">
         Dr. Varalatchoumy M <br>
         Head, Cambrian Incubation Centre
       </div>
     </div>
+
     <div class="ceo-message fade-in">
       <p>
         The Cambrian Incubation Centre is designed to be a space for ideation, collaboration, and
-transformation. With support from the Ministry of MSME and IISc Bangalore, we aim to bridge
-the gap between research and real-world implementation. Whether you're a student, MSME, or
-innovator, CIC is here to help you scale your ideas.
-
-        
+        transformation. With support from the Ministry of MSME and IISc Bangalore, we aim to bridge
+        the gap between research and real-world implementation. Whether you're a student, MSME, or
+        innovator, CIC is here to help you scale your ideas.
       </p>
     </div>
   </div>
 </div>
-
-
-
-
-   

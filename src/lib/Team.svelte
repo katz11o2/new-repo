@@ -545,42 +545,7 @@
   </div>
 {/each}
 
-<div class="podium-showcase">
 
- <div class="section-heading">
-  <h2>Our top Student Startups</h2>
-  <div class="decoration">
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="line"></span>
-  </div>
-</div>
-
-  <div class="podium-container">
-    
-    <!-- 2nd Place -->
-    <div class="podium-box second">
-      <div class="person"></div>
-      <div class="startup-box">Gestify</div>
-      <div class="base">2nd</div>
-    </div>
-
-    <!-- 1st Place -->
-    <div class="podium-box first">
-      <div class="person"></div>
-      <div class="startup-box">Projectoo</div>
-      <div class="base">1st</div>
-    </div>
-
-    <!-- 3rd Place -->
-    <div class="podium-box third">
-      <div class="person"></div>
-      <div class="startup-box">Koko Shell</div>
-      <div class="base">3rd</div>
-    </div>
-
-  </div>
-</div>
 
 
 

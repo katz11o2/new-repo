@@ -138,7 +138,7 @@
      <a href="/advisory" class="menu-link">Advisory Committee</a>
     <a href="/facilities" class="menu-link">Facilities</a>
     <a href="/login" class="menu-link">Register/Login</a>
-    <a href="/beneficiaries" class="menu-link">Benificiaries</a>
+    <a href="/beneficiaries" class="menu-link">Beneficiaries</a>
     <a href="https://engg.cambridge.edu.in/photo-gallery/" class="menu-link">Gallery</a>
     <a href="/contact" class="menu-link">Contact Us</a>
   </nav>
