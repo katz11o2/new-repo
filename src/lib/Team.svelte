@@ -240,6 +240,11 @@
     margin: 0 auto;
     line-height: 1.6;
   }
+  @media (max-width: 768px) {
+  .initiatives-section h1 {
+    font-size: 1.6rem; /* ↓ Reduce from 2rem or 2.6rem */
+    line-height: 1.4;
+  }
 
   @media (max-width: 768px) {
     .initiatives-container h1 {
@@ -291,18 +296,14 @@
     -webkit-text-fill-color: transparent;
   }
 
-  .initiatives-section p {
-    font-size: 1rem;
-    color: #555;
-    max-width: 850px;
-    margin: 0 auto;
-    line-height: 1.8;
+   .initiatives-section p {
+    font-size: 0.85rem; /* ↓ Reduce from 0.95rem or 1rem */
+    line-height: 1.6;
+    padding: 0 10px;
   }
+}
 
-  @media (max-width: 768px) {
-    .initiatives-section h1 {
-      font-size: 2rem;
-    }
+  
 
     .initiatives-section p {
       font-size: 0.95rem;
