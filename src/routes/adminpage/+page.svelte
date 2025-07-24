@@ -1,6 +1,8 @@
 <script>
   import { goto } from "$app/navigation";
   import { supabase } from "$lib/supabase";
+  import { isLoggedIn } from '../stores/login.js'; // Adjust if needed
+
 
   let username = "";
   let password = "";
@@ -26,7 +28,9 @@
     .single();
 
   if (data) {
-    goto("/view");
+   isLoggedIn.set(true);
+goto("/view");
+
   } else {
     alert("Invalid credentials!");
   }
