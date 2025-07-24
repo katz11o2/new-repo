@@ -8,11 +8,13 @@ import { isLoggedIn } from '../stores/login.js'; // Adjust path
   import { user } from '$lib/stores';
   import Footer from '$lib/Footer.svelte';
 
-  onMount(() => {
-  if (!get(isLoggedIn)) {
-    goto('/'); // Redirect to login
+ onMount(() => {
+  const isAuth = sessionStorage.getItem('authenticated');
+  if (isAuth !== 'true') {
+    goto('/'); // redirect if not authenticated
   }
 });
+
 
 </script>
 

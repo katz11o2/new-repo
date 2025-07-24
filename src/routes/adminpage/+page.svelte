@@ -27,9 +27,11 @@
     .eq("password", trimmedPassword)
     .single();
 
-  if (data) {
-   isLoggedIn.set(true);
-goto("/view");
+ if (data) {
+  sessionStorage.setItem('authenticated', 'true'); // ✅ add this
+  goto("/view");
+}
+
 
   } else {
     alert("Invalid credentials!");
