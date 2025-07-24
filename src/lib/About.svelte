@@ -37,12 +37,14 @@
     }
 
   .image-banner img {
-    width: 100%;
-    min-height: 70vh;
-    object-fit: cover;
-    display: block;
-    animation: slideFade 1s ease-in-out, glow 4s infinite;
-  }
+  width: 100%;
+  height: auto;
+  object-fit: contain; /* or use 'cover' if you want cropping/fill */
+  display: block;
+  animation: slideFade 1s ease-in-out, glow 4s infinite;
+  max-height: 100vh; /* optional: prevents extreme vertical stretch */
+}
+
 
   @keyframes slideFade {
     from {
@@ -67,11 +69,12 @@
     }
   }
 
-  @media (max-width: 600px) {
-    .image-banner img {
-      max-height: 120px;
-    }
+ @media (max-width: 600px) {
+  .image-banner img {
+    max-height: 200px; /* optional limit */
   }
+}
+
 
   .ticker {
     background-color: #17194a;
