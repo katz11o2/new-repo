@@ -1,40 +1,37 @@
 <script>
   import Header from '$lib/Header.svelte';
   import { onMount } from 'svelte';
-  import { get } from 'svelte/store';
-  import { goto } from '$app/navigation';
-  import { isLoggedIn } from '../stores/login.js';
+   import { get } from 'svelte/store';
+   import { goto } from '$app/navigation'; // you missed this import
+import { isLoggedIn } from '../stores/login.js'; // Adjust path
+
   import { user } from '$lib/stores';
   import Footer from '$lib/Footer.svelte';
-  import { supabase } from '$lib/supabase';
 
-  let showPage = false;
+ let showPage = false;
 
-  const allowedEmails = ['thiruvenkat.er@gmail.com']; // ✅ Change this to your Gmail
-
-  onMount(async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    const user = session?.user;
-
-    if (session && user && allowedEmails.includes(user.email)) {
+  onMount(() => {
+    const isAuthenticated = sessionStorage.getItem("authenticated");
+    if (isAuthenticated === "true") {
       showPage = true;
     } else {
-      goto('/');
+      goto("/");
     }
   });
+
+
+
 </script>
 
-{#if showPage}
-  <div class="app-wrapper">
-    <Header />
+<div class="app-wrapper">
+  <Header />
 
-    <main class="main-content">
-      <slot />
-    </main>
+  <main class="main-content">
+    <slot />
+  </main>
 
-    <Footer />
-  </div>
-{/if}
+  <Footer />
+</div>
 
 <style>
   .app-wrapper {
