@@ -6,7 +6,7 @@
   import { isLoggedIn } from '../stores/login.js';
   import { user } from '$lib/stores';
   import Footer from '$lib/Footer.svelte';
-  import { supabase } from '$lib/supabaseClient';
+  import { supabase } from '$lib/supabase';
 
   let showPage = false;
 
