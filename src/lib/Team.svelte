@@ -194,15 +194,15 @@
   }
 
   @media (max-width: 768px) {
-    .glass-container {
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .glass-box {
-      width: 90%;
-    }
+  .glass-container {
+    flex-direction: column; /* Stack vertically */
+    align-items: center;    /* Center the boxes horizontally */
   }
+
+     .glass-box {
+    width: 90%; /* Optional: make each box fill more horizontal space */
+  }
+}
 
   .initiatives-section {
     background: #fff;
