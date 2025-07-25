@@ -1,7 +1,7 @@
 <script>
   const advisors = [
     {
-      name: "Dr. T Venkata Prabhakar",
+      name: "Dr. T ",
       designation: "Chief Research Scientist,\nIndian Institute of Science (IISc)",
       image: "/images/ad2.jpg"
     },
