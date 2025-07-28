@@ -25,36 +25,14 @@
     max-width: 1200px;
     margin: auto;
     padding: 5rem 2rem;
-    font-family: 'Poppins', sans-serif;
   }
 
   .heading {
     font-size: 1.8rem;
     font-weight: 600;
     color: #0c1d4e;
-    margin-bottom: 0.5rem;
+    margin-bottom: 2rem;
     text-align: left;
-  }
-
-  .heading-decor {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 1.5rem;
-  }
-
-  .blue-dot {
-    width: 10px;
-    height: 10px;
-    background-color: #0c1d4e;
-    border-radius: 50%;
-  }
-
-  .blue-line {
-    flex-grow: 1;
-    border: none;
-    height: 2px;
-    background-color: #0c1d4e;
   }
 
   .glass-box {
@@ -80,6 +58,7 @@
     max-width: 300px;
     opacity: 0;
     transform: translateY(20px);
+    text-align: center;
   }
 
   .ceo-image img {
@@ -92,24 +71,28 @@
     color: #555;
     margin-top: 0.5rem;
     text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
   }
 
   .ceo-message {
-    flex: 1;
+    flex: 2;
     min-width: 300px;
     color: #333;
     line-height: 1.8;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     opacity: 0;
     transform: translateY(20px);
   }
 
   .ceo-message p {
+    font-size: 1.05rem;
+    margin: 0 auto;
+    margin-top: 50px;
     text-align: justify;
-    font-size: 1rem;
-    margin: -70px 0 0 0;
+    max-width: 700px;
   }
 
   /* Animation */
@@ -138,6 +121,10 @@
       padding: 2rem;
     }
 
+    .heading {
+      text-align: center;
+    }
+
     .glass-box {
       flex-direction: column;
       align-items: center;
@@ -145,22 +132,17 @@
     }
 
     .ceo-message p {
-      margin-top: 0;
+      font-size: 1rem;
     }
   }
 </style>
 
 <div class="container">
   <div class="heading fade-in">Advisor - Innovation's Message</div>
-  <div class="heading-decor fade-in">
-    <div class="blue-dot"></div>
-    <div class="blue-dot"></div>
-    <hr class="blue-line" />
-  </div>
 
   <div class="glass-box fade-in">
     <div class="ceo-image fade-in">
-      <img src="https://i.ibb.co/4wvg2LQs/11111111.jpg" alt="CEO Image" />
+      <img src="https://i.ibb.co/4wvg2LQs/11111111.jpg" alt="Advisor Image" />
       <div class="ceo-quote">
         Shri. Srinivas M. Jamkhandi<br />
         Advisor - Innovation,<br />

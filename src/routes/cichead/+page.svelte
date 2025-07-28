@@ -21,66 +21,71 @@
   }
 
   .container {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: auto;
-    padding: 5rem 2rem;
+    padding: 4rem 2rem;
   }
 
   .heading {
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 600;
     color: #0c1d4e;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
     text-align: left;
   }
 
   .heading-decor {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 1.5rem;
+    gap: 8px;
+    margin-bottom: 2rem;
   }
 
-  
   .glass-box {
     display: flex;
     flex-wrap: wrap;
-    gap: 6rem;
+    gap: 3rem;
     padding: 2rem;
     border-radius: 20px;
     background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
     box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
     transition: transform 0.4s ease, box-shadow 0.4s ease;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .glass-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(31, 38, 135, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 36px rgba(31, 38, 135, 0.3);
   }
 
   .ceo-image {
     flex: 1;
-    min-width: 250px;
-    max-width: 300px;
+    max-width: 260px;
     opacity: 0;
     transform: translateY(20px);
+    text-align: center;
   }
 
   .ceo-image img {
     width: 100%;
-    border-radius: 0.5rem;
+    max-width: 220px;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
   }
 
   .ceo-quote {
     font-style: italic;
     color: #555;
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
     text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
   }
 
   .ceo-message {
-    flex: 1;
+    flex: 2;
     min-width: 300px;
     color: #333;
     line-height: 1.8;
@@ -92,12 +97,13 @@
   }
 
   .ceo-message p {
+    font-size: 1.1rem;
+    margin: 0 auto;
     text-align: justify;
-    font-size: 1rem;
-    margin-top: -70px;
+    margin-bottom: 70px;
+    max-width: 700px;
   }
 
-  /* Animation */
   .fade-in {
     animation: fadeInUp 0.8s ease forwards;
   }
@@ -117,6 +123,40 @@
       transform: translateY(0);
     }
   }
+
+  @media (max-width: 600px) {
+    .container {
+      padding: 2rem 1rem;
+    }
+
+    .heading {
+      font-size: 1.5rem;
+      text-align: center;
+    }
+
+    .glass-box {
+      flex-direction: column;
+      gap: 2rem;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .ceo-image {
+      max-width: 180px;
+    }
+
+    .ceo-image img {
+      max-width: 160px;
+    }
+
+    .ceo-quote {
+      font-size: 0.95rem;
+    }
+
+    .ceo-message p {
+      font-size: 1rem;
+    }
+  }
 </style>
 
 <div class="container">
@@ -129,19 +169,16 @@
 
   <div class="glass-box fade-in">
     <div class="ceo-image fade-in">
-      <img src="https://engg.cambridge.edu.in/wp-content/uploads/2023/06/536e21ff-2f83-4f7f-8cfb-f3707a562081.jpg" alt="Chairman Image" />
-      <div class="ceo-quote fade-in">
-        Dr. Varalatchoumy M <br>
+      <img src="https://engg.cambridge.edu.in/wp-content/uploads/2023/06/536e21ff-2f83-4f7f-8cfb-f3707a562081.jpg" alt="Dr. Varalatchoumy M" />
+      <div class="ceo-quote">
+        Dr. Varalatchoumy M<br>
         Head, Cambrian Incubation Centre
       </div>
     </div>
 
     <div class="ceo-message fade-in">
       <p>
-        The Cambrian Incubation Centre is designed to be a space for ideation, collaboration, and
-        transformation. With support from the Ministry of MSME and IISc Bangalore, we aim to bridge
-        the gap between research and real-world implementation. Whether you're a student, MSME, or
-        innovator, CIC is here to help you scale your ideas.
+        The Cambrian Incubation Centre is designed to be a space for ideation, collaboration, and transformation. With support from the Ministry of MSME and IISc Bangalore, we aim to bridge the gap between research and real-world implementation. Whether you're a student, MSME, or innovator, CIC is here to help you scale your ideas.
       </p>
     </div>
   </div>

@@ -21,57 +21,47 @@
   }
 
   .container {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: auto;
-    padding: 2rem 1rem;
+    padding: 5rem 2rem;
   }
 
   .heading {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 600;
     color: #0c1d4e;
-    margin-bottom: 0.5rem;
+    margin-bottom: 2rem;
     text-align: left;
-  }
-
-  .heading-decor {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 1rem;
   }
 
   .glass-box {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5rem;
-    padding: 1.2rem;
-    border-radius: 15px;
+    gap: 2rem;
+    padding: 2rem;
+    border-radius: 20px;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
-    box-shadow: 0 6px 24px rgba(31, 38, 135, 0.2);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
     transition: transform 0.4s ease, box-shadow 0.4s ease;
-    justify-content: space-between;
-    align-items: center;
   }
 
   .glass-box:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 32px rgba(31, 38, 135, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(31, 38, 135, 0.3);
   }
 
   .ceo-image {
     flex: 1;
-    max-width: 220px;
+    min-width: 250px;
+    max-width: 300px;
     opacity: 0;
     transform: translateY(20px);
-    margin: 0 auto;
     text-align: center;
   }
 
   .ceo-image img {
     width: 100%;
-    max-width: 180px;
     border-radius: 0.5rem;
   }
 
@@ -80,25 +70,28 @@
     color: #555;
     margin-top: 0.5rem;
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    font-weight: 500;
   }
 
   .ceo-message {
     flex: 2;
-    min-width: 240px;
+    min-width: 300px;
     color: #333;
-    line-height: 1.6;
+    line-height: 1.8;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     opacity: 0;
     transform: translateY(20px);
   }
 
   .ceo-message p {
+    font-size: 1.05rem;
+    margin: 0 auto;
+    margin-top:20px;
     text-align: justify;
-    font-size: 0.95rem;
-    margin: 0;
+    max-width: 700px;
   }
 
   /* Animation */
@@ -122,49 +115,29 @@
     }
   }
 
-  /* Mobile Styles */
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
     .container {
-      padding: 1.5rem 1rem;
+      padding: 2rem;
     }
 
     .heading {
-      font-size: 1.25rem;
       text-align: center;
     }
 
     .glass-box {
       flex-direction: column;
-      padding: 1rem;
-      gap: 1rem;
-      text-align: center;
-    }
-
-    .ceo-image {
-      max-width: 160px;
-    }
-
-    .ceo-image img {
-      max-width: 150px;
+      align-items: center;
+      padding: 1.5rem;
     }
 
     .ceo-message p {
-      font-size: 0.9rem;
-    }
-
-    .ceo-quote {
-      font-size: 0.85rem;
+      font-size: 1rem;
     }
   }
 </style>
 
 <div class="container">
   <div class="heading fade-in">Principal's Message</div>
-  <div class="heading-decor fade-in">
-    <div class="blue-dot"></div>
-    <div class="blue-dot"></div>
-    <hr class="blue-line" />
-  </div>
 
   <div class="glass-box fade-in">
     <div class="ceo-image fade-in">
@@ -177,15 +150,15 @@
     </div>
     <div class="ceo-message fade-in">
       <p>
-        At Cambridge Institute of Technology, we believe in nurturing not just students,
-        but future innovators, entrepreneurs, and leaders. The Cambrian Incubation
-        Centre (CIC) is a testament to our commitment to creating a dynamic ecosystem
-        where creativity meets opportunity. Through CIC, we aim to equip our students
-        and startups with the tools, mentorship, and resources they need to transform
-        their ideas into viable, impactful ventures.
-        I encourage every student, faculty member, and MSME partner to actively
-        engage with CIC and make the most of the opportunities it offers. Together, let’s
-        build a future driven by innovation and entrepreneurship.
+        At Cambridge Institute of Technology, we believe in nurturing not just students, but future
+        innovators, entrepreneurs, and leaders. The Cambrian Incubation Centre (CIC) is a testament
+        to our commitment to creating a dynamic ecosystem where creativity meets opportunity.
+        Through CIC, we aim to equip our students and startups with the tools, mentorship, and
+        resources they need to transform their ideas into viable, impactful ventures.
+       
+        I encourage every student, faculty member, and MSME partner to actively engage with CIC and
+        make the most of the opportunities it offers. Together, let’s build a future driven by
+        innovation and entrepreneurship.
       </p>
     </div>
   </div>
