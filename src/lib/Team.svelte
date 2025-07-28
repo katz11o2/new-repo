@@ -234,7 +234,7 @@
   .initiatives-container p {
     font-family: 'Poppins', sans-serif;
     font-size: 1.1rem;
-    color: #555;
+    color: #ffffff;
     
     max-width: 800px;
     margin: 0 auto;
