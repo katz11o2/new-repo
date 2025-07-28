@@ -27,16 +27,15 @@
     .eq("password", trimmedPassword)
     .single();
 
- if (data) {
-  sessionStorage.setItem('authenticated', 'true'); // ✅ add this
+if (data) {
+  sessionStorage.setItem('authenticated', 'true');
   goto("/view");
 }
 
-
-  } else {
-    alert("Invalid credentials!");
-  }
+} else {
+  alert("Invalid credentials!");
 }
+
 
 
  async function handleRegister() {
