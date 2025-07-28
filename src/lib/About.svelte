@@ -2,14 +2,18 @@
   import { onMount } from 'svelte';
 
   let currentImageIndex = 0;
- const images = [
-  '/images/Artboard 1 copy.jpg',
-  '/images/Artboard 1.jpg'
-];
 
+  const images = [
+    '/images/Artboard 1 copy.jpg',
+    '/images/Artboard 1.jpg'
+  ];
+
+  // ✅ Reactive image source
+  $: src = images[currentImageIndex];
 
   let interval;
 
+  // ✅ Image changes every 4 seconds
   onMount(() => {
     interval = setInterval(() => {
       currentImageIndex = (currentImageIndex + 1) % images.length;
@@ -19,14 +23,14 @@
   });
 
   const items = [
-  `Welcome to Cambrian Incubation Center, We invite you to post your design challenges and we can build a solution for it! <a href="/login" class="link">Click Here</a>`
-];
-
+    `Welcome to Cambrian Incubation Center, We invite you to post your design challenges and we can build a solution for it! <a href="/login" class="link">Click Here</a>`
+  ];
 
   function scrollByAmount(amount) {
     window.scrollBy({ top: amount, behavior: 'smooth' });
   }
 </script>
+
 
 <style>
     .image-banner {
@@ -257,5 +261,6 @@
 
 <!-- ✅ Full-width Animated Banner Below Ticker -->
 <div class="image-banner">
-  <img src="{images[currentImageIndex]}" alt="Banner" />
+ <img {src} alt="Banner" />
+
 </div>
