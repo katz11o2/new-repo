@@ -3,7 +3,9 @@
   let fadeIn = false;
 
   onMount(() => {
-    fadeIn = true;
+    setTimeout(() => {
+      fadeIn = true;
+    }, 100); // Slight delay for smoother effect
   });
 </script>
 
@@ -30,18 +32,18 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 1.2s ease-out, transform 1.2s ease-out, transform 0.3s ease;
+    transition: opacity 1.2s ease-out, transform 1.2s ease-out;
     box-sizing: border-box;
-  }
-
-  .container:hover {
-    transform: scale(1.01);
-    box-shadow: 0 10px 40px rgba(31, 38, 135, 0.3);
   }
 
   .fade-in {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  .container:hover {
+    transform: scale(1.01);
+    box-shadow: 0 10px 40px rgba(31, 38, 135, 0.3);
   }
 
   h1 {
@@ -98,13 +100,9 @@
 
 <div class="wrapper">
   <div class="container {fadeIn ? 'fade-in' : ''}">
-    <h1 class="text"> Innovation Support</h1>
+    <h1 class="text">Innovation Support</h1>
     <p>
       Innovation Support aims to create an enabling ecosystem that nurtures creativity, experimentation, and the transformation of ideas into viable solutions. By providing mentorship, access to prototyping facilities, funding opportunities, and industry linkages, innovation support systems empower students, researchers, and startups to pursue breakthrough innovations. These structured initiatives foster a collaborative environment where challenges are addressed through design thinking, iterative development, and real-world validation. The ultimate goal is to accelerate the journey from concept to market, thereby strengthening the innovation pipeline and promoting sustainable, scalable impact across sectors.
     </p>
   </div>
 </div>
-
- 
-
-

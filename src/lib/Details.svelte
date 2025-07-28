@@ -68,7 +68,7 @@
           <li> Market Entry Strategy</li>
           <li>Technology Transfer</li>
           <li> Funding & Investment Support</li>
-          <li> Regulatory Compliance Assistance</li>
+       
         </ul>
         <a href="login">Apply Now →</a>
       </div>

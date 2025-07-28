@@ -1,9 +1,21 @@
 <script>
   import { onMount } from 'svelte';
-  let fadeIn = false;
+
+  let visible = false;
+  let sectionRef;
 
   onMount(() => {
-    fadeIn = true;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          visible = true;
+          observer.unobserve(sectionRef);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(sectionRef);
   });
 </script>
 
@@ -14,7 +26,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 100px;
+    padding: 100px 20px;
     box-sizing: border-box;
   }
 
@@ -29,19 +41,19 @@
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 1.2s ease-out, transform 1.2s ease-out, transform 0.3s ease;
+    transform: translateY(30px);
+    transition: opacity 1.2s ease-out, transform 1.2s ease-out;
     box-sizing: border-box;
-  }
-
-  .container:hover {
-    transform: scale(1.01);
-    box-shadow: 0 10px 40px rgba(31, 38, 135, 0.3);
   }
 
   .fade-in {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  .container:hover {
+    transform: scale(1.01);
+    box-shadow: 0 10px 40px rgba(31, 38, 135, 0.3);
   }
 
   h1 {
@@ -84,26 +96,14 @@
       line-height: 1.6;
     }
   }
-
-  @keyframes glow {
-    0% { text-shadow: 0 0 5px #aaa; }
-    50% { text-shadow: 0 0 15px #ccc; }
-    100% { text-shadow: 0 0 5px #aaa; }
-  }
-
-  .glow-text {
-    animation: glow 2s infinite alternate;
-  }
 </style>
 
 <div class="wrapper">
-  <div class="container {fadeIn ? 'fade-in' : ''}">
-    <h1 class="text"> Research and Development Partnership</h1>
+  <div bind:this={sectionRef} class="container {visible ? 'fade-in' : ''}">
+    <h1 class="text">Research and Development Partnership</h1>
     <p>
       A partnership between learned academia and industry is designed to establish a professional platform to enable impactful
       Research and Development (R&D) serves as the backbone of technological advancement and societal progress. It fosters a culture of inquiry, experimentation, and continuous improvement, empowering institutions and industries to stay ahead in a rapidly evolving global landscape. By integrating theoretical frameworks with practical applications, R&D initiatives drive the creation of cutting-edge products, improved processes, and transformative solutions. Whether through academic research labs, corporate innovation centers, or public-private partnerships, the focus remains on generating knowledge, solving real-world problems, and enhancing economic and social outcomes. Sustained investment in R&D not only leads to technological breakthroughs but also cultivates a skilled workforce and a robust innovation ecosystem.
-</p>
+    </p>
   </div>
 </div>
-
- 

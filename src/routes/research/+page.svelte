@@ -3,7 +3,9 @@
   let fadeIn = false;
 
   onMount(() => {
-    fadeIn = true;
+    setTimeout(() => {
+      fadeIn = true;
+    }, 50); // slight delay for smooth transition
   });
 </script>
 
@@ -30,7 +32,7 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 1.2s ease-out, transform 1.2s ease-out, transform 0.3s ease;
+    transition: opacity 1.2s ease-out, transform 1.2s ease-out;
     box-sizing: border-box;
   }
 
@@ -97,7 +99,7 @@
 </style>
 
 <div class="wrapper">
-  <div class="container {fadeIn ? 'fade-in' : ''}">
+  <div class="container" class:fade-in={fadeIn}>
     <h1 class="text">Industry Problem Solving</h1>
     <p>
       A partnership between learned academia and industry is designed to establish a professional platform to enable impactful
