@@ -11,7 +11,7 @@
 
   let isRegistering = false;
 
- async function handleLogin() {
+async function handleLogin() {
   const trimmedUsername = username.trim();
   const trimmedPassword = password.trim();
 
@@ -27,14 +27,14 @@
     .eq("password", trimmedPassword)
     .single();
 
-if (data) {
-  sessionStorage.setItem('authenticated', 'true');
-  goto("/view");
+  if (data) {
+    sessionStorage.setItem('authenticated', 'true');
+    goto("/view");
+  } else {
+    alert("Invalid credentials!");
+  }
 }
 
-} else {
-  alert("Invalid credentials!");
-}
 
 
 
