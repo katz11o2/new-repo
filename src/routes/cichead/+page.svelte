@@ -101,7 +101,7 @@
     margin: 0 auto;
     text-align: justify;
     margin-bottom: 70px;
-    max-width: 690px;
+    max-width: 700px;
   }
 
   .fade-in {
