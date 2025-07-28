@@ -1,7 +1,7 @@
 <script>
   import { goto } from "$app/navigation";
   import { supabase } from "$lib/supabase";
-  import { isLoggedIn } from '../stores/login.js'; // Adjust if needed
+  
 
 
   let username = "";
