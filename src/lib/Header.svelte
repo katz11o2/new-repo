@@ -40,11 +40,12 @@
 
   .left-logo {
     margin-left: 15px;
-    height: 60px;
+   
   }
 
   .right-logo {
     margin-right: 20px;
+     height: 60px;
   }
 
   .center-logo {
