@@ -40,8 +40,6 @@
 
   .left-logo {
     margin-left: 15px;
-    height: 90px;
-    width:100%;
   }
 
   .right-logo {
