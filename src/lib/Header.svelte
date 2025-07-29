@@ -25,11 +25,10 @@
     width: 100%;
     padding: 15px 0;
     position: relative;
-    height:15px;
   }
 
   .logo {
-    height: 50px;
+    height: 40px;
     max-width: 130px;
     object-fit: contain;
     transition: transform 0.3s ease;
