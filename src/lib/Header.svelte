@@ -25,7 +25,7 @@
     width: 100%;
     padding: 15px 0;
     position: relative;
-    height:30px;
+    height:25px;
   }
 
   .logo {
