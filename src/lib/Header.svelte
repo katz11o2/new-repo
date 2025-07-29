@@ -28,7 +28,7 @@
   }
 
   .logo {
-    height: 80px;
+    height: 50px;
     max-width: 130px;
     object-fit: contain;
     transition: transform 0.3s ease;
