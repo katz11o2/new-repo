@@ -28,7 +28,7 @@
   }
 
   .logo {
-   
+    height: 40px;
     max-width: 130px;
     object-fit: contain;
     transition: transform 0.3s ease;
@@ -40,12 +40,10 @@
 
   .left-logo {
     margin-left: 15px;
-   
   }
 
   .right-logo {
     margin-right: 20px;
-     height: 60px;
   }
 
   .center-logo {
