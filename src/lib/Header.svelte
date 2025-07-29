@@ -23,9 +23,9 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 15px 0;
+    padding: 30px 0;
     position: relative;
-    height:15px;
+    height:30px;
   }
 
   .logo {
