@@ -39,9 +39,12 @@
   }
 
   .left-logo {
-    margin-left: 15px;
-     height: 60px; 
-  }
+  margin-left: 15px;
+  height: 40px;
+  transform: scale(1.1); /* makes it appear bigger */
+  transform-origin: left center; /* keeps scaling anchored */
+}
+
 
   .right-logo {
     margin-right: 20px;
