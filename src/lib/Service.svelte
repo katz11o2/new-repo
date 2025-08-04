@@ -32,7 +32,6 @@
 </script>
 
 <style>
-
 .image-below {
   margin-top: 80px;
   width: 90%;
@@ -84,80 +83,100 @@
   }
 }
 
+.services-section {
+  background: #fdfdfd;
+  padding: 40px 20px;
+  font-family: 'Poppins', sans-serif;
+  color: #222;
+  text-align: center;
+}
 
-  .services-section {
-    background: #fdfdfd;
-    padding: 40px 20px;
-    font-family: 'Poppins', sans-serif;
-    color: #222;
-    text-align: center;
+.services-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.service-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.service-card {
+  width: 220px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  transition: transform 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-6px);
+}
+
+.service-gif {
+  width: 30%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.service-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 6px;
+}
+
+.service-desc {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #444;
+  line-height: 1.4;
+}
+
+/* MOBILE SIZE REDUCTION ONLY — REDUCED FURTHER */
+@media (max-width: 768px) {
+  .service-card {
+    width: 100%;
+    max-width: 80%;
+    padding: 8px;
+    border-radius: 10px;
   }
 
   .services-title {
-    font-size: 1.8rem;
-    font-weight: 600;
-    margin-bottom: 20px;
-  }
-
-  .service-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 30px;
-    margin-top: 30px;
-  }
-
-  .service-card {
-    width: 220px;
-    padding: 16px;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 16px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    transition: transform 0.3s ease;
-  }
-
-  .service-card:hover {
-    transform: translateY(-6px);
+    font-size: 0.9rem;
+    margin-bottom: 10px;
   }
 
   .service-gif {
-    width: 30%;
-    height: auto;
-    border-radius: 10px;
-    margin-bottom: 12px;
-  }
-
-  .service-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #111;
+    width: 24%;
     margin-bottom: 6px;
   }
 
+  .service-title {
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+  }
+
   .service-desc {
-    font-size: 0.85rem;
-    font-weight: 400;
-    color: #444;
-    line-height: 1.4;
+    font-size: 0.6rem;
+    line-height: 1.1;
   }
 
-  @media (max-width: 768px) {
-    .service-card {
-      width: 100%;
-      max-width: 90%;
-    }
-
-    .services-title {
-      font-size: 1.4rem;
-    }
-
-    .service-gif {
-      width: 50%;
-    }
+  .image-below {
+    margin-top: 30px;
+    border-radius: 10px;
+    width: 85%;
   }
+}
 </style>
 
 <div class="services-section">
@@ -181,9 +200,5 @@
     {/each}
   </div>
 
- <img class="image-below" src="/images/1.png" alt="Decorative Image" />
-
-
+  <img class="image-below" src="/images/1.png" alt="Decorative Image" />
 </div>
-
-

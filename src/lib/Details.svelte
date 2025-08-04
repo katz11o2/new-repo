@@ -31,28 +31,26 @@
 </section>
 
 <section class="support-section">
-<div class="section-heading">
-     <h2>Who We Support</h2>
-  <div class="decoration">
-    
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="line"></span>
+  <div class="section-heading">
+    <h2>Who We Support</h2>
+    <div class="decoration">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="line"></span>
+    </div>
   </div>
- 
-</div>
 
   <div class="support-boxes">
     <div class="support-card creative">
       <div class="highlight-bar"></div>
       <div class="support-content">
-        <h3> Students & Researchers</h3>
+        <h3>Students & Researchers</h3>
         <p>Empowering the next generation of innovators with resources, mentorship, and funding opportunities.</p>
         <ul>
-          <li> Research & Development Support</li>
-          <li> Academic Project Incubation</li>
-          <li> Industry Collaboration</li>
-          <li> Skill Development Workshops</li>
+          <li>Research & Development Support</li>
+          <li>Academic Project Incubation</li>
+          <li>Industry Collaboration</li>
+          <li>Skill Development Workshops</li>
         </ul>
         <a href="login">Apply Now →</a>
       </div>
@@ -61,14 +59,13 @@
     <div class="support-card creative">
       <div class="highlight-bar"></div>
       <div class="support-content">
-        <h3> MSMEs & Startups</h3>
+        <h3>MSMEs & Startups</h3>
         <p>Comprehensive support for micro, small, and medium enterprises to scale and succeed in competitive markets.</p>
         <ul>
-          <li> Business Model Validation</li>
-          <li> Market Entry Strategy</li>
+          <li>Business Model Validation</li>
+          <li>Market Entry Strategy</li>
           <li>Technology Transfer</li>
-          <li> Funding & Investment Support</li>
-       
+          <li>Funding & Investment Support</li>
         </ul>
         <a href="login">Apply Now →</a>
       </div>
@@ -89,11 +86,6 @@
     display: flex;
     justify-content: center;
   }
-
-  
-
-  
-
 
   .cards-grid {
     display: grid;
@@ -142,7 +134,6 @@
     color: #444;
   }
 
-  /* Support Section */
   .support-section {
     background: white;
     padding: 3rem 0.5rem;
@@ -150,40 +141,39 @@
     margin: 0 auto;
   }
 
- .section-heading {
-  text-align: center;
-  margin-bottom: 2rem;
-}
+  .section-heading {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
 
-.decoration {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  margin-top: 1rem;
-  margin-bottom: 4rem; /* reduced from 70px to 0.4rem for tight spacing */
-}
+  .decoration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin-top: 1rem;
+    margin-bottom: 4rem;
+  }
 
-.dot {
-  width: 10px;
-  height: 10px;
-  background-color: blue;
-  border-radius: 50%;
-}
+  .dot {
+    width: 10px;
+    height: 10px;
+    background-color: blue;
+    border-radius: 50%;
+  }
 
-.line {
-  width: 180px;
-  height: 2px;
-  background-color: #17194a;
-}
+  .line {
+    width: 180px;
+    height: 2px;
+    background-color: #17194a;
+  }
 
-.support-section h2 {
-  font-size: 1.7rem;
-  font-weight: 700;
-  margin: 0; /* removed bottom margin for even less gap */
-  color: #222;
-}
-
+  .support-section h2 {
+    font-size: 1.7rem;
+    font-weight: 700;
+    margin: 0;
+    color: #222;
+  }
 
   .support-boxes {
     display: grid;
@@ -254,6 +244,65 @@
 
     .support-boxes {
       grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* ✅ MOBILE VERSION REDUCED SIZES ONLY */
+  @media (max-width: 768px) {
+    .card {
+      padding: 0.8rem 0.6rem;
+      border-radius: 0.6rem;
+    }
+
+    .gif {
+      width: 32px;
+      height: 32px;
+      margin-bottom: 0.6rem;
+    }
+
+    .card h3 {
+      font-size: 0.85rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .card p {
+      font-size: 0.7rem;
+    }
+
+    .support-section h2 {
+      font-size: 1.2rem;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+    }
+
+    .line {
+      width: 100px;
+    }
+
+    .support-content {
+      padding: 0.8rem;
+    }
+
+    .support-content h3 {
+      font-size: 0.85rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .support-content p {
+      font-size: 0.7rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .support-content li {
+      font-size: 0.7rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .support-content a {
+      font-size: 0.7rem;
     }
   }
 </style>
