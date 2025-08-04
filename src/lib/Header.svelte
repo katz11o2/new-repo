@@ -2,9 +2,24 @@
   import LogoLeft from '../lib/logos/CIT.png';
   import LogoCenter from '../lib/logos/CIC.png';
   import LogoRight from '../lib/logos/CHOSS.png';
+  import { onMount } from 'svelte';
+
+  let isMobile = false;
+  let showMobileMenu = false;
 
   function goBack() {
     window.history.back();
+  }
+
+  onMount(() => {
+    isMobile = window.innerWidth <= 640;
+    window.addEventListener('resize', () => {
+      isMobile = window.innerWidth <= 640;
+    });
+  });
+
+  function toggleMenu() {
+    showMobileMenu = !showMobileMenu;
   }
 </script>
 
@@ -39,12 +54,11 @@
   }
 
   .left-logo {
-  margin-left: 15px;
-  height: 40px;
-  transform: scale(1.1); /* makes it appear bigger */
-  transform-origin: left center; /* keeps scaling anchored */
-}
-
+    margin-left: 15px;
+    height: 40px;
+    transform: scale(1.1);
+    transform-origin: left center;
+  }
 
   .right-logo {
     margin-right: 20px;
@@ -105,20 +119,53 @@
     75% { transform: translateX(-1px); }
   }
 
+  /* Hide original menu bar and show hamburger on mobile */
   @media (max-width: 640px) {
     .logo {
       height: 28px;
       max-width: 60px;
     }
 
-    .menu-link {
+    .menu-bar {
+      display: none;
+    }
+
+    .hamburger {
+      display: block;
+      color: white;
+      font-size: 20px;
+      margin: 10px;
+      cursor: pointer;
+      padding: 5px 15px;
+    }
+
+    .mobile-menu {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding-left: 15px;
+      gap: 10px;
+      padding-bottom: 10px;
+    }
+
+    .mobile-menu a,
+    .mobile-menu button {
       font-size: 14px;
     }
+  }
+
+  /* Desktop: hide hamburger */
+  .hamburger {
+    display: none;
+  }
+
+  .mobile-menu {
+    display: none;
   }
 </style>
 
 <header>
-  <!-- Logo Bar with hrefs -->
+  <!-- Logo Bar -->
   <div class="logo-bar">
     <a href="https://www.cambridge.edu.in/" target="_blank" rel="noopener">
       <img src={LogoLeft} alt="Left Logo" class="logo left-logo" />
@@ -133,17 +180,38 @@
     </a>
   </div>
 
-  <!-- Menu Bar -->
+  <!-- Desktop Menu -->
   <nav class="menu-bar">
     <button class="back-button" on:click={goBack}>←</button>
     <a href="/" class="menu-link">Home</a>
     <a href="/about" class="menu-link">About us</a>
     <a href="/events" class="menu-link">Calender of Events</a>
-     <a href="/advisory" class="menu-link">Advisory Committee</a>
+    <a href="/advisory" class="menu-link">Advisory Committee</a>
     <a href="/facilities" class="menu-link">Facilities</a>
     <a href="/login" class="menu-link">Register/Login</a>
     <a href="/beneficiaries" class="menu-link">Beneficiaries</a>
     <a href="https://engg.cambridge.edu.in/photo-gallery/" class="menu-link">Gallery</a>
     <a href="/contact" class="menu-link">Contact Us</a>
   </nav>
+
+  <!-- Mobile Hamburger Button -->
+  {#if isMobile}
+    <div class="hamburger" on:click={toggleMenu}>
+      ☰ Menu
+    </div>
+    {#if showMobileMenu}
+      <nav class="mobile-menu">
+        <button class="back-button" on:click={goBack}>←</button>
+        <a href="/" class="menu-link">Home</a>
+        <a href="/about" class="menu-link">About us</a>
+        <a href="/events" class="menu-link">Calender of Events</a>
+        <a href="/advisory" class="menu-link">Advisory Committee</a>
+        <a href="/facilities" class="menu-link">Facilities</a>
+        <a href="/login" class="menu-link">Register/Login</a>
+        <a href="/beneficiaries" class="menu-link">Beneficiaries</a>
+        <a href="https://engg.cambridge.edu.in/photo-gallery/" class="menu-link">Gallery</a>
+        <a href="/contact" class="menu-link">Contact Us</a>
+      </nav>
+    {/if}
+  {/if}
 </header>
