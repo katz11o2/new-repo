@@ -325,17 +325,17 @@
       <span class="circle-label desktop">Brief</span>
       <span class="circle-label mobile">A</span>
     </div>
-    <div class="circle-wrapper" on:click={() => scrollByAmount(1500)}>
+    <div class="circle-wrapper" on:click={() => scrollByAmount(2500)}>
       <div class="circle"></div>
       <span class="circle-label desktop">Team</span>
       <span class="circle-label mobile">B</span>
     </div>
-    <div class="circle-wrapper" on:click={() => scrollByAmount(2800)}>
+    <div class="circle-wrapper" on:click={() => scrollByAmount(1800)}>
       <div class="circle"></div>
-      <span class="circle-label desktop">Startups</span>
+      <span class="circle-label desktop">Support</span>
       <span class="circle-label mobile">C</span>
     </div>
-    <div class="circle-wrapper" on:click={() => scrollByAmount(3200)}>
+    <div class="circle-wrapper" on:click={() => scrollByAmount(3700)}>
       <div class="circle"></div>
       <span class="circle-label desktop">Initiatives</span>
       <span class="circle-label mobile">D</span>
