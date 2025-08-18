@@ -34,6 +34,7 @@
     }
   });
 </script>
+
 <style>
   body {
     padding-top: 50px;
@@ -66,81 +67,63 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   }
 
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
-    gap: 2rem;
-    padding: 2rem 2rem;
+  .table-container {
+    overflow-x: auto;
+    padding: 1rem 2rem;
   }
 
-  .card {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(12px);
-    border-radius: 1.5rem;
-    padding: 2rem;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    background: white;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    border-radius: 12px;
+    overflow: hidden;
   }
 
-  .card:hover {
-    transform: translateY(-5px);
+  thead {
+    background: #0070f3;
+    color: white;
   }
 
-  .card h3 {
-    margin-top: 0;
-    font-size: 1.2rem;
-    color: #0055cc;
-    margin-bottom: 0.5rem;
-  }
-
-  .card p {
-    margin: 0.4rem 0;
-    line-height: 1.4;
+  th, td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    vertical-align: top;
     word-wrap: break-word;
-    font-size: 1rem;
+    max-width: 250px;
   }
 
-  .card strong {
-    color: #222;
+  tbody tr:hover {
+    background: #f9f9f9;
+  }
+
+  th {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  td {
+    font-size: 0.9rem;
+    color: #333;
   }
 
   .entry-number {
-    background: #0070f3;
-    color: white;
-    display: inline-block;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
+    font-weight: bold;
+    color: #0070f3;
   }
 
   @media (max-width: 768px) {
-    .card-grid {
-      grid-template-columns: 1fr;
-      gap: 20px;
-      padding: 1rem;
+    table {
+      font-size: 0.85rem;
     }
-
-    .card {
-      padding: 1.2rem;
-       margin: 0 10px;
-    }
-
-    .card h3 {
-      font-size: 1rem;
-    }
-
-    .card p {
-      font-size: 0.9rem;
-    }
-
-    .entry-number {
-      font-size: 0.8rem;
+    th, td {
+      padding: 8px 10px;
     }
   }
 </style>
-
 
 <!-- Toggle Section -->
 <div class="toggle-buttons">
@@ -150,42 +133,82 @@
 
 <!-- Student Entries -->
 {#if activeTab === 'students'}
-  <div class="card-grid">
-    {#each studentEntries as entry (entry.id)}
-      <div class="card">
-        <div class="entry-number">#{entry.number}</div>
-        <h3>{entry.idea_title || entry.title || 'No Title'}</h3>
-        <p><strong>Category:</strong> {entry.category}</p>
-        <p><strong>Description:</strong> {entry.idea_description || entry.description}</p>
-        <p><strong>Uniqueness:</strong> {entry.uniqueness}</p>
-        <p><strong>Existing Technologies:</strong> {entry.existingTechnologies}</p>
-        <p><strong>Gap Analysis:</strong> {entry.gapAnalysis}</p>
-        <p><strong>Patentability:</strong> {entry.patentability}</p>
-        <p><strong>Marketing Data:</strong> {entry.marketing_data}</p>
-        <p><strong>Visualized Product:</strong> {entry.visualized_product}</p>
-        <p><strong>Research Data:</strong> {entry.research_data}</p>
-        <p><strong>Experimental Data:</strong> {entry.experimental_data}</p>
-        <p><strong>Other Category:</strong> {entry.other_category}</p>
-      </div>
-    {/each}
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Uniqueness</th>
+          <th>Existing Technologies</th>
+          <th>Gap Analysis</th>
+          <th>Patentability</th>
+          <th>Marketing Data</th>
+          <th>Visualized Product</th>
+          <th>Research Data</th>
+          <th>Experimental Data</th>
+          <th>Other Category</th>
+        </tr>
+      </thead>
+      <tbody>
+        {#each studentEntries as entry (entry.id)}
+          <tr>
+            <td class="entry-number">#{entry.number}</td>
+            <td>{entry.idea_title || entry.title || 'No Title'}</td>
+            <td>{entry.category}</td>
+            <td>{entry.idea_description || entry.description}</td>
+            <td>{entry.uniqueness}</td>
+            <td>{entry.existingTechnologies}</td>
+            <td>{entry.gapAnalysis}</td>
+            <td>{entry.patentability}</td>
+            <td>{entry.marketing_data}</td>
+            <td>{entry.visualized_product}</td>
+            <td>{entry.research_data}</td>
+            <td>{entry.experimental_data}</td>
+            <td>{entry.other_category}</td>
+          </tr>
+        {/each}
+      </tbody>
+    </table>
   </div>
 {:else}
   <!-- Industry Entries -->
-  <div class="card-grid">
-    {#each industryEntries as entry (entry.id)}
-      <div class="card">
-        <div class="entry-number">#{entry.number}</div>
-        <h3>{entry.title || entry.idea_title || 'No Title'}</h3>
-        <p><strong>Category:</strong> {entry.category}</p>
-        <p><strong>Description:</strong> {entry.description || entry.idea_description}</p>
-        <p><strong>Uniqueness:</strong> {entry.uniqueness}</p>
-        <p><strong>Existing Tech:</strong> {entry.existingTech}</p>
-        <p><strong>Gap Analysis:</strong> {entry.gapAnalysis}</p>
-        <p><strong>Patentability:</strong> {entry.patentability}</p>
-        <p><strong>Market Data:</strong> {entry.marketData}</p>
-        <p><strong>Financials:</strong> {entry.financials}</p>
-        <p><strong>Visualized Product:</strong> {entry.visualized_product}</p>
-      </div>
-    {/each}
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Uniqueness</th>
+          <th>Existing Tech</th>
+          <th>Gap Analysis</th>
+          <th>Patentability</th>
+          <th>Market Data</th>
+          <th>Financials</th>
+          <th>Visualized Product</th>
+        </tr>
+      </thead>
+      <tbody>
+        {#each industryEntries as entry (entry.id)}
+          <tr>
+            <td class="entry-number">#{entry.number}</td>
+            <td>{entry.title || entry.idea_title || 'No Title'}</td>
+            <td>{entry.category}</td>
+            <td>{entry.description || entry.idea_description}</td>
+            <td>{entry.uniqueness}</td>
+            <td>{entry.existingTech}</td>
+            <td>{entry.gapAnalysis}</td>
+            <td>{entry.patentability}</td>
+            <td>{entry.marketData}</td>
+            <td>{entry.financials}</td>
+            <td>{entry.visualized_product}</td>
+          </tr>
+        {/each}
+      </tbody>
+    </table>
   </div>
 {/if}
