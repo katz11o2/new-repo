@@ -191,3 +191,45 @@
     {/each}
   </div>
 </section>
+<section class="section">
+  <div class='oot'>
+    <h1>Advisory Committee</h1>
+    <div class="dot-line">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="line"></div>
+    </div>
+  </div>
+  <div class="cards-container">
+    {#each advisors as person}
+      <div class="card">
+        <div class="image-container">
+          <img src={person.image} alt={person.name} />
+        </div>
+        <div class="name">{person.name}</div>
+        <div class="designation">{person.designation}</div>
+      </div>
+    {/each}
+  </div>
+
+  <!-- HOD View Button -->
+  <div style="margin-top: 2rem; text-align: center;">
+    <button 
+      onclick="window.location.href='/hodview'" 
+      style="
+        padding: 0.75rem 1.5rem;
+        background-color: #1e3a8a;
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      "
+      onmouseover="this.style.backgroundColor='#162c6a'"
+      onmouseout="this.style.backgroundColor='#1e3a8a'"
+    >
+      Go to HOD View
+    </button>
+  </div>
+</section>
