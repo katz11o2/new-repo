@@ -7,6 +7,15 @@
   let industryEntries = [];
   let activeTab = 'students';
 
+  const hodList = [
+    "Mech HOD",
+    "EEE HOD",
+    "ECE HOD",
+    "CSE HOD",
+    "AIML HOD",
+    "Civil HOD"
+  ];
+
   const industryKeywords = [
     "New Product Development",
     "New Process Development",
@@ -33,6 +42,30 @@
         .map((entry, index) => ({ ...entry, number: index + 1 }));
     }
   });
+
+  async function handleSend(entryId, sendTo, comment) {
+    if (!sendTo) {
+      alert("⚠️ Please select a HOD before sending.");
+      return;
+    }
+
+    const { error } = await supabase
+      .from('design_idea_forwards')
+      .insert([
+        {
+          idea_id: entryId,
+          send_to: sendTo,
+          comment: comment || ""
+        }
+      ]);
+
+    if (error) {
+      console.error(error);
+      alert("❌ Failed to send: " + error.message);
+    } else {
+      alert(`✅ Entry #${entryId} successfully sent to ${sendTo} with comment: "${comment}"`);
+    }
+  }
 </script>
 
 <style>
@@ -115,6 +148,29 @@
     color: #0070f3;
   }
 
+  select, input[type="text"] {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 0.85rem;
+    width: 100%;
+  }
+
+  .send-btn {
+    background: #0070f3;
+    color: white;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: 0.3s ease;
+  }
+
+  .send-btn:hover {
+    background: #005bb5;
+  }
+
   @media (max-width: 768px) {
     table {
       font-size: 0.85rem;
@@ -150,6 +206,8 @@
           <th>Research Data</th>
           <th>Experimental Data</th>
           <th>Other Category</th>
+          <th>Send To</th>
+          <th>Comments & Action</th>
         </tr>
       </thead>
       <tbody>
@@ -168,6 +226,18 @@
             <td>{entry.research_data}</td>
             <td>{entry.experimental_data}</td>
             <td>{entry.other_category}</td>
+            <td>
+              <select bind:value={entry.sendTo}>
+                <option value="">Select HOD</option>
+                {#each hodList as hod}
+                  <option value={hod}>{hod}</option>
+                {/each}
+              </select>
+            </td>
+            <td>
+              <input type="text" placeholder="Add comments..." bind:value={entry.comment} />
+              <button class="send-btn" on:click={() => handleSend(entry.id, entry.sendTo, entry.comment)}>Send</button>
+            </td>
           </tr>
         {/each}
       </tbody>
@@ -190,6 +260,8 @@
           <th>Market Data</th>
           <th>Financials</th>
           <th>Visualized Product</th>
+          <th>Send To</th>
+          <th>Comments & Action</th>
         </tr>
       </thead>
       <tbody>
@@ -206,6 +278,18 @@
             <td>{entry.marketData}</td>
             <td>{entry.financials}</td>
             <td>{entry.visualized_product}</td>
+            <td>
+              <select bind:value={entry.sendTo}>
+                <option value="">Select HOD</option>
+                {#each hodList as hod}
+                  <option value={hod}>{hod}</option>
+                {/each}
+              </select>
+            </td>
+            <td>
+              <input type="text" placeholder="Add comments..." bind:value={entry.comment} />
+              <button class="send-btn" on:click={() => handleSend(entry.id, entry.sendTo, entry.comment)}>Send</button>
+            </td>
           </tr>
         {/each}
       </tbody>
