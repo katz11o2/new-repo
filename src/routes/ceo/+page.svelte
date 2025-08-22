@@ -7,10 +7,6 @@
       el.classList.add('visible');
     });
   });
-
-  function goToHodView() {
-    window.location.href = '/hodview'; // navigate to hodview page
-  }
 </script>
 
 <svelte:head>
@@ -89,46 +85,26 @@
   }
 
   .ceo-message {
-    flex: 2;
-    min-width: 240px;
-    color: #333;
-    line-height: 1.6;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    opacity: 0;
-    transform: translateY(20px);
-    margin-bottom: 70px;
-  }
+  flex: 2;
+  min-width: 240px;
+  color: #333;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Push content to top */
+  opacity: 0;
+  transform: translateY(20px);
+  margin-bottom: 70px; /* Pulls it up slightly */
+}
 
   .ceo-message p {
-    font-size: 0.95rem;
-    margin: 0 auto;
-    text-align: center;
-    max-width: 700px;
-  }
-
-  /* Floating button */
- .hod-btn {
-  position: fixed; /* ensures it's anchored to viewport, not parent */
-  top: 20px;
-  right: 20px;
-  background: #0c1d4e;
-  color: white;
-  border: none;
-  border-radius: 50px;
-  padding: 10px 18px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  transition: background 0.3s ease;
-  z-index: 999999; /* make sure it's always on top */
+  font-size: 0.95rem;
+  margin: 0 auto;
+  text-align: center;
+  max-width: 700px;
 }
 
 
-  .hod-btn:hover {
-    background: #102970;
-  }
 
   /* Animation */
   .fade-in {
@@ -213,6 +189,3 @@
     </div>
   </div>
 </div>
-
-<!-- Floating Button (now inside Svelte scope) -->
-<button class="hod-btn" on:click={goToHodView}>Go to HOD View</button>
