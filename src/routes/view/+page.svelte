@@ -6,6 +6,7 @@
   let studentEntries = [];
   let industryEntries = [];
   let activeTab = 'students';
+  let expanded = {}; // track expanded state per field per entry
 
   const hodList = [
     "Mech HOD",
@@ -66,6 +67,10 @@
       alert(`✅ Entry ${entryId} successfully sent to ${sendTo} with comment: "${comment}"`);
     }
   }
+
+  function toggleExpand(entryId, field) {
+    expanded = { ...expanded, [entryId + field]: !expanded[entryId + field] };
+  }
 </script>
 
 <style>
@@ -73,7 +78,7 @@
     padding-top: 40px;
     padding-bottom: 40px;
     font-family: 'Segoe UI', sans-serif;
-    font-size: 0.85rem; /* reduced font size */
+    font-size: 0.85rem;
   }
 
   .toggle-buttons {
@@ -125,7 +130,7 @@
   th, td {
     padding: 10px 12px;
     text-align: left;
-    border: 1px solid #004080; /* dark blue lines */
+    border: 1px solid #004080;
     vertical-align: top;
     word-wrap: break-word;
     max-width: 220px;
@@ -177,6 +182,25 @@
     background: #002850;
   }
 
+  .collapsed {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .expanded {
+    display: block;
+  }
+
+  .read-more-btn {
+    color: #004080;
+    cursor: pointer;
+    font-size: 0.75rem;
+    margin-top: 4px;
+    display: inline-block;
+  }
+
   @media (max-width: 768px) {
     table {
       font-size: 0.75rem;
@@ -220,18 +244,95 @@
         {#each studentEntries as entry (entry.id)}
           <tr>
             <td class="entry-number">{entry.number}</td>
-            <td>{entry.idea_title || entry.title || 'No Title'}</td>
+            <td>
+              <div class={expanded[entry.id + 'title'] ? 'expanded' : 'collapsed'}>
+                {entry.idea_title || entry.title || 'No Title'}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'title')}>
+                {expanded[entry.id + 'title'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
             <td>{entry.category}</td>
-            <td>{entry.idea_description || entry.description}</td>
-            <td>{entry.uniqueness}</td>
-            <td>{entry.existingTechnologies}</td>
-            <td>{entry.gapAnalysis}</td>
-            <td>{entry.patentability}</td>
-            <td>{entry.marketing_data}</td>
-            <td>{entry.visualized_product}</td>
-            <td>{entry.research_data}</td>
-            <td>{entry.experimental_data}</td>
-            <td>{entry.other_category}</td>
+            <td>
+              <div class={expanded[entry.id + 'desc'] ? 'expanded' : 'collapsed'}>
+                {entry.idea_description || entry.description}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'desc')}>
+                {expanded[entry.id + 'desc'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
+            <td>
+              <div class={expanded[entry.id + 'uniq'] ? 'expanded' : 'collapsed'}>
+                {entry.uniqueness}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'uniq')}>
+                {expanded[entry.id + 'uniq'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
+            <td>
+              <div class={expanded[entry.id + 'existTech'] ? 'expanded' : 'collapsed'}>
+                {entry.existingTechnologies}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'existTech')}>
+                {expanded[entry.id + 'existTech'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
+            <td>
+              <div class={expanded[entry.id + 'gap'] ? 'expanded' : 'collapsed'}>
+                {entry.gapAnalysis}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'gap')}>
+                {expanded[entry.id + 'gap'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
+            <td>
+              <div class={expanded[entry.id + 'patent'] ? 'expanded' : 'collapsed'}>
+                {entry.patentability}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'patent')}>
+                {expanded[entry.id + 'patent'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
+            <td>
+              <div class={expanded[entry.id + 'market'] ? 'expanded' : 'collapsed'}>
+                {entry.marketing_data}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'market')}>
+                {expanded[entry.id + 'market'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
+            <td>
+              <div class={expanded[entry.id + 'visual'] ? 'expanded' : 'collapsed'}>
+                {entry.visualized_product}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'visual')}>
+                {expanded[entry.id + 'visual'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
+            <td>
+              <div class={expanded[entry.id + 'research'] ? 'expanded' : 'collapsed'}>
+                {entry.research_data}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'research')}>
+                {expanded[entry.id + 'research'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
+            <td>
+              <div class={expanded[entry.id + 'expdata'] ? 'expanded' : 'collapsed'}>
+                {entry.experimental_data}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'expdata')}>
+                {expanded[entry.id + 'expdata'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
+            <td>
+              <div class={expanded[entry.id + 'other'] ? 'expanded' : 'collapsed'}>
+                {entry.other_category}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'other')}>
+                {expanded[entry.id + 'other'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
             <td>
               <select bind:value={entry.sendTo}>
                 <option value="">Send to</option>
@@ -274,16 +375,79 @@
         {#each industryEntries as entry (entry.id)}
           <tr>
             <td class="entry-number">{entry.number}</td>
-            <td>{entry.title || entry.idea_title || 'No Title'}</td>
+            <td>
+              <div class={expanded[entry.id + 'title'] ? 'expanded' : 'collapsed'}>
+                {entry.title || entry.idea_title || 'No Title'}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'title')}>
+                {expanded[entry.id + 'title'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
             <td>{entry.category}</td>
-            <td>{entry.description || entry.idea_description}</td>
-            <td>{entry.uniqueness}</td>
-            <td>{entry.existingTech}</td>
-            <td>{entry.gapAnalysis}</td>
-            <td>{entry.patentability}</td>
-            <td>{entry.marketData}</td>
-            <td>{entry.financials}</td>
-            <td>{entry.visualized_product}</td>
+            <td>
+              <div class={expanded[entry.id + 'desc'] ? 'expanded' : 'collapsed'}>
+                {entry.description || entry.idea_description}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'desc')}>
+                {expanded[entry.id + 'desc'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
+            <td>
+              <div class={expanded[entry.id + 'uniq'] ? 'expanded' : 'collapsed'}>
+                {entry.uniqueness}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'uniq')}>
+                {expanded[entry.id + 'uniq'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
+            <td>
+              <div class={expanded[entry.id + 'existTech'] ? 'expanded' : 'collapsed'}>
+                {entry.existingTech}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'existTech')}>
+                {expanded[entry.id + 'existTech'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
+            <td>
+              <div class={expanded[entry.id + 'gap'] ? 'expanded' : 'collapsed'}>
+                {entry.gapAnalysis}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'gap')}>
+                {expanded[entry.id + 'gap'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
+            <td>
+              <div class={expanded[entry.id + 'patent'] ? 'expanded' : 'collapsed'}>
+                {entry.patentability}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'patent')}>
+                {expanded[entry.id + 'patent'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
+            <td>
+              <div class={expanded[entry.id + 'market'] ? 'expanded' : 'collapsed'}>
+                {entry.marketData}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'market')}>
+                {expanded[entry.id + 'market'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
+            <td>
+              <div class={expanded[entry.id + 'fin'] ? 'expanded' : 'collapsed'}>
+                {entry.financials}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'fin')}>
+                {expanded[entry.id + 'fin'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
+            <td>
+              <div class={expanded[entry.id + 'visual'] ? 'expanded' : 'collapsed'}>
+                {entry.visualized_product}
+              </div>
+              <span class="read-more-btn" on:click={() => toggleExpand(entry.id, 'visual')}>
+                {expanded[entry.id + 'visual'] ? 'Read Less' : 'Read More'}
+              </span>
+            </td>
             <td>
               <select bind:value={entry.sendTo}>
                 <option value="">Send to</option>

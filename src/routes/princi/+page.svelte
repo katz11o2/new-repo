@@ -141,9 +141,9 @@
 
   <div class="glass-box fade-in">
     <div class="ceo-image fade-in">
-      <img src="https://engg.cambridge.edu.in/wp-content/uploads/2021/09/Principal1.png.webp" alt="Principal Image" />
+      <img src="https://i.ibb.co/Y7CYy7Xr/Whats-App-Image-2025-08-28-at-19-40-16-f1c21c10.jpg" alt="Principal Image" />
       <div class="ceo-quote">
-        Dr. G. Indumathi<br />
+        Dr. B V Ravishankar <br />
         Principal,<br />
         Cambridge Institute of Technology
       </div>

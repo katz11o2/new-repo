@@ -14,10 +14,10 @@
         image: "https://i.ibb.co/B1Mz9nV/IMG-7217.jpg"
       },
       {
-        name: "Dr. G Indumathi",
+        name: "Dr. B V Ravishankar",
         role: "Prinicpal, CITech",
         link: "/princi",
-        image: "https://engg.cambridge.edu.in/wp-content/uploads/2021/09/Principal1.png.webp"
+        image: "https://i.ibb.co/Y7CYy7Xr/Whats-App-Image-2025-08-28-at-19-40-16-f1c21c10.jpg"
       }
     ],
     [
