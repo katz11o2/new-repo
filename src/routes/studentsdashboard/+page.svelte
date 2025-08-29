@@ -207,6 +207,7 @@ gapAnalysis: form.gapAnalysis || null,
   justify-content: center;
   gap: 12px; /* spacing between checkbox and button */
   margin-top: 1rem;
+  
 }
 
 .checkbox-container {
@@ -322,10 +323,10 @@ button.submit-btn {
           <input bind:value={form.experimental_data} placeholder="Experimental Data" />
           <input bind:value={form.visualized_product} placeholder="Visualized Product (URL or Notes)" />
 
-        <div class="confirm-submit-wrapper">
+       <div class="confirm-submit-wrapper">
   <div class="checkbox-container">
-    <span>I confirm the submission.</span>
     <input type="checkbox" bind:checked={form.confirmSubmission} />
+    <span>I confirm the submission.</span>
   </div>
 
   <button class="submit-btn" on:click={submitForm} disabled={loading}>
@@ -336,6 +337,7 @@ button.submit-btn {
     <p class="error-text">{error}</p>
   {/if}
 </div>
+
 
 
           {#if error}
