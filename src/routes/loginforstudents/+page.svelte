@@ -86,24 +86,26 @@
   }
 
 
-    async function signInWithGoogle() {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: "https://cambrian-sparkzone.com/register",
-        },
-      });
+   async function signInWithGoogle() {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: window.location.origin, // redirect back to same domain
+    },
+  });
 
-      if (error) {
-        console.error("Error signing in:", error.message);
-      }
-    }
+  if (error) {
+    console.error("Error signing in:", error.message);
+  }
+}
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        goto("/studentsdashboard");
-      }
-    });
+// ✅ Listen to auth changes and redirect properly
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === "SIGNED_IN" && session) {
+    goto("/studentsdashboard"); // send to dashboard after login
+  }
+});
+
 
     function redirectToRegister() {
       goto("/register");
