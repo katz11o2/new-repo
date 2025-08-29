@@ -71,7 +71,7 @@
         phone: phone,
         college: college
       },
-      emailRedirectTo: "https://cambrian-sparkzone.com/studentsdashboard" // redirect after confirmation
+      emailRedirectTo: "https://cambrian-sparkzone.com/industrysdashboard" // redirect after confirmation
     }
   });
 
