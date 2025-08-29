@@ -199,6 +199,43 @@ gapAnalysis: form.gapAnalysis || null,
     flex: 1;
   }
 
+
+  .confirm-submit-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px; /* spacing between checkbox and button */
+  margin-top: 1rem;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* Place checkbox to the right */
+.checkbox-container input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+button.submit-btn {
+  min-width: 120px; /* optional, for a uniform button size */
+}
+
+.error-text {
+  color: red;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+
   .glass {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(14px);
@@ -285,14 +322,21 @@ gapAnalysis: form.gapAnalysis || null,
           <input bind:value={form.experimental_data} placeholder="Experimental Data" />
           <input bind:value={form.visualized_product} placeholder="Visualized Product (URL or Notes)" />
 
-          <label class="flex items-center mb-4">
-            <input type="checkbox" bind:checked={form.confirmSubmission} class="mr-2" />
-            I confirm the submission.
-          </label>
+        <div class="confirm-submit-wrapper">
+  <div class="checkbox-container">
+    <span>I confirm the submission.</span>
+    <input type="checkbox" bind:checked={form.confirmSubmission} />
+  </div>
 
-          <button class="submit-btn" on:click={submitForm} disabled={loading}>
-            {loading ? 'Submitting...' : 'Submit'}
-          </button>
+  <button class="submit-btn" on:click={submitForm} disabled={loading}>
+    {loading ? 'Submitting...' : 'Submit'}
+  </button>
+
+  {#if error}
+    <p class="error-text">{error}</p>
+  {/if}
+</div>
+
 
           {#if error}
             <p style="color:red">{error}</p>
