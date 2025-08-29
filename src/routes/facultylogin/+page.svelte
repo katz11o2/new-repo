@@ -26,84 +26,87 @@
     // ✅ FIX: SignaturePad initializes only when canvas appears
   
 
-    async function handleSignup() {
-    const nameRegex = /^[A-Za-z. ]+$/;
-    const phoneRegex = /^[0-9]{10}$/;
-    const passwordRegex = /^(?![!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8}$/;
+   async function handleSignup() {
+  const nameRegex = /^[A-Za-z. ]+$/;
+  const phoneRegex = /^[0-9]{10}$/;
+  const passwordRegex = /^(?![!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8}$/;
 
-    if (!nameRegex.test(Name)) {
-      alert("❌ Name should contain only letters, spaces, or dots.");
-      return;
-    }
+  if (!nameRegex.test(Name)) {
+    alert("❌ Name should contain only letters, spaces, or dots.");
+    return;
+  }
 
-    if (!phoneRegex.test(phone)) {
-      alert("❌ Phone number must be exactly 10 digits.");
-      return;
-    }
+  if (!phoneRegex.test(phone)) {
+    alert("❌ Phone number must be exactly 10 digits.");
+    return;
+  }
 
-    if (!passwordRegex.test(password)) {
-      alert("❌ Password must be 8 characters and cannot start with a special character.");
-      return;
-    }
+  if (!passwordRegex.test(password)) {
+    alert("❌ Password must be 8 characters and cannot start with a special character.");
+    return;
+  }
 
-    if (password !== confirmPassword) {
+  if (password !== confirmPassword) {
     alert("❌ Passwords do not match.");
     return;
   }
 
+  if (captchaInput !== captcha) {
+    alert("❌ Incorrect captcha.");
+    return;
+  }
 
-    if (captchaInput !== captcha) {
-      alert("❌ Incorrect captcha.");
-      return;
-    }
+  if (!ndaAccepted) {
+    alert("❌ Please accept the NDA.");
+    return;
+  }
 
-    if (!ndaAccepted) {
-      alert("❌ Please accept the NDA.");
-      return;
-    }
-
-    const { data, error } = await supabase.from("design_ideas").insert([
-      {
-    name: Name,
-    phone,
-    college,
+  // ✅ Use Supabase Auth signup instead of table insert
+  const { data, error } = await supabase.auth.signUp({
     email: Email,
-    password,
-    
+    password: password,
+    options: {
+      data: { 
+        name: Name,
+        phone: phone,
+        college: college
+      },
+      emailRedirectTo: "https://cambrian-sparkzone.com/studentsdashboard" // redirect after confirmation
+    }
+  });
+
+  if (error) {
+    alert("❌ Sign-up failed: " + error.message);
+    console.error("Supabase error:", error);
+    return;
   }
 
-    ]);
+  alert("✅ Signed up successfully! Please check your email to confirm.");
+  goto("/studentsdashboard");
+}
 
-    if (error) {
-      alert("❌ Sign-up failed: " + error.message);
-      console.error("Supabase error:", error);
-      return;
-    }
 
-    alert("✅ Signed up successfully!");
-    goto("/register");
 
+   async function signInWithGoogle() {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: "https://cambrian-sparkzone.com/studentsdashboard",
+    },
+  });
+
+  if (error) {
+    console.error("Error signing in:", error.message);
   }
+}
 
 
-    async function signInWithGoogle() {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: "https://cambrian-sparkzone.com/register",
-        },
-      });
+   supabase.auth.onAuthStateChange(async (event, session) => {
+  if (session) {
+    goto("/studentsdashboard");
+  }
+});
 
-      if (error) {
-        console.error("Error signing in:", error.message);
-      }
-    }
-
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        goto("/studentsdashboard");
-      }
-    });
 
     function redirectToRegister() {
       goto("/register");
