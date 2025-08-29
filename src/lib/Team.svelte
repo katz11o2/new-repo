@@ -68,10 +68,10 @@
         image: "https://engg.cambridge.edu.in/wp-content/uploads/2023/06/536e21ff-2f83-4f7f-8cfb-f3707a562081.jpg"
       },
       {
-        name: "Dr. Shiva Panchakshari T G",
+        name: "Dr. Nagesh Kallollu Narayanaswamy",
         role: "Professor & Head, ECE, CITech",
        
-        image: "https://engg.cambridge.edu.in/wp-content/uploads/2022/03/DSC_1035-2048x1362.jpg"
+        image: "https://i.ibb.co/C5ZjMG5c/Whats-App-Image-2025-08-29-at-10-17-02-a50b4b70.jpg"
       },
       {
         name: "Dr.Sujatha",
