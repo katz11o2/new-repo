@@ -18,9 +18,14 @@
     let ndaScrolledToEnd = false;
     
 
-  onMount(() => {
-    ndaAccepted = false; // Always false on refresh
-  });
+ onMount(async () => {
+  ndaAccepted = false; // reset NDA
+
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) {
+    goto("/studentsdashboard");
+  }
+});
 
 
     // ✅ FIX: SignaturePad initializes only when canvas appears
