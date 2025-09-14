@@ -324,7 +324,7 @@
 </style>
 
 <!-- Partners Section -->
-<div class="partner-heading">Partners: MSME & Industry Associations</div>
+<div class="partner-heading"> MSME & Industry Partners</div>
 <div class="logo-grid">
   {#each logos as logo}
     <a href={logo.href} target="_blank" class="logo-box">

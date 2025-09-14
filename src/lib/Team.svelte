@@ -23,13 +23,13 @@
     [
       {
         name: "Shri Srinivas M. Jamkhandi ",
-        role: "Advisior-Innovation, CITech",
+        role: "Director-cum-Advisor, Incubation and Innovation",
         link: "/srini",
         image: "https://i.ibb.co/4wvg2LQs/11111111.jpg"
       },
       {
         name: "Dr. M Varalatchoutmy",
-        role: "Head - CIC, CITech",
+        role: "Head - CIC,  CITech",
         link: "cichead",
         image: "https://engg.cambridge.edu.in/wp-content/uploads/2023/06/536e21ff-2f83-4f7f-8cfb-f3707a562081.jpg"
       }
@@ -62,7 +62,7 @@
     ],
     [
       {
-        name: "Dr. Varalatchoumy M",
+        name: "Dr. Varalatchoumy M",
         role: "Professor & Head, AIML, CITech",
        
         image: "https://engg.cambridge.edu.in/wp-content/uploads/2023/06/536e21ff-2f83-4f7f-8cfb-f3707a562081.jpg"

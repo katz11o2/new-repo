@@ -321,7 +321,10 @@ button.submit-btn {
           <input bind:value={form.marketing_data} placeholder="Marketing Data" />
           <input bind:value={form.research_data} placeholder="Research Data" />
           <input bind:value={form.experimental_data} placeholder="Experimental Data" />
-          <input bind:value={form.visualized_product} placeholder="Visualized Product (URL or Notes)" />
+         <div class="file-upload-wrapper">
+  <label for="visualizedProduct">Visualized Product:</label>
+  <input type="file" id="visualizedProduct" on:change={handleFileUpload} />
+</div>
 
        <div class="confirm-submit-wrapper">
   <div class="checkbox-container">
