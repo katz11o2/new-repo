@@ -11,6 +11,11 @@
       image: "https://i.ibb.co/4wvg2LQs/11111111.jpg"
     },
     {
+      name: "Shri. B S Srinivasan",
+      designation: "Chairman - Progress, Industry - Academia Connect, LUBK",
+      image: "https://i.ibb.co/99G2R9Ld/Whats-App-Image-2025-08-29-at-20-19-15-eff1194b.jpg"
+    },
+    {
       name: "Shri. Danappa D.P",
       designation: "President – PIA",
       image: "https://piapeenya.com/wp-content/uploads/2025/07/DANAPPA-D.P.jpg"
@@ -20,11 +25,13 @@
       designation: "President - KASSIA",
       image: "http://kassia.org.in/wp-content/uploads/2025/07/PRESIDENT-Copy.jpg"
     },
+
     {
-      name: "Shri. B S Srinivasan",
-      designation: "Chairman - Progress, Industry - Academia Connect, LUBK",
-      image: "https://i.ibb.co/99G2R9Ld/Whats-App-Image-2025-08-29-at-20-19-15-eff1194b.jpg"
+      name: "Shri Narayana Prasanna K",
+      designation: "President - LUB",
+      image: "https://i.ibb.co/Ld1tgqWp/KNP.jpg"
     }
+
   ];
 </script>
 
@@ -73,9 +80,9 @@
   /* --- GRID LAYOUT --- */
   .cards-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 2.5rem;
-    max-width: 1000px;
+    max-width: 1100px;
     margin: auto;
   }
 
@@ -182,9 +189,9 @@
     <div class="line"></div>
   </div>
 
-  <!-- First row (2 cards) -->
+  <!-- First row (3 cards: HOD, Jamkhandi, Srinivasan) -->
   <div class="cards-container">
-    {#each advisors.slice(0,2) as person}
+    {#each advisors.slice(0,3) as person}
       <div class="card">
         <div class="image-container">
           <img src={person.image} alt={person.name} />
@@ -195,9 +202,9 @@
     {/each}
   </div>
 
-  <!-- Second row (3 cards) -->
+  <!-- Second row (next 3 cards) -->
   <div class="cards-container second-row">
-    {#each advisors.slice(2) as person}
+    {#each advisors.slice(3) as person}
       <div class="card">
         <div class="image-container">
           <img src={person.image} alt={person.name} />
