@@ -45,7 +45,7 @@
         name: "Dr. Shreekanth M Prabhu",
         role: "Professor & Head, CSE, CITech",
         
-        image: "https://media.licdn.com/dms/image/v2/C4D03AQHXSzSF4MXFKA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1516239447507?e=1757548800&v=beta&t=udRYiCjrzJVKWwhEIu72kT2ifi3FVBAfN-LMXHlyXdw"
+        image: "https://tse1.mm.bing.net/th/id/OIP.tToOAUqf0q0FG5irnRpUUgHaE8?pid=Api&P=0&h=180"
       },
       {
         name: "Dr. Preethi S",
@@ -97,7 +97,7 @@
         name: "Dr. Ravi",
         role: "Professor & Head, MBA, CITech",
        
-        image: "https://media.licdn.com/dms/image/v2/C5103AQGpD02sI7GKMQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1549959731357?e=1757548800&v=beta&t=up4DeO6eHi-hL1SsrhyMdrt3tvujCOcjDdb2zwmTlRQ"
+        image: "https://faculty.cambridge.edu.in/wp-content/uploads/2022/09/Dr-Ravi-K-K-MBA.jpg"
       },
       {
         name: "Prof. Diwakar Karadi",
