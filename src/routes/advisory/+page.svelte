@@ -23,7 +23,7 @@
     {
       name: "Shri B.R. Ganesh Rao",
       designation: "President - KASSIA",
-      image: "http://kassia.org.in/wp-content/uploads/2025/07/PRESIDENT-Copy.jpg"
+      image: "https://i.ibb.co/jPsJSJFB/PRESIDENT-Copy.jpg"
     },
 
     {
