@@ -3,35 +3,39 @@
     {
       name: "Dr. Varalatchoumy M ",
       designation: "Professor & Head, AIML, CITech",
-      image: "https://engg.cambridge.edu.in/wp-content/uploads/2023/06/536e21ff-2f83-4f7f-8cfb-f3707a562081.jpg"
+      image: "https://engg.cambridge.edu.in/wp-content/uploads/2023/06/536e21ff-2f83-4f7f-8cfb-f3707a562081.jpg",
+      link: "https://cambrian-sparkzone.com/cichead" // change to your desired URL
     },
     {
       name: "Shri. Srinivas M. Jamkhandi",
       designation: "Former Director-MoMSME, GoI",
-      image: "https://i.ibb.co/4wvg2LQs/11111111.jpg"
+      image: "https://i.ibb.co/4wvg2LQs/11111111.jpg",
+      link: "https://cambrian-sparkzone.com/srini"
     },
     {
       name: "Shri. B S Srinivasan",
       designation: "Chairman - Progress, Industry - Academia Connect, LUBK",
-      image: "https://i.ibb.co/99G2R9Ld/Whats-App-Image-2025-08-29-at-20-19-15-eff1194b.jpg"
+      image: "https://i.ibb.co/99G2R9Ld/Whats-App-Image-2025-08-29-at-20-19-15-eff1194b.jpg",
+      link: "https://lubkarnataka.org/office-bearers/"
     },
     {
       name: "Shri. Danappa D.P",
       designation: "President – PIA",
-      image: "https://piapeenya.com/wp-content/uploads/2025/07/DANAPPA-D.P.jpg"
+      image: "https://piapeenya.com/wp-content/uploads/2025/07/DANAPPA-D.P.jpg",
+      link: "https://piapeenya.com/presidents-message/"
     },
     {
       name: "Shri B.R. Ganesh Rao",
       designation: "President - KASSIA",
-      image: "https://i.ibb.co/jPsJSJFB/PRESIDENT-Copy.jpg"
+      image: "https://i.ibb.co/jPsJSJFB/PRESIDENT-Copy.jpg",
+      link: "http://kassia.org.in/council-members-2/"
     },
-
     {
       name: "Shri Narayana Prasanna K",
       designation: "President - LUB",
-      image: "https://i.ibb.co/Ld1tgqWp/KNP.jpg"
+      image: "https://i.ibb.co/Ld1tgqWp/KNP.jpg",
+      link: "https://lubkarnataka.org/office-bearers/"
     }
-
   ];
 </script>
 
@@ -99,6 +103,9 @@
     transition: all 0.3s ease;
     animation: fadeInUp 0.8s ease forwards;
     opacity: 0;
+    text-decoration: none;
+    color: inherit;
+    display: block;
   }
 
   /* Stagger animation */
@@ -192,26 +199,26 @@
   <!-- First row (3 cards: HOD, Jamkhandi, Srinivasan) -->
   <div class="cards-container">
     {#each advisors.slice(0,3) as person}
-      <div class="card">
+      <a href={person.link} target="_blank" class="card">
         <div class="image-container">
           <img src={person.image} alt={person.name} />
         </div>
         <div class="name">{person.name}</div>
         <div class="designation">{person.designation}</div>
-      </div>
+      </a>
     {/each}
   </div>
 
   <!-- Second row (next 3 cards) -->
   <div class="cards-container second-row">
     {#each advisors.slice(3) as person}
-      <div class="card">
+      <a href={person.link} target="_blank" class="card">
         <div class="image-container">
           <img src={person.image} alt={person.name} />
         </div>
         <div class="name">{person.name}</div>
         <div class="designation">{person.designation}</div>
-      </div>
+      </a>
     {/each}
   </div>
 </section>
