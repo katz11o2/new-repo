@@ -1,11 +1,6 @@
 <script>
   const advisors = [
-    {
-      name: "Dr. Varalatchoumy M ",
-      designation: "Professor & Head, AIML, CITech",
-      image: "https://engg.cambridge.edu.in/wp-content/uploads/2023/06/536e21ff-2f83-4f7f-8cfb-f3707a562081.jpg",
-      link: "https://cambrian-sparkzone.com/cichead" // change to your desired URL
-    },
+    
     {
       name: "Shri. Srinivas M. Jamkhandi",
       designation: "Former Director-MoMSME, GoI",
