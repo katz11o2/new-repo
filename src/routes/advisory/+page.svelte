@@ -25,6 +25,33 @@
       image: "https://i.ibb.co/jPsJSJFB/PRESIDENT-Copy.jpg",
       link: "http://kassia.org.in/council-members-2/"
     },
+     {
+      name: "Shri Chandrasekaran. S",
+      designation: "President - WACIA",
+      image: "https://wacia.in/images/chandrasekaran.jpg",
+      link: "https://wacia.in/management.html"
+    },
+
+     {
+      name: "Shri Ajay Bhargav",
+      designation: "President - DIA",
+      image: "https://dia-association.com/wp-content/uploads/2025/09/mr-ajay-bhargav-1.png",
+      link: "https://dia-association.com/our-team/"
+    },
+
+     {
+      name: "Dr Selva Kumar . S",
+      designation: "Chairman - TMTP",
+      image: "",
+      link: "http://tmtp.in/about-us/board-of-directors"
+    },
+
+     {
+      name: "Shri Sriprakasha",
+      designation: "President - MKAIA",
+      image: "https://www.mkaia.org/wp-content/uploads/2023/10/sriprakasha_pres.jpg",
+      link: "https://www.mkaia.org/office-bearers/"
+    },
     {
       name: "Shri Narayana Prasanna K",
       designation: "President - LUB",
