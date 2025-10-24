@@ -225,12 +225,10 @@
       <div class="footer-heading">Quick Links</div>
       <a href="/">Home</a>
       <a href="/about">About Us</a>
-      <a href="/services">Facilities</a>
+      <a href="/events">Calendar of Events</a>
       <a href="/projects">Post Your Design Challenges</a>
-      <a href="/contact">Gallery</a>
-      <a href="/blog">Calender of events</a>
-      <a href="/events">Register/Login</a>
-      <a href="/team">Contact us</a>
+      <a href="https://engg.cambridge.edu.in/photo-gallery/">Gallery</a>
+      <a href="/contact">Contact us</a>
     </div>
   </div>
 
