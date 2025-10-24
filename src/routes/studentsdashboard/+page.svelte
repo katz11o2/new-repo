@@ -32,9 +32,12 @@
   $: showPatentField = form.uniqueness === 'Yes';
 
 onMount(async () => {
+  // ✅ Prevent server-side crash on Vercel (window is undefined during SSR)
+  if (typeof window === 'undefined') return;
+
   let email = sessionStorage.getItem("userEmail");
 
-  // fallback to Supabase Auth (for Google login)
+  // ✅ Fallback to Supabase session (for Google or persistent login)
   if (!email) {
     const { data: { session }, error } = await supabase.auth.getSession();
 
@@ -42,11 +45,11 @@ onMount(async () => {
       email = session.user.email;
       sessionStorage.setItem("userEmail", email);
     } else {
-      // not logged in — allow access anyway
       console.log("User not authenticated, continuing as guest.");
     }
   }
 
+  // ✅ Load submissions only if we have an email
   if (email) {
     user = { email };
     console.log('Logged in as:', email);
@@ -144,6 +147,16 @@ gapAnalysis: form.gapAnalysis || null,
     await supabase.auth.signOut();
     goto('/');
   }
+
+  function handleFileUpload(event) {
+  const file = event.target.files[0];
+  if (file) {
+    console.log('File selected:', file.name);
+    // You can store just the file name for now:
+    form.visualized_product = file.name;
+  }
+}
+
 </script>
 
 <style>
@@ -323,7 +336,7 @@ button.submit-btn {
           <input bind:value={form.experimental_data} placeholder="Experimental Data" />
          <div class="file-upload-wrapper">
   <label for="visualizedProduct">Visualized Product:</label>
-  <input type="file" id="visualizedProduct" on:change={handleFileUpload} />
+ 
 </div>
 
        <div class="confirm-submit-wrapper">
