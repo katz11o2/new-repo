@@ -343,7 +343,7 @@
       {/if}
     </div>
   </div>
-
+</div>
   <!-- Admin Toggle Section -->
   <div class="toggle-buttons">
     <button on:click={() => activeTab = 'students'} class:active={activeTab === 'students'}>Student Entries</button>
