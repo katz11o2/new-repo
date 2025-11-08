@@ -148,7 +148,7 @@
 
 <main class="section">
   <!-- ✅ Admin Button -->
-  <div class="admin-box" on:click={() => goto('/adminpage')}>
+  <div class="admin-box" on:click={() => goto('/adminview')}>
     Admin
   </div>
 
