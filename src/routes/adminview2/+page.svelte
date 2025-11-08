@@ -62,9 +62,9 @@
 
     if (error) {
       console.error(error);
-      alert("❌ Failed to send: " + error.message);
+      alert("    Failed to send: " + error.message);
     } else {
-      alert(✅ Entry ${entryId} successfully sent to ${sendTo} with comment: "${comment}");
+      alert( Entry ${entryId} successfully sent to ${sendTo} with comment: "${comment}");
     }
   }
 
