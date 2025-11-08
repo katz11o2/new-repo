@@ -46,7 +46,7 @@
 
   async function handleSend(entryId, sendTo, comment) {
     if (!sendTo) {
-      alert("⚠ Please select a HOD before sending.");
+      alert(" Please select a HOD before sending.");
       return;
     }
 
@@ -64,7 +64,8 @@
       console.error(error);
       alert("    Failed to send: " + error.message);
     } else {
-      alert( Entry ${entryId} successfully sent to ${sendTo} with comment: "${comment}");
+     alert(`Entry ${entryId} successfully sent to ${sendTo} with comment: "${comment}"`);
+
     }
   }
 
