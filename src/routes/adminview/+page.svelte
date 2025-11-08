@@ -1,91 +1,103 @@
-<script>
+<script> 
   import { goto } from '$app/navigation';
-
-  const members = [
-    { title: "Principal / CEO", link: "/adminpage" },
-    { title: "CIC Head / Manager",  link: "/adminpage2" }
-  ];
-
-  function handleClick(link) {
-    goto(link);
-  }
 </script>
 
+<svelte:head>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+</svelte:head>
+
 <style>
-  .page {
-    background: white;
-    min-height: 100vh;
+  main {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #f0f4ff, #ffffff);
+    min-height: 80vh;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #1e3a8a;
+    margin-bottom: 30px;
+    text-align: center;
+    animation: fadePop 0.6s ease-in-out;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    animation: fadePop 0.6s ease-in-out;
+  }
+
+  .glass-box {
+    width: 100%;
+    min-height: 50px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(30, 58, 138, 0.08);
+    border: 1px solid #d6e3f8;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
-    padding: 2rem;
-  }
-
-  .box-container {
-    display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
-    justify-content: center;
-    animation: fadeIn 1s ease-in-out;
-  }
-
-  .card {
-    background: #f9fafb;
-    border-radius: 16px;
-    padding: 2rem 3rem;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    text-align: center;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    min-width: 260px;
-  }
-
-  .card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-    background: #ffffff;
-  }
-
-  .title {
+    color: #1e3a8a;
     font-size: 1.2rem;
     font-weight: 600;
-    color: #1e3a8a;
-    margin-bottom: 0.5rem;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    cursor: pointer;
+    padding: 20px;
+    text-align: center;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
   }
 
-  .name {
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: #334155;
+  .glass-box:hover {
+    transform: translateY(-4px);
+    background: #f0f6ff;
+    box-shadow: 0 12px 28px rgba(30, 58, 138, 0.15);
   }
 
-  @keyframes fadeIn {
+  @keyframes fadePop {
     from {
       opacity: 0;
-      transform: translateY(20px);
+      transform: scale(0.95);
     }
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: scale(1);
     }
   }
 
-  @media (max-width: 768px) {
-    .card {
-      padding: 1.5rem 2rem;
-      min-width: 200px;
+  /* Mobile Optimizations */
+  @media (max-width: 480px) {
+    .glass-box {
+      font-size: 1rem;
+      padding: 16px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
     }
   }
 </style>
 
-<div class="page">
-  <div class="box-container">
-    {#each members as member}
-      <div class="card" on:click={() => handleClick(member.link)}>
-        <div class="title">{member.title}</div>
-        <div class="name">{member.name}</div>
-      </div>
-    {/each}
+<main>
+  <h1>Select Your Category</h1>
+
+  <div class="content">
+    <div class="glass-box" on:click={() => goto('/adminpage')}>
+      For CEO
+    </div>
+
+    <div class="glass-box" on:click={() => goto('/adminpage2')}>
+      For CIC Head/ Manager
+    </div>
   </div>
-</div>
+</main>
