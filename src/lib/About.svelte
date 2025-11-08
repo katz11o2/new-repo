@@ -5,6 +5,7 @@
 
   let currentImageIndex = 0;
 
+  
   const images = [
     '/images/her.jpg',
     '/images/Artboard 1.jpg'
