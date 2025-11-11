@@ -231,6 +231,20 @@
     background: #00a65a;
     box-shadow: 0 0 6px rgba(0, 150, 0, 0.3);
   }
+
+  .table-wrapper {
+  width: 100%;
+  overflow-x: auto;  /* Enables horizontal scroll */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
+}
+
+table {
+  min-width: 1000px; /* 👈 ensures table expands horizontally */
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
 </style>
 
 <div class="page">
@@ -256,56 +270,60 @@
   {#if loading}
     <p>Loading entries...</p>
   {:else}
-    <table>
-      <thead>
-        <tr>
-          {#each columns as col}
-            <th>{col}</th>
-          {/each}
-          <th>Action</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {#each filteredEntries as entry}
+    <!-- 👇 Added a scroll wrapper -->
+    <div class="table-wrapper">
+      <table>
+        <thead>
           <tr>
             {#each columns as col}
-              <td>{entry[col]}</td>
+              <th>{col}</th>
             {/each}
-            <td>
-              <button class="toggle-status" on:click={() => toggleStatus(entry.id)}>
-                {showStatus[entry.id] ? "Hide Status" : "View Status"}
-              </button>
-            </td>
+            <th>Action</th>
           </tr>
+        </thead>
 
-          {#if showStatus[entry.id]}
+        <tbody>
+          {#each filteredEntries as entry}
             <tr>
-              <td colspan={columns.length + 1}>
-                <div class="status-container">
-                  <div class="status-title">PROJECT STATUS</div>
-                  <div class="status-legend">
-                    <div><span class="circle green"></span> Completed</div>
-                    <div><span class="circle red"></span> Not Completed</div>
-                  </div>
-                  <div class="stages-grid">
-                    <div class="stage-box">Stage 1<br />Application Receipt</div>
-                    <div class="stage-box">Stage 2<br />Preliminary Assessment</div>
-                    <div class="stage-box">Stage 3<br />Assessment by HoD</div>
-                    <div class="stage-box">Stage 4<br />Design Idea Defence</div>
-                    <div class="stage-box">Stage 5<br />Proof of Concept</div>
-                    <div class="stage-box">Stage 6<br />Project Progress Reviews</div>
-                    <div class="stage-box">Stage 7<br />Prototype Development</div>
-                    <div class="stage-box">Stage 8<br />Field Trials</div>
-                    <div class="stage-box">Stage 9<br />Final Prototype</div>
-                    <div class="stage-box">Completion Status</div>
-                  </div>
-                </div>
+              {#each columns as col}
+                <td>{entry[col]}</td>
+              {/each}
+              <td>
+                <button class="toggle-status" on:click={() => toggleStatus(entry.id)}>
+                  {showStatus[entry.id] ? "Hide Status" : "View Status"}
+                </button>
               </td>
             </tr>
-          {/if}
-        {/each}
-      </tbody>
-    </table>
+
+            {#if showStatus[entry.id]}
+              <tr>
+                <td colspan={columns.length + 1}>
+                  <div class="status-container">
+                    <div class="status-title">PROJECT STATUS</div>
+                    <div class="status-legend">
+                      <div><span class="circle green"></span> Completed</div>
+                      <div><span class="circle red"></span> Not Completed</div>
+                    </div>
+                    <div class="stages-grid">
+                      <div class="stage-box">Stage 1<br />Application Receipt</div>
+                      <div class="stage-box">Stage 2<br />Preliminary Assessment</div>
+                      <div class="stage-box">Stage 3<br />Assessment by HoD</div>
+                      <div class="stage-box">Stage 4<br />Design Idea Defence</div>
+                      <div class="stage-box">Stage 5<br />Proof of Concept</div>
+                      <div class="stage-box">Stage 6<br />Project Progress Reviews</div>
+                      <div class="stage-box">Stage 7<br />Prototype Development</div>
+                      <div class="stage-box">Stage 8<br />Field Trials</div>
+                      <div class="stage-box">Stage 9<br />Final Prototype</div>
+                      <div class="stage-box">Completion Status</div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            {/if}
+          {/each}
+        </tbody>
+      </table>
+    </div>
   {/if}
 </div>
+
