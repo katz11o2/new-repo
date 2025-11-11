@@ -132,11 +132,11 @@
   }
 
   table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-    font-size: 0.9rem;
-  }
+  min-width: 1000px; /* 👈 ensures table expands horizontally */
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
 
   th,
   td {
@@ -232,12 +232,11 @@
     box-shadow: 0 0 6px rgba(0, 150, 0, 0.3);
   }
 
-  .table-wrapper {
+.table-wrapper {
   width: 100%;
   overflow-x: auto;  /* Enables horizontal scroll */
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
 }
-
 table {
   min-width: 1000px; /* 👈 ensures table expands horizontally */
   border-collapse: collapse;
