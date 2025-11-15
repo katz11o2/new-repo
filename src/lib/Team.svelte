@@ -15,9 +15,15 @@
       },
       {
         name: "Dr. B V Ravishankar",
-        role: "Prinicpal, CITech",
+        role: "Director/Prinicpal, CITech",
         link: "/princi",
         image: "https://i.ibb.co/Y7CYy7Xr/Whats-App-Image-2025-08-28-at-19-40-16-f1c21c10.jpg"
+      },
+      {
+        name: "Dr. G.Indumathi",
+        role: "Associate Director, CITech",
+        
+        image: "https://faculty.cambridge.edu.in/wp-content/uploads/2021/11/Dr.-G.Indumathi-Professor-and-Head.jpg"
       }
     ],
     [
