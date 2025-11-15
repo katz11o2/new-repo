@@ -1,328 +1,225 @@
 <script>
   import { onMount } from "svelte";
   import { supabase } from "$lib/supabase";
+  import Chart from "chart.js/auto";
 
-  let entries = [];
-  let filteredEntries = [];
+  let data = [];
   let loading = true;
-  let searchQuery = "";
-  let suggestions = [];
-  let showStatus = {};
-  let selectedEntryDetails = {};
-  let columns = []; // auto headers
 
-  const industryKeywords = [
-    "New Product Development",
-    "New Process Development",
-    "New Features in Existing Product",
-    "Problems in Existing Product",
-    "Problems in Existing Processes"
+  // Dashboard KPIs
+  let totalIdeas = 0;
+  let totalUsers = 0;
+  let stageCounts = {};
+
+  // For charts reference
+  let chart1, chart2, chart3, chart4, chart5;
+
+  const stages = [
+    "Stage 1 - Application Receipt",
+    "Stage 2 - Preliminary Assessment",
+    "Stage 3 - Assessment by HoD",
+    "Stage 4 - Design Idea Defence",
+    "Stage 5 - Proof of Concept",
+    "Stage 6 - Progress Reviews",
+    "Stage 7 - Prototype Development",
+    "Stage 8 - Field Trials",
+    "Stage 9 - Final Prototype"
   ];
 
   onMount(async () => {
-    const { data, error } = await supabase
+    const { data: ideas, error } = await supabase
       .from("design_ideas")
-      .select("*")
-      .order("created_at", { ascending: false });
+      .select("*");
 
-    if (error) console.error("Error fetching data:", error);
+    if (error) console.log(error);
     else {
-      entries = data || [];
-      filteredEntries = entries;
-      if (entries.length > 0) columns = Object.keys(entries[0]);
+      data = ideas;
+      totalIdeas = ideas.length;
+
+      // count users
+      const uniqueUsers = new Set(ideas.map(i => i.created_by));
+      totalUsers = uniqueUsers.size;
+
+      // stage counts
+      stageCounts = {};
+      stages.forEach(s => stageCounts[s] = 0);
+      ideas.forEach(i => {
+        if (stageCounts[i.current_stage]) stageCounts[i.current_stage]++;
+      });
+
+      initCharts();
     }
+
     loading = false;
   });
 
-  // search functionality
-  function handleSearch(event) {
-    searchQuery = event.target.value.toLowerCase();
-    if (searchQuery.trim() === "") {
-      filteredEntries = entries;
-      suggestions = [];
-      return;
-    }
-    filteredEntries = entries.filter(
-      (entry) =>
-        entry.id.toString().includes(searchQuery) ||
-        (entry.idea_title && entry.idea_title.toLowerCase().includes(searchQuery))
-    );
-    suggestions = filteredEntries.slice(0, 5);
+  function initCharts() {
+    createChart("c1", "bar", stageCounts);
+    createChart("c2", "pie", stageCounts);
+    createChart("c3", "line", stageCounts);
+    createChart("c4", "doughnut", stageCounts);
+    createChart("c5", "bar", stageCounts);
   }
 
-  function selectSuggestion(suggestion) {
-    searchQuery = suggestion.idea_title;
-    filteredEntries = [suggestion];
-    suggestions = [];
-  }
+  function createChart(canvasId, type, dataset) {
+    const ctx = document.getElementById(canvasId);
 
-  async function toggleStatus(entryId) {
-    showStatus[entryId] = !showStatus[entryId];
-    showStatus = { ...showStatus };
-
-    if (showStatus[entryId]) {
-      const { data, error } = await supabase
-        .from("design_ideas")
-        .select("*")
-        .eq("id", entryId)
-        .single();
-
-      if (!error && data) selectedEntryDetails[entryId] = data;
-    }
+    new Chart(ctx, {
+      type,
+      data: {
+        labels: Object.keys(dataset),
+        datasets: [
+          {
+            label: "Count",
+            data: Object.values(dataset),
+            borderWidth: 2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
   }
 </script>
 
 <style>
   .page {
-    background: #fff;
-    padding: 1.5rem;
-    font-family: "Segoe UI", sans-serif;
-    color: #222;
+    padding: 20px;
+    background: #f7f7f7;
     min-height: 100vh;
+    font-family: "Segoe UI";
   }
 
-  .header {
+  .heading {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #004080;
+    margin-bottom: 20px;
+  }
+
+  /* KPI BOXES */
+  .kpi-row {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
+    gap: 20px;
     flex-wrap: wrap;
   }
-
-  .title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #004080;
+  .kpi-box {
+    flex: 1;
+    min-width: 200px;
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
   }
-
-  .search-box {
-    position: relative;
-    width: 260px;
-  }
-
-  input[type="search"] {
-    width: 100%;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
+  .kpi-title {
+    color: #555;
     font-size: 0.9rem;
   }
-
-  .suggestions {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 0 0 8px 8px;
-    max-height: 150px;
-    overflow-y: auto;
-    z-index: 10;
+  .kpi-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #003366;
   }
 
-  .suggestions div {
-    padding: 8px 10px;
-    cursor: pointer;
-    font-size: 0.85rem;
-  }
-
-  .suggestions div:hover {
-    background: #f0f6ff;
-  }
-
-  table {
-  min-width: 1000px; /* 👈 ensures table expands horizontally */
-  border-collapse: collapse;
-  margin-top: 1rem;
-  font-size: 0.9rem;
-}
-
-  th,
-  td {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    text-align: left;
-  }
-
-  th {
-    background-color: #004080;
-    color: white;
-    font-weight: 600;
-  }
-
-  tr {
-    transition: background 0.2s ease;
-  }
-
-  tr:hover {
-    background-color: #f5f9ff;
-  }
-
-  .toggle-status {
-    background: none;
-    border: 1px solid #004080;
-    color: #004080;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  .toggle-status:hover {
-    background: #004080;
-    color: white;
-  }
-
-  /* status container */
-  .status-container {
-    background: #fafafa;
-    border-left: 4px solid #004080;
-    margin: 0.8rem 0 1.5rem 0;
-    border-radius: 10px;
-    padding: 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  }
-
-  .status-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #004080;
-    margin-bottom: 0.8rem;
-  }
-
-  .status-legend {
-    display: flex;
-    gap: 1rem;
-    font-size: 0.85rem;
-    margin-bottom: 0.6rem;
-  }
-
-  .circle {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    display: inline-block;
-  }
-
-  .circle.green {
-    background: #00a65a;
-  }
-
-  .circle.red {
-    background: #d9534f;
-  }
-
-  .stages-grid {
+  /* 5 CHART GRID */
+  .chart-grid {
+    margin-top: 25px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 22px;
+  }
+  .chart-box {
+    background: white;
+    padding: 20px;
+    height: 350px;
+    border-radius: 16px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
   }
 
-  .stage-box {
-    background: #d9534f;
-    color: white;
-    border-radius: 6px;
-    padding: 6px;
-    font-size: 0.8rem;
+  /* STAGE TIMELINE */
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: 40px;
+    gap: 20px;
+  }
+  .stage-card {
+    background: white;
+    padding: 18px;
+    border-radius: 14px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+    position: relative;
+    border-left: 4px solid #004080;
+  }
+  .stage-card::after {
+    content: "➜";
+    position: absolute;
+    right: -18px;
+    top: 40%;
+    font-size: 1.5rem;
+    color: #004080;
+  }
+  .stage-card:last-child::after {
+    display: none;
   }
 
-  .stage-box:first-child {
-    background: #00a65a;
-    box-shadow: 0 0 6px rgba(0, 150, 0, 0.3);
+  .stage-title {
+    font-weight: 600;
+    color: #003366;
   }
-
-.table-wrapper {
-  width: 100%;
-  overflow-x: auto;  /* Enables horizontal scroll */
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
-}
-table {
-  min-width: 1000px; /* 👈 ensures table expands horizontally */
-  border-collapse: collapse;
-  margin-top: 1rem;
-  font-size: 0.9rem;
-}
-
 </style>
 
 <div class="page">
-  <div class="header">
-    <div class="title">Design Ideas</div>
-    <div class="search-box">
-      <input
-        type="search"
-        placeholder="Search by ID or Title..."
-        on:input={handleSearch}
-        bind:value={searchQuery}
-      />
-      {#if suggestions.length > 0}
-        <div class="suggestions">
-          {#each suggestions as s}
-            <div on:click={() => selectSuggestion(s)}>#{s.id} — {s.idea_title}</div>
-          {/each}
-        </div>
-      {/if}
-    </div>
-  </div>
+  <div class="heading">📊 Design Ideas Dashboard</div>
 
   {#if loading}
-    <p>Loading entries...</p>
+    <p>Loading dashboard...</p>
   {:else}
-    <!-- 👇 Added a scroll wrapper -->
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            {#each columns as col}
-              <th>{col}</th>
-            {/each}
-            <th>Action</th>
-          </tr>
-        </thead>
 
-        <tbody>
-          {#each filteredEntries as entry}
-            <tr>
-              {#each columns as col}
-                <td>{entry[col]}</td>
-              {/each}
-              <td>
-                <button class="toggle-status" on:click={() => toggleStatus(entry.id)}>
-                  {showStatus[entry.id] ? "Hide Status" : "View Status"}
-                </button>
-              </td>
-            </tr>
+    <!-- KPI ROW -->
+    <div class="kpi-row">
+      <div class="kpi-box">
+        <div class="kpi-title">Total Ideas</div>
+        <div class="kpi-value">{totalIdeas}</div>
+      </div>
 
-            {#if showStatus[entry.id]}
-              <tr>
-                <td colspan={columns.length + 1}>
-                  <div class="status-container">
-                    <div class="status-title">PROJECT STATUS</div>
-                    <div class="status-legend">
-                      <div><span class="circle green"></span> Completed</div>
-                      <div><span class="circle red"></span> Not Completed</div>
-                    </div>
-                    <div class="stages-grid">
-                      <div class="stage-box">Stage 1<br />Application Receipt</div>
-                      <div class="stage-box">Stage 2<br />Preliminary Assessment</div>
-                      <div class="stage-box">Stage 3<br />Assessment by HoD</div>
-                      <div class="stage-box">Stage 4<br />Design Idea Defence</div>
-                      <div class="stage-box">Stage 5<br />Proof of Concept</div>
-                      <div class="stage-box">Stage 6<br />Project Progress Reviews</div>
-                      <div class="stage-box">Stage 7<br />Prototype Development</div>
-                      <div class="stage-box">Stage 8<br />Field Trials</div>
-                      <div class="stage-box">Stage 9<br />Final Prototype</div>
-                      <div class="stage-box">Completion Status</div>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            {/if}
-          {/each}
-        </tbody>
-      </table>
+      <div class="kpi-box">
+        <div class="kpi-title">Total Users Submitted</div>
+        <div class="kpi-value">{totalUsers}</div>
+      </div>
+
+      <div class="kpi-box">
+        <div class="kpi-title">Active Stages</div>
+        <div class="kpi-value">{Object.values(stageCounts).filter(x=>x>0).length}</div>
+      </div>
+
+      <div class="kpi-box">
+        <div class="kpi-title">Completed (Stage 9)</div>
+        <div class="kpi-value">{stageCounts["Stage 9 - Final Prototype"]}</div>
+      </div>
     </div>
+
+    <!-- STAGE TIMELINE (4 PER ROW) -->
+    <div class="heading" style="margin-top:30px;">🔄 Stage Timeline</div>
+    <div class="timeline">
+      {#each stages as stg}
+        <div class="stage-card">
+          <div class="stage-title">{stg}</div>
+        </div>
+      {/each}
+    </div>
+
+    <!-- 5 CHARTS -->
+    <div class="heading" style="margin-top:40px;">📈 Charts Overview</div>
+    <div class="chart-grid">
+      <div class="chart-box"><canvas id="c1"></canvas></div>
+      <div class="chart-box"><canvas id="c2"></canvas></div>
+      <div class="chart-box"><canvas id="c3"></canvas></div>
+      <div class="chart-box"><canvas id="c4"></canvas></div>
+      <div class="chart-box"><canvas id="c5"></canvas></div>
+    </div>
+
   {/if}
 </div>
-
