@@ -42,8 +42,8 @@
      {
       name: "Dr Selva Kumar . S",
       designation: "Chairman - TMTP",
-      image: "",
-      link: "http://tmtp.in/about-us/board-of-directors"
+      image: "https://i.ibb.co/Dfypm43L/images.jpg",
+      link: "https://starofmysore.com/wp-content/uploads/2023/06/news-6-1-Dr-S-Selvakumar.jpg"
     },
 
      {

@@ -51,7 +51,7 @@
         name: "Dr. Shreekanth M Prabhu",
         role: "Professor & Head, CSE, CITech",
         
-        image: "https://tse1.mm.bing.net/th/id/OIP.tToOAUqf0q0FG5irnRpUUgHaE8?pid=Api&P=0&h=180"
+        image: "https://faculty.cambridge.edu.in/wp-content/uploads/2025/08/WhatsApp-Image-2025-08-29-at-10.33.36-AM.jpeg"
       },
       {
         name: "Dr. Preethi S",
